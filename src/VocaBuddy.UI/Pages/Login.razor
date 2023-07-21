@@ -28,7 +28,13 @@
 
 
                 <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-success">Login</button>
+                    <button type="submit" class="btn btn-success" disabled="@IsSubmitting">Login</button>
+                    @if (IsSubmitting)
+                    {
+                        <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    }
                 </div>
             </EditForm>
         </div>

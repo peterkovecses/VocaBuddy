@@ -11,12 +11,14 @@ public partial class LoginBase : CustomComponentBase
     protected UserLoginRequest Model = new();
     protected bool ShowAuthError = false;
     protected string AuthErrorText = string.Empty;
+    protected bool IsSubmitting { get; set; }
 
     [Inject]
     private IAuthenticationService _authService { get; set; }
 
     protected async Task ExecuteLogin()
     {
+        IsSubmitting = true;
         ShowAuthError = false;
 
         try
@@ -31,6 +33,10 @@ public partial class LoginBase : CustomComponentBase
         catch
         {
             ShowErrorMessage("Unsuccessful login");
+        }
+        finally
+        {
+            IsSubmitting = false;
         }
     }
 
