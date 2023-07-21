@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
-using VocaBuddy.UI.Exceptions;
+using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.Shared.Models;
 using VocaBuddy.UI.Interfaces;
 using VocaBuddy.UI.Models;
 

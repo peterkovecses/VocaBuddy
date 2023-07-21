@@ -1,6 +1,6 @@
 ﻿using Identity.Interfaces;
-using Identity.Models;
 using Microsoft.AspNetCore.Mvc;
+using VocaBuddy.Shared.Models;
 
 namespace Identity.Controllers;
 

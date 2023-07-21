@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using VocaBuddy.UI.Exceptions;
+using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.Shared.Models;
 using VocaBuddy.UI.Interfaces;
 using VocaBuddy.UI.Models;
 

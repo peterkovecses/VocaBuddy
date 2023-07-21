@@ -1,7 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using VocaBuddy.Shared.Models;
 using VocaBuddy.UI.Interfaces;
-using VocaBuddy.UI.Models;
 
 namespace VocaBuddy.UI.Authentication;
 

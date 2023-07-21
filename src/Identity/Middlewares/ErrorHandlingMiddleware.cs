@@ -1,7 +1,7 @@
 ﻿using Identity.Exceptions;
 using System.Net;
-using System.Security.Authentication;
 using System.Text.Json;
+using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Middlewares;
 

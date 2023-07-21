@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.Exceptions;
+﻿namespace VocaBuddy.Shared.Exceptions;
 
 public class InvalidCredentialsException : Exception
 {

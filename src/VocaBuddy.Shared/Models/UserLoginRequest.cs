@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VocaBuddy.UI.Models;
+namespace VocaBuddy.Shared.Models;
 
 public class UserLoginRequest
 {
     [EmailAddress]
-    [Required(ErrorMessage = "Email Address is required.")]
+    [Required]
     public string Email { get; set; } = default!;
 
-    [Required(ErrorMessage = "Password is required.")]
+    [Required]
     public string Password { get; set; } = default!;
 }
+
