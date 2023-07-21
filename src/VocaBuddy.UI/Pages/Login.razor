@@ -1,0 +1,36 @@
+﻿@page "/login"
+@inherits LoginBase
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="mt-5">Login</h3>
+            @if (ShowAuthError)
+            {
+                <div class="alert alert-danger mt-3">@AuthErrorText</div>
+            }
+            <EditForm Model="Model" OnValidSubmit="ExecuteLogin" class="card card-body bg-light mt-3">
+                <DataAnnotationsValidator />
+
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email:</label>
+                    <InputText id="email" class="form-control" @bind-Value="Model.Email" />
+                    <ValidationMessage For="@(() => Model.Email)" />
+                </div>
+
+                <div class="form-group mt-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <InputText type="password" id="password" class="form-control" @bind-Value="Model.Password" />
+                    <ValidationMessage For="@(() => Model.Password)" />
+                </div>
+
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-success">Login</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>

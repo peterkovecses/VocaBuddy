@@ -1,0 +1,32 @@
+﻿@inherits MainLayoutBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a class="me-3" href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <AuthorizeView>
+                <Authorized>
+                    <div>@Email</div>
+                    <NavLink class="nav-link d-flex" href="logout" style="padding-left: 0;">
+                        <span class="oi oi-account-logout" aria-hidden="true"></span>
+                        <span class="ms-2">Logout</span>
+                    </NavLink>
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink class="nav-link d-flex" href="login" style="padding-left: 0;">
+                        <span class="oi oi-account-login" aria-hidden="true"></span>
+                        <span class="ms-2">Login</span>
+                    </NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
