@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocaBuddy.UI", "src\VocaBud
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocaBuddy.Shared", "src\VocaBuddy.Shared\VocaBuddy.Shared.csproj", "{EE24278A-2021-448C-8F0D-897316FCDA42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Tests", "tests\Identity.Tests\Identity.Tests.csproj", "{09864AA1-0ACA-4D14-844C-19B01C02BA74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Tests", "tests\Identity.Tests\Identity.Tests.csproj", "{09864AA1-0ACA-4D14-844C-19B01C02BA74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FB7BB082-2D97-41F6-9F39-3E73D01D363D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09864AA1-0ACA-4D14-844C-19B01C02BA74} = {FB7BB082-2D97-41F6-9F39-3E73D01D363D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {441C3545-E20D-4CC9-81DC-574979B14CE0}

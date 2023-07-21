@@ -11,10 +11,9 @@ public static class ConfigureServices
 {
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<IdentityOptions>(
-            configuration.GetSection(IdentityOptions.Identity));
-
-        var identityOptions = configuration.GetSection(IdentityOptions.Identity).Get<IdentityOptions>();
+        var identityOptionsSection = configuration.GetSection(IdentityOptions.Identity);
+        services.Configure<IdentityOptions>(identityOptionsSection);           
+        var identityOptions = identityOptionsSection.Get<IdentityOptions>();
 
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();
