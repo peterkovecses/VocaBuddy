@@ -8,4 +8,6 @@ public class IdentityOptions
     public string LoginEndpoint { get; set; }
     public string RegisterEndpoint { get; set; }
     public string RefreshEndpoint { get; set; }
+    public string AuthTokenStorageKey { get; set; }
+    public string RefreshTokenStorageKey { get; set; }
 }
