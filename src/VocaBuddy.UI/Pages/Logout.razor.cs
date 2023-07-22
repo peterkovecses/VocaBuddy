@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using VocaBuddy.UI.Interfaces;
-using VocaBuddy.UI.Models;
-
-namespace VocaBuddy.UI.Pages;
+﻿namespace VocaBuddy.UI.Pages;
 
 public class LogoutBase : CustomComponentBase
 {

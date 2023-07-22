@@ -1,5 +1,4 @@
-﻿using VocaBuddy.Shared.Models;
-using VocaBuddy.UI.Models;
+﻿using VocaBuddy.UI.Authentication.Models;
 
 namespace VocaBuddy.UI.Interfaces
 {

@@ -1,9 +1,7 @@
-﻿namespace VocaBuddy.UI.Models;
+﻿namespace VocaBuddy.UI.ApiHelper.IdentityApi;
 
-public class IdentityOptions
+public class IdentityApiOptions
 {
-    public const string Identity = "Apis:Identity";
-
     public string BaseUrl { get; set; }
     public string LoginEndpoint { get; set; }
     public string RegisterEndpoint { get; set; }

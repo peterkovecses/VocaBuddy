@@ -1,18 +1,18 @@
 ﻿using Microsoft.Extensions.Options;
+using Shared.Exceptions;
 using System.Net.Http.Json;
+using System.Text.Json;
 using VocaBuddy.Shared.Exceptions;
-using VocaBuddy.Shared.Models;
-using VocaBuddy.UI.Interfaces;
-using VocaBuddy.UI.Models;
+using VocaBuddy.UI.Authentication.Models;
 
-namespace VocaBuddy.UI.Api.IdentityApi;
+namespace VocaBuddy.UI.ApiHelper.IdentityApi;
 
 public class IdentityApiClient : IIdentityApiClient
 {
     private readonly HttpClient _client;
-    private readonly IdentityOptions _identityOptions;
+    private readonly IdentityApiOptions _identityOptions;
 
-    public IdentityApiClient(HttpClient client, IOptions<IdentityOptions> identityOptions)
+    public IdentityApiClient(HttpClient client, IOptions<IdentityApiOptions> identityOptions)
     {
         _client = client;
         _identityOptions = identityOptions.Value;
@@ -37,13 +37,36 @@ public class IdentityApiClient : IIdentityApiClient
     public async Task RegisterAsync(UserRegistrationRequest registrationRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RegisterEndpoint, registrationRequest);
-        response.EnsureSuccessStatusCode();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            var errorMessage = await GetErrorMessage(response.Content);
+
+            throw new UserCreationException(errorMessage);
+        }
+
+        throw new HttpRequestException();
+
+        static async Task<string> GetErrorMessage(HttpContent content)
+        {
+            var stringContent = await content.ReadAsStringAsync();
+            var responseObject = JsonDocument.Parse(stringContent).RootElement;
+            var errorMessage = responseObject.GetProperty("error").GetString();
+
+            return errorMessage;
+        }
     }
 
     public async Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RefreshEndpoint, refreshTokenRequest);
         response.EnsureSuccessStatusCode();
+
         return await response.Content.ReadFromJsonAsync<AuthenticationResult>();
     }
 }

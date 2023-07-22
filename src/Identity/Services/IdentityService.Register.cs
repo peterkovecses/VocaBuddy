@@ -1,6 +1,7 @@
 ﻿using Identity.Exceptions;
 using Identity.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Shared.Exceptions;
 
 namespace Identity.Services;
 
@@ -38,6 +39,6 @@ public partial class IdentityService : IIdentityService
         }
 
         static string MergeIdentityErrors(IEnumerable<IdentityError> errors)
-            => string.Join(";", errors.Select(error => error.Description));
+            => string.Join(". ", errors.Select(error => error.Description));
     }
 }

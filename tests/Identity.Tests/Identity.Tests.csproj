@@ -25,6 +25,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Identity\Identity.csproj" />
+		<ProjectReference Include="..\..\src\VocaBuddy.Shared\VocaBuddy.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

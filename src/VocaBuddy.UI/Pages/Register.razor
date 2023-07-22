@@ -1,0 +1,54 @@
+﻿@page "/register"
+@inherits RegisterBase
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="mt-5">Login</h3>
+
+            @if (ShowAuthError)
+            {
+                <div class="alert alert-danger mt-3">@AuthErrorText</div>
+            }
+
+            @if (ShowSuccessMessage)
+            {
+                <div class="alert alert-success mt-3">@SuccessMessageText</div>
+            }
+
+            <EditForm Model="Model" OnValidSubmit="ExecuteLogin" class="card card-body bg-light mt-3">
+                <DataAnnotationsValidator />
+
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email:</label>
+                    <InputText id="email" class="form-control" @bind-Value="Model.Email" />
+                    <ValidationMessage For="@(() => Model.Email)" />
+                </div>
+
+                <div class="form-group mt-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <InputText type="password" id="password" class="form-control" @bind-Value="Model.Password" />
+                    <ValidationMessage For="@(() => Model.Password)" />
+                </div>
+
+                <div class="form-group mt-3">
+                    <label for="confirm-password" class="form-label">Confirm Password:</label>
+                    <InputText type="password" id="confirm-password" class="form-control" @bind-Value="Model.ConfirmPassword" />
+                    <ValidationMessage For="@(() => Model.ConfirmPassword)" />
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-success" disabled="@IsSubmitting">Login</button>
+                    @if (IsSubmitting)
+                    {
+                        <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    }
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>

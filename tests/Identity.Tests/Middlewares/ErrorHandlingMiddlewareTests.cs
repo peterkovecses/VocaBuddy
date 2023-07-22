@@ -3,6 +3,7 @@ using Identity.Middlewares;
 using Identity.Tests.TestHelpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Shared.Exceptions;
 using System.Net;
 using VocaBuddy.Shared.Exceptions;
 

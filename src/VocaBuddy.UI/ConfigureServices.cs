@@ -1,9 +1,8 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using VocaBuddy.UI.Api.IdentityApi;
-using VocaBuddy.UI.Authentication;
-using VocaBuddy.UI.Interfaces;
-using VocaBuddy.UI.Models;
+using VocaBuddy.UI.ApiHelper.IdentityApi;
+using VocaBuddy.UI.Authentication.Models;
+using VocaBuddy.UI.Authentication.Services;
 
 namespace VocaBuddy.UI;
 
@@ -11,9 +10,11 @@ public static class ConfigureServices
 {
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var identityOptionsSection = configuration.GetSection(IdentityOptions.Identity);
-        services.Configure<IdentityOptions>(identityOptionsSection);           
-        var identityOptions = identityOptionsSection.Get<IdentityOptions>();
+        var identityOptionsSection = configuration.GetSection(ConfigKeys.IdentityOptions);
+        services.Configure<IdentityApiOptions>(identityOptionsSection);           
+        var identityOptions = identityOptionsSection.Get<IdentityApiOptions>();
+
+        services.Configure<PasswordOptions>(configuration.GetSection(ConfigKeys.PasswordOptions));
 
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();

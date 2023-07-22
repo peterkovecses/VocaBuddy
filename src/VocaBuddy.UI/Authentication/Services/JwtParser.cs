@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.Authentication
+﻿namespace VocaBuddy.UI.Authentication.Services
 {
     using System;
     using System.Collections.Generic;

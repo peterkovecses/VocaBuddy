@@ -1,25 +1,32 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using VocaBuddy.UI.ApiHelper.IdentityApi;
 
-namespace VocaBuddy.UI.Authentication;
+namespace VocaBuddy.UI.Authentication.Services;
 
 public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
+    private readonly IdentityApiOptions _identityOptions;
     private readonly AuthenticationState _anonymous;
 
-    public CustomAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+    public CustomAuthenticationStateProvider(
+        HttpClient httpClient,
+        ILocalStorageService localStorage,
+        IOptions<IdentityApiOptions> identityOptions)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
+        _identityOptions = identityOptions.Value;
         _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await _localStorage.GetItemAsync<string>("authToken");
+        var token = await _localStorage.GetItemAsync<string>(_identityOptions.AuthTokenStorageKey);
 
         if (string.IsNullOrWhiteSpace(token))
         {

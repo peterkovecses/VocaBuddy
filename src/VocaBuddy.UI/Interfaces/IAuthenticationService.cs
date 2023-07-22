@@ -1,5 +1,4 @@
-﻿using VocaBuddy.Shared.Models;
-using VocaBuddy.UI.Models;
+﻿using VocaBuddy.UI.Authentication.Models;
 
 namespace VocaBuddy.UI.Interfaces
 {
@@ -7,5 +6,6 @@ namespace VocaBuddy.UI.Interfaces
     {
         Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest);
         Task LogoutAsync();
+        Task RegisterAsync(UserRegistrationRequest userRegistrationRequest);
     }
 }
