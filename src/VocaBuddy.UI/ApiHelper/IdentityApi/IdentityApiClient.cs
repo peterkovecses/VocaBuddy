@@ -10,9 +10,9 @@ namespace VocaBuddy.UI.ApiHelper.IdentityApi;
 public class IdentityApiClient : IIdentityApiClient
 {
     private readonly HttpClient _client;
-    private readonly IdentityApiOptions _identityOptions;
+    private readonly IdentityApiConfiguration _identityOptions;
 
-    public IdentityApiClient(HttpClient client, IOptions<IdentityApiOptions> identityOptions)
+    public IdentityApiClient(HttpClient client, IOptions<IdentityApiConfiguration> identityOptions)
     {
         _client = client;
         _identityOptions = identityOptions.Value;

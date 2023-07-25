@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.UI.ApiHelper.IdentityApi;
 
-public class IdentityApiOptions
+public class IdentityApiConfiguration
 {
     public string BaseUrl { get; set; }
     public string LoginEndpoint { get; set; }

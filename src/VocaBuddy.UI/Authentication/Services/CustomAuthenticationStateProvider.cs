@@ -10,13 +10,13 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
-    private readonly IdentityApiOptions _identityOptions;
+    private readonly IdentityApiConfiguration _identityOptions;
     private readonly AuthenticationState _anonymous;
 
     public CustomAuthenticationStateProvider(
         HttpClient httpClient,
         ILocalStorageService localStorage,
-        IOptions<IdentityApiOptions> identityOptions)
+        IOptions<IdentityApiConfiguration> identityOptions)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;

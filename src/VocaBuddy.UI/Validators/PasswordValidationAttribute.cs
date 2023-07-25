@@ -8,7 +8,7 @@ public class PasswordValidationAttribute : ValidationAttribute
 {
     protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
     {
-        var passwordOptions = validationContext.GetRequiredService<IOptions<PasswordOptions>>().Value;
+        var passwordOptions = validationContext.GetRequiredService<IOptions<PasswordConfiguration>>().Value;
 
         if (value is not string password)
         {

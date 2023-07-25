@@ -9,15 +9,15 @@ namespace VocaBuddy.UI.Authentication.Services;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly IIdentityApiClient _client;
-    private readonly AuthenticationStateProvider _authStateProvider;
+    private readonly CustomAuthenticationStateProvider _authStateProvider;
     private readonly ILocalStorageService _localStorage;
-    private readonly IdentityApiOptions _identityOptions;
+    private readonly IdentityApiConfiguration _identityOptions;
 
     public AuthenticationService(
         IIdentityApiClient client,
-        AuthenticationStateProvider authStateProvider,
+        CustomAuthenticationStateProvider authStateProvider,
         ILocalStorageService localStorage,
-        IOptions<IdentityApiOptions> identityOptions)
+        IOptions<IdentityApiConfiguration> identityOptions)
     {
         _client = client;
         _authStateProvider = authStateProvider;
@@ -28,7 +28,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
-        ((CustomAuthenticationStateProvider)_authStateProvider).SignInUser(result.Token);
+        _authStateProvider.SignInUser(result.Token);
         await _localStorage.SetItemAsync(_identityOptions.AuthTokenStorageKey, result!.Token);
         await _localStorage.SetItemAsync(_identityOptions.RefreshTokenStorageKey, result!.RefreshToken);
 
@@ -38,7 +38,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task LogoutAsync()
     {
         await _localStorage.RemoveItemAsync(_identityOptions.AuthTokenStorageKey);
-        ((CustomAuthenticationStateProvider)_authStateProvider).SignOutUser();
+        _authStateProvider.SignOutUser();
     }
 
     public async Task RegisterAsync(UserRegistrationRequest userRegistrationRequest)

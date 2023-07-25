@@ -11,15 +11,20 @@ public static class ConfigureServices
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
     {
         var identityOptionsSection = configuration.GetSection(ConfigKeys.IdentityOptions);
-        services.Configure<IdentityApiOptions>(identityOptionsSection);           
-        var identityOptions = identityOptionsSection.Get<IdentityApiOptions>();
+        services.Configure<IdentityApiConfiguration>(identityOptionsSection);
+        var identityOptions = identityOptionsSection.Get<IdentityApiConfiguration>();
 
-        services.Configure<PasswordOptions>(configuration.GetSection(ConfigKeys.PasswordOptions));
+        services.Configure<PasswordConfiguration>(configuration.GetSection(ConfigKeys.PasswordOptions));
 
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();
-        // TODO: register the custom and inject it
-        services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+
+        services.AddScoped<
+            CustomAuthenticationStateProvider,
+              CustomAuthenticationStateProvider>();
+                  services.AddScoped<AuthenticationStateProvider>(
+                    provider => provider.GetService<CustomAuthenticationStateProvider>());
+
         services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         services.AddHttpClient<IIdentityApiClient, IdentityApiClient>(client =>

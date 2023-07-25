@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.UI.Authentication.Models;
 
-public class PasswordOptions
+public class PasswordConfiguration
 {
     public bool RequireDigit { get; set; }
     public bool RequireLowercase { get; set; }
