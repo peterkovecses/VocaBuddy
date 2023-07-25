@@ -18,6 +18,7 @@ public static class ConfigureServices
 
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();
+        // TODO: register the custom and inject it
         services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
 

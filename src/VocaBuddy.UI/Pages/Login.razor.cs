@@ -1,5 +1,4 @@
-﻿
-using VocaBuddy.Shared.Exceptions;
+﻿using VocaBuddy.Shared.Exceptions;
 
 namespace VocaBuddy.UI.Pages;
 

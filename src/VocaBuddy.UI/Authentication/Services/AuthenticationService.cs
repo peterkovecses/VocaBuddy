@@ -28,9 +28,9 @@ public class AuthenticationService : IAuthenticationService
     public async Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
+        ((CustomAuthenticationStateProvider)_authStateProvider).SignInUser(result.Token);
         await _localStorage.SetItemAsync(_identityOptions.AuthTokenStorageKey, result!.Token);
         await _localStorage.SetItemAsync(_identityOptions.RefreshTokenStorageKey, result!.RefreshToken);
-        ((CustomAuthenticationStateProvider)_authStateProvider).SignInUser(result.Token);
 
         return result;
     }
