@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.Authentication.Models;
+﻿namespace VocaBuddy.UI.Models;
 
 public class PasswordConfiguration
 {

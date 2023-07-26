@@ -1,6 +1,4 @@
-﻿using VocaBuddy.UI.Authentication.Models;
-
-namespace VocaBuddy.UI.Interfaces
+﻿namespace VocaBuddy.UI.Interfaces
 {
     public interface IIdentityApiClient
     {

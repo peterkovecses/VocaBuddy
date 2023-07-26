@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
-using VocaBuddy.UI.Authentication.Models;
 
 namespace VocaBuddy.UI.Validators;
 

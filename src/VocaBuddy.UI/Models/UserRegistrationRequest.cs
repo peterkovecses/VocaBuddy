@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using VocaBuddy.UI.Validators;
 
-namespace VocaBuddy.UI.Authentication.Models;
+namespace VocaBuddy.UI.Models;
 
 public class UserRegistrationRequest
 {

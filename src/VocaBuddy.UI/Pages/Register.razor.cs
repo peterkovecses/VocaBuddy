@@ -1,5 +1,4 @@
 ﻿using Shared.Exceptions;
-using VocaBuddy.UI.Authentication.Models;
 
 namespace VocaBuddy.UI.Pages;
 

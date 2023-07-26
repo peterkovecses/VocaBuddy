@@ -1,10 +1,8 @@
 ﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
 using VocaBuddy.UI.ApiHelper.IdentityApi;
-using VocaBuddy.UI.Authentication.Models;
 
-namespace VocaBuddy.UI.Authentication.Services;
+namespace VocaBuddy.UI.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {

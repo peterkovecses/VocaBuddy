@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.Authentication.Services;
+﻿namespace VocaBuddy.UI.Authentication;
 
 using System;
 using System.Collections.Generic;
@@ -30,37 +30,31 @@ public static class JwtParser
 
     private static void AddRolesToClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
     {
-        if (claimsDictionary.TryGetValue(ClaimTypes.Role, out object? roles) && roles != null)
+        if (claimsDictionary.TryGetValue("role", out object? roles) && roles != null)
         {
             var parsedRoles = ParseRoles(roles.ToString());
             AddParsedRolesToClaims(claims, parsedRoles);
         }
     }
 
-    private static void AddParsedRolesToClaims(List<Claim> claims, IEnumerable<string> parsedRoles)
-    {
-        claims.AddRange(parsedRoles.Select(parsedRole => new Claim(ClaimTypes.Role, parsedRole)));
-    }
-
     private static IEnumerable<string> ParseRoles(string rolesStr)
     {
-        rolesStr = TrimSquareBrackets(rolesStr);
-        var parsedRoles = SplitRoleString(rolesStr);
+        if (IsArray(rolesStr))
+        {
+            return JsonSerializer.Deserialize<IEnumerable<string>>(rolesStr);
+        }
 
-        return TrimQuotesFromRoles(parsedRoles);
+        return new List<string>() { rolesStr };
     }
 
-    private static string TrimSquareBrackets(string rolesStr)
-        => rolesStr.Trim().TrimStart('[').TrimEnd(']');
+    private static bool IsArray(string rolesStr)
+        => rolesStr.StartsWith("[") && rolesStr.EndsWith("]");
 
-    private static string[] SplitRoleString(string rolesStr)
-        => rolesStr.Split(',', StringSplitOptions.RemoveEmptyEntries);
-
-    private static IEnumerable<string> TrimQuotesFromRoles(string[] parsedRoles)
-        => parsedRoles.Select(role => role.Trim('"'));
+    private static void AddParsedRolesToClaims(List<Claim> claims, IEnumerable<string> parsedRoles)
+        => claims.AddRange(parsedRoles.Select(parsedRole => new Claim(ClaimTypes.Role, parsedRole)));
 
     private static void RemoveExtractedRoles(Dictionary<string, object> claimsDictionary)
-        => claimsDictionary.Remove(ClaimTypes.Role);
+        => claimsDictionary.Remove("role");
 
     private static void AddRemainingClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
         => claims.AddRange(claimsDictionary.Select(keyValuePair => new Claim(keyValuePair.Key, keyValuePair.Value.ToString())));
@@ -69,7 +63,15 @@ public static class JwtParser
         => JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
     private static string GetPayload(string jwt)
-        => jwt.Split('.')[1];
+    {
+        var jwtParts = jwt.Split('.');
+        if (jwtParts.Length != 3)
+        {
+            throw new ArgumentException("Invalid JWT token format.");
+        }
+
+        return jwtParts[1];
+    }
 
     private static byte[] DecodeBase64UrlToByteArray(string payload)
     {

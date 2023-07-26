@@ -3,7 +3,6 @@ using Shared.Exceptions;
 using System.Net.Http.Json;
 using System.Text.Json;
 using VocaBuddy.Shared.Exceptions;
-using VocaBuddy.UI.Authentication.Models;
 
 namespace VocaBuddy.UI.ApiHelper.IdentityApi;
 

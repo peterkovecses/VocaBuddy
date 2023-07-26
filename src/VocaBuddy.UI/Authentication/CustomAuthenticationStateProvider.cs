@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using VocaBuddy.UI.ApiHelper.IdentityApi;
 
-namespace VocaBuddy.UI.Authentication.Services;
+namespace VocaBuddy.UI.Authentication;
 
 public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {

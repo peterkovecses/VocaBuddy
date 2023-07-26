@@ -5,7 +5,7 @@ namespace VocaBuddy.UI.Shared
     public class MainLayoutBase : LayoutComponentBase, IDisposable
     {
         protected bool IsAuthenticated;
-        protected string Email;
+        protected string Email;        
 
         [CascadingParameter]
         protected Task<AuthenticationState> AuthState { get; set; }
@@ -44,8 +44,6 @@ namespace VocaBuddy.UI.Shared
         }
 
         public void Dispose()
-        {
-            (AuthStateProvider as AuthenticationStateProvider).AuthenticationStateChanged -= OnAuthenticationStateChanged;
-        }
+            => (AuthStateProvider as AuthenticationStateProvider).AuthenticationStateChanged -= OnAuthenticationStateChanged;
     }
 }
