@@ -1,14 +1,23 @@
 ﻿namespace VocaBuddy.UI.Authentication;
 
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
+using VocaBuddy.UI.Interfaces;
 
-public static class JwtParser
+public class JwtParser : IJwtParser
 {
-    public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+    private readonly IdentityApiConfiguration _identityConfiguration;
+
+    public JwtParser(IOptions<IdentityApiConfiguration> identityOptions)
+    {
+        _identityConfiguration = identityOptions.Value;
+    }
+
+    public IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
         var payload = GetPayload(jwt);
         var jsonBytes = DecodeBase64UrlToByteArray(payload);
@@ -17,7 +26,7 @@ public static class JwtParser
         return GetClaims(claimsDictionary);
     }
 
-    private static IEnumerable<Claim> GetClaims(Dictionary<string, object>? claimsDictionary)
+    private IEnumerable<Claim> GetClaims(Dictionary<string, object>? claimsDictionary)
     {
         var claims = new List<Claim>();
         // Roles must be handled differently than plain claims
@@ -28,9 +37,9 @@ public static class JwtParser
         return claims;
     }
 
-    private static void AddRolesToClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
+    private void AddRolesToClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
     {
-        if (claimsDictionary.TryGetValue("role", out object? roles) && roles != null)
+        if (claimsDictionary.TryGetValue(_identityConfiguration.RoleKey, out object? roles) && roles != null)
         {
             var parsedRoles = ParseRoles(roles.ToString());
             AddParsedRolesToClaims(claims, parsedRoles);
@@ -53,8 +62,8 @@ public static class JwtParser
     private static void AddParsedRolesToClaims(List<Claim> claims, IEnumerable<string> parsedRoles)
         => claims.AddRange(parsedRoles.Select(parsedRole => new Claim(ClaimTypes.Role, parsedRole)));
 
-    private static void RemoveExtractedRoles(Dictionary<string, object> claimsDictionary)
-        => claimsDictionary.Remove("role");
+    private void RemoveExtractedRoles(Dictionary<string, object> claimsDictionary)
+        => claimsDictionary.Remove(_identityConfiguration.RoleKey);
 
     private static void AddRemainingClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
         => claims.AddRange(claimsDictionary.Select(keyValuePair => new Claim(keyValuePair.Key, keyValuePair.Value.ToString())));

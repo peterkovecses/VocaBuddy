@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using VocaBuddy.UI.ApiHelper.IdentityApi;
 
 namespace VocaBuddy.UI.Authentication;
 
@@ -10,16 +9,19 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
+    private readonly IJwtParser _jwtParser;
     private readonly IdentityApiConfiguration _identityOptions;
     private readonly AuthenticationState _anonymous;
 
     public CustomAuthenticationStateProvider(
         HttpClient httpClient,
         ILocalStorageService localStorage,
+        IJwtParser jwtParser,
         IOptions<IdentityApiConfiguration> identityOptions)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
+        _jwtParser = jwtParser;
         _identityOptions = identityOptions.Value;
         _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
     }
@@ -51,6 +53,6 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(authState);
     }
 
-    private static ClaimsPrincipal CreateAuthenticatedUser(string token)
-        => new(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
+    private ClaimsPrincipal CreateAuthenticatedUser(string token)
+        => new(new ClaimsIdentity(_jwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
 }

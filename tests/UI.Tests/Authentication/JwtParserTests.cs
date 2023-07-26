@@ -1,10 +1,21 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.Extensions.Options;
+using System.Security.Claims;
 using VocaBuddy.UI.Authentication;
+using VocaBuddy.UI.Models;
 
 namespace UI.Tests.Authentication;
 
 public class JwtParserTests
 {
+    private readonly JwtParser _sut;
+
+    public JwtParserTests()
+    {
+        var identityConfig = new IdentityApiConfiguration() { RoleKey = "role" };
+        var identityOptions = Options.Create(identityConfig);
+        _sut = new JwtParser(identityOptions);
+    }
+
     [Fact]
     public void ParseClaimsFromJwt_WithValidJwtAndSingleRole_ShouldReturnClaimsIncludingRole()
     {
@@ -18,7 +29,7 @@ public class JwtParserTests
         };
 
         // Act
-        var claims = JwtParser.ParseClaimsFromJwt(jwt);
+        var claims = _sut.ParseClaimsFromJwt(jwt);
 
         // Assert
         claims.Should().BeEquivalentTo(expectedClaims);
@@ -38,7 +49,7 @@ public class JwtParserTests
         };
 
         // Act
-        var claims = JwtParser.ParseClaimsFromJwt(jwt);
+        var claims = _sut.ParseClaimsFromJwt(jwt);
 
         // Assert
         claims.Should().BeEquivalentTo(expectedClaims);
@@ -52,7 +63,7 @@ public class JwtParserTests
         var expectedExceptionMessage = "Invalid JWT token format.";
 
         // Act
-        Action act = () => JwtParser.ParseClaimsFromJwt(invalidJwt);
+        Action act = () => _sut.ParseClaimsFromJwt(invalidJwt);
 
         // Assert
         act.Should().Throw<ArgumentException>().WithMessage(expectedExceptionMessage);
@@ -68,7 +79,7 @@ public class JwtParserTests
         var jwt = $"{jwtHeader}.{invalidBase64UrlEncodedPayload}.{jwtSignature}";
 
         // Act
-        Action act = () => JwtParser.ParseClaimsFromJwt(jwt);
+        Action act = () => _sut.ParseClaimsFromJwt(jwt);
 
         // Assert
         act.Should().Throw<FormatException>().WithMessage("Invalid Base64Url encoding.");

@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using VocaBuddy.Shared.Exceptions;
 
-namespace VocaBuddy.UI.ApiHelper.IdentityApi;
+namespace VocaBuddy.UI.ApiHelper;
 
 public class IdentityApiClient : IIdentityApiClient
 {

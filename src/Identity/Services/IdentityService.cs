@@ -78,7 +78,7 @@ public partial class IdentityService : IIdentityService
             claims.AddRange(userClaims);
 
             var userRoles = (await _userManager.GetRolesAsync(user))
-                                .Select(r => new Claim(ClaimTypes.Role, r));
+                                .Select(role => new Claim(ClaimTypes.Role, role));
             claims.AddRange(userRoles);
 
             return claims;

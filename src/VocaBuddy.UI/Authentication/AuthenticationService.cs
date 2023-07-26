@@ -1,6 +1,5 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
-using VocaBuddy.UI.ApiHelper.IdentityApi;
 
 namespace VocaBuddy.UI.Authentication;
 
@@ -40,7 +39,5 @@ public class AuthenticationService : IAuthenticationService
     }
 
     public async Task RegisterAsync(UserRegistrationRequest userRegistrationRequest)
-    {
-        await _client.RegisterAsync(userRegistrationRequest);
-    }
+        => await _client.RegisterAsync(userRegistrationRequest);
 }

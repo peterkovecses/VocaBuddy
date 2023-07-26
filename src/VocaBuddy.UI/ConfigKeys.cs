@@ -2,6 +2,6 @@
 
 public static class ConfigKeys
 {
-    public const string IdentityOptions = "Apis:Identity";
-    public const string PasswordOptions = "PasswordOptions";
+    public const string IdentityConfiguration = "Apis:Identity";
+    public const string PasswordConfiguration = "PasswordConfiguration";
 }

@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.ApiHelper.IdentityApi;
+﻿namespace VocaBuddy.UI.Models;
 
 public class IdentityApiConfiguration
 {
@@ -8,4 +8,5 @@ public class IdentityApiConfiguration
     public string RefreshEndpoint { get; set; }
     public string AuthTokenStorageKey { get; set; }
     public string RefreshTokenStorageKey { get; set; }
+    public string RoleKey { get; set; }
 }
