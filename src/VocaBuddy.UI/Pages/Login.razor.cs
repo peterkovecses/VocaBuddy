@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Exceptions;
-
-namespace VocaBuddy.UI.Pages;
+﻿namespace VocaBuddy.UI.Pages;
 
 public partial class LoginBase : CustomComponentBase
 {

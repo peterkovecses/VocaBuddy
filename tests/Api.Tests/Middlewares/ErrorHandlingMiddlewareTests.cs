@@ -1,13 +1,11 @@
-﻿using Identity.Exceptions;
-using Identity.Middlewares;
-using Identity.Tests.TestHelpers;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Shared.Exceptions;
 using System.Net;
-using VocaBuddy.Shared.Exceptions;
+using System.Text;
+using VocaBuddy.Api.Middlewares;
+using VocaBuddy.Application.Exceptions;
 
-namespace Identity.Tests.Middlewares;
+namespace Api.Tests.Middlewares;
 
 public class ErrorHandlingMiddlewareTests
 {
@@ -38,22 +36,13 @@ public class ErrorHandlingMiddlewareTests
     }
 
     [Theory]
-    [InlineData(typeof(ExpiredRefreshTokenException), HttpStatusCode.BadRequest, "This refresh token has expired.")]
-    [InlineData(typeof(InvalidatedRefreshTokenException), HttpStatusCode.BadRequest, "This refresh token has been invalidated.")]
-    [InlineData(typeof(InvalidCredentialsException), HttpStatusCode.BadRequest, "Incorrect username or password.")]
-    [InlineData(typeof(InvalidJwtException), HttpStatusCode.BadRequest, "Token is not a JWT with valid security algorithm.")]
-    [InlineData(typeof(JwtIdNotMatchException), HttpStatusCode.BadRequest, "This refresh token does not match this JWT.")]
-    [InlineData(typeof(NotExpiredTokenException), HttpStatusCode.BadRequest, "This token hasn not expired yet.")]
-    [InlineData(typeof(RefreshTokenNotExistsException), HttpStatusCode.BadRequest, "This refresh token does not exists.")]
-    [InlineData(typeof(UsedUpRefreshTokenException), HttpStatusCode.BadRequest, "This refresh token has been invalidated.")]
-    [InlineData(typeof(UserExistsException), HttpStatusCode.BadRequest, "User with this e-mail address already exists.")]
-    [InlineData(typeof(UserCreationException), HttpStatusCode.BadRequest, "Test exception")]
+    [InlineData(typeof(OperationCanceledException), HttpStatusCode.Accepted, "Operation was cancelled.")]
     [InlineData(typeof(Exception), HttpStatusCode.InternalServerError, "An error occurred while processing the request.")]
     public async Task InvokeAsync_Exception_ExpectedStatusCode(Type exceptionType, HttpStatusCode expectedStatusCode, string expectedMessage)
     {
         // Arrange
         var context = new DefaultHttpContext();
-        var exceptionInstance = CreateExceptionWithTypeAndMessage(exceptionType, expectedMessage);
+        var exceptionInstance = Activator.CreateInstance(exceptionType) as Exception;
         context.Response.Body = new MemoryStream();
         _requestDelegateMock.Setup(requestDelegate => requestDelegate(context)).Throws(exceptionInstance);
 
@@ -81,19 +70,50 @@ public class ErrorHandlingMiddlewareTests
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
 
-        var responseBody = ((MemoryStream)context.Response.Body).Content();
-        Assert.Contains(expectedMessage, responseBody);
+        var responseBody = ((MemoryStream)context.Response.Body).ToArray();
+        var responseBodyString = Encoding.ASCII.GetString(responseBody);
+        Assert.Contains(expectedMessage, responseBodyString);
     }
 
-    private static Exception CreateExceptionWithTypeAndMessage(Type exceptionType, string message)
+    [Fact]
+    public async Task InvokeAsync_NotFoundException_ExpectedStatusCode()
     {
-        var constructorWithMessageParam = exceptionType.GetConstructor(new[] { typeof(string) });
+        // Arrange
+        var itemId = 8;
+        var context = new DefaultHttpContext();
+        var exceptionInstance = new NotFoundException(itemId);
+        context.Response.Body = new MemoryStream();
+        _requestDelegateMock.Setup(requestDelegate => requestDelegate(context)).Throws(exceptionInstance);
 
-        if (constructorWithMessageParam != null)
-        {
-            return (Exception)Activator.CreateInstance(exceptionType, message);
-        }
+        _loggerMock.Setup(logger => logger.Log(
+            It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((@object, @type) => true),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+        ));
 
-        return (Exception)Activator.CreateInstance(exceptionType);
+        var expectedStatusCode = 404;
+        var expectedMessage = $"Item with id {itemId} not found.";
+
+        // Act
+        await _errorHandlingMiddleware.InvokeAsync(context);
+
+        // Assert
+        _requestDelegateMock.Verify(requestDelegate => requestDelegate(context), Times.Once);
+        Assert.Equal(expectedStatusCode, context.Response.StatusCode);
+
+        _loggerMock.Verify(
+            logger => logger.Log(
+                It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((@object, @type) => true),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.Once);
+
+        var responseBody = ((MemoryStream)context.Response.Body).ToArray();
+        var responseBodyString = Encoding.ASCII.GetString(responseBody);
+        Assert.Contains(expectedMessage, responseBodyString);
     }
 }

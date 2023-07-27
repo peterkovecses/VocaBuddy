@@ -1,4 +1,4 @@
-﻿namespace Identity.Tests.TestHelpers;
+﻿namespace Api.Tests.TestHelpers;
 
 public static class MemoryStreamExtensions
 {

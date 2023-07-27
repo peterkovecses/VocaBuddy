@@ -7,8 +7,6 @@ namespace Identity.Filters;
 
 public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
 {
-    public const string DefaultMessage = "An error occurred while processing the request.";
-
     public override void OnException(ExceptionContext context)
     {
         if (context.Exception is InvalidCredentialsException)
@@ -21,7 +19,7 @@ public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
         {
             context
                 .SetStatusCode(StatusCodes.Status500InternalServerError)
-                .SetResult(AuthenticationResult.Error(DefaultMessage));
+                .SetResult(AuthenticationResult.Error());
         }
 
         base.OnException(context);

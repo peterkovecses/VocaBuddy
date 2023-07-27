@@ -1,12 +1,10 @@
 ﻿namespace VocaBuddy.Shared.Models;
 
-public partial class AuthenticationResult
+public partial class AuthenticationResult : ResultBase
 {
-
     public AuthenticationResultStatus Status { get; set; }
     public string? Token { get; set; }
     public string? RefreshToken { get; set; }
-    public string? ErrorMessage { get; set; }
 
     public static AuthenticationResult Success(string token, string refreshToken)
         => new()
@@ -23,7 +21,7 @@ public partial class AuthenticationResult
             ErrorMessage = errorMessage
         };
 
-    public static AuthenticationResult Error(string errorMessage)
+    public static AuthenticationResult Error(string errorMessage = DefaultErrorMessage)
         => new()
         {
             Status = AuthenticationResultStatus.Error,

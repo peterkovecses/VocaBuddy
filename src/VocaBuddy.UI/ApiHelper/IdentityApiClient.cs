@@ -2,7 +2,6 @@
 using Shared.Exceptions;
 using System.Net.Http.Json;
 using System.Text.Json;
-using VocaBuddy.Shared.Exceptions;
 
 namespace VocaBuddy.UI.ApiHelper;
 
@@ -20,8 +19,9 @@ public class IdentityApiClient : IIdentityApiClient
     public async Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
-        
-        return await response.Content.ReadFromJsonAsync<AuthenticationResult>();
+
+        return await response?.Content.ReadFromJsonAsync<AuthenticationResult>()
+               ?? AuthenticationResult.Error();
     }
 
     public async Task RegisterAsync(UserRegistrationRequest registrationRequest)

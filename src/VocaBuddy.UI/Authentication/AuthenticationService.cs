@@ -26,14 +26,25 @@ public class AuthenticationService : IAuthenticationService
     {
         var result = await _client.LoginAsync(loginRequest);
 
-        if (result.Status == AuthenticationResultStatus.Success)
+        if (LoginSucceed(result))
         {
-            _authStateProvider.SignInUser(result.Token);
-            await _localStorage.SetItemAsync(_identityOptions.AuthTokenStorageKey, result!.Token);
-            await _localStorage.SetItemAsync(_identityOptions.RefreshTokenStorageKey, result!.RefreshToken);
+            SignInUser(result);
+            await StoreTokens(result);
         }
 
         return result;
+
+        static bool LoginSucceed(AuthenticationResult result)
+            => result.Status == AuthenticationResultStatus.Success;
+
+        void SignInUser(AuthenticationResult result)
+            => _authStateProvider.SignInUser(result.Token);
+
+        async Task StoreTokens(AuthenticationResult result)
+        {
+            await _localStorage.SetItemAsync(_identityOptions.AuthTokenStorageKey, result!.Token);
+            await _localStorage.SetItemAsync(_identityOptions.RefreshTokenStorageKey, result!.RefreshToken);
+        }
     }
 
     public async Task LogoutAsync()
