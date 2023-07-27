@@ -42,7 +42,7 @@ public class ErrorHandlingMiddlewareTests
     [InlineData(typeof(InvalidatedRefreshTokenException), HttpStatusCode.BadRequest, "This refresh token has been invalidated.")]
     [InlineData(typeof(InvalidCredentialsException), HttpStatusCode.BadRequest, "Incorrect username or password.")]
     [InlineData(typeof(InvalidJwtException), HttpStatusCode.BadRequest, "Token is not a JWT with valid security algorithm.")]
-    [InlineData(typeof(JwtNotMatchException), HttpStatusCode.BadRequest, "This refresh token does not match this JWT.")]
+    [InlineData(typeof(JwtIdNotMatchException), HttpStatusCode.BadRequest, "This refresh token does not match this JWT.")]
     [InlineData(typeof(NotExpiredTokenException), HttpStatusCode.BadRequest, "This token hasn not expired yet.")]
     [InlineData(typeof(RefreshTokenNotExistsException), HttpStatusCode.BadRequest, "This refresh token does not exists.")]
     [InlineData(typeof(UsedUpRefreshTokenException), HttpStatusCode.BadRequest, "This refresh token has been invalidated.")]

@@ -35,15 +35,14 @@ public class ErrorHandlingMiddleware
         (HttpStatusCode code, string message) = exception switch
         {
             UserCreationException => (HttpStatusCode.BadRequest, exception.Message),
-            UsedUpRefreshTokenException => (HttpStatusCode.BadRequest, exception.Message),
-            RefreshTokenNotExistsException => (HttpStatusCode.BadRequest, exception.Message),
-            NotExpiredTokenException => (HttpStatusCode.BadRequest, exception.Message),
-            JwtNotMatchException => (HttpStatusCode.BadRequest, exception.Message),
-            InvalidatedRefreshTokenException => (HttpStatusCode.BadRequest, exception.Message),
-            ExpiredRefreshTokenException => (HttpStatusCode.BadRequest, exception.Message),
-            InvalidCredentialsException => (HttpStatusCode.BadRequest, exception.Message),
-            InvalidJwtException => (HttpStatusCode.BadRequest, exception.Message),
-            UserExistsException=> (HttpStatusCode.BadRequest, exception.Message),
+            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
+            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, exception.Message),
+            NotExpiredTokenException => (HttpStatusCode.Unauthorized, exception.Message),
+            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, exception.Message),
+            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
+            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
+            InvalidJwtException => (HttpStatusCode.Unauthorized, exception.Message),
+            UserExistsException=> (HttpStatusCode.Conflict, exception.Message),
             _ => (HttpStatusCode.InternalServerError, "An error occurred while processing the request.")
         };
 

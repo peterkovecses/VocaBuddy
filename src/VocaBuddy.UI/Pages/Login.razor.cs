@@ -17,22 +17,25 @@ public partial class LoginBase : CustomComponentBase
         IsSubmitting = true;
         ShowAuthError = false;
 
-        try
+        var result = await _authService.LoginAsync(Model);
+        HandleResult(result);
+    }
+
+    private void HandleResult(AuthenticationResult result)
+    {
+        IsSubmitting = false;
+
+        switch (result.Status)
         {
-            var result = await _authService.LoginAsync(Model);
-            NavManager.NavigateTo("/");
-        }
-        catch(InvalidCredentialsException ex)
-        {
-            ShowErrorMessage(ex.Message);
-        }
-        catch
-        {
-            ShowErrorMessage("Unsuccessful login");
-        }
-        finally
-        {
-            IsSubmitting = false;
+            case AuthenticationResultStatus.Success:
+                NavManager.NavigateTo("/");
+                break;
+            case AuthenticationResultStatus.InvalidCredentials:
+                ShowErrorMessage(result.ErrorMessage!);
+                break;
+            default:
+                ShowErrorMessage("Unsuccessful login");
+                break;
         }
     }
 

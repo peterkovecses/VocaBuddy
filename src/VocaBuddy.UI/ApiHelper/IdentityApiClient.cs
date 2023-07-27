@@ -20,17 +20,8 @@ public class IdentityApiClient : IIdentityApiClient
     public async Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadFromJsonAsync<AuthenticationResult>();
-        }
-
-        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-        {
-            throw new InvalidCredentialsException();
-        }
-
-        throw new HttpRequestException();
+        
+        return await response.Content.ReadFromJsonAsync<AuthenticationResult>();
     }
 
     public async Task RegisterAsync(UserRegistrationRequest registrationRequest)

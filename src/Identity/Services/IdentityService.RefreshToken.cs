@@ -88,7 +88,7 @@ public partial class IdentityService : IIdentityService
             var jti = claimPrincipal.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Jti).Value;
             if (storedRefreshToken.JwtId != jti)
             {
-                throw new JwtNotMatchException();
+                throw new JwtIdNotMatchException();
             }
         }
 

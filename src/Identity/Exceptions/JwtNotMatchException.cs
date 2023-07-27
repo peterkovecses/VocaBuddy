@@ -1,6 +1,6 @@
 ﻿namespace Identity.Exceptions;
 
-public class JwtNotMatchException : Exception
+public class JwtIdNotMatchException : Exception
 {
-    public JwtNotMatchException() : base("This refresh token does not match this JWT.") { }
+    public JwtIdNotMatchException() : base("The JWT ID of the refresh token does not match the provided JWT.") { }
 }
