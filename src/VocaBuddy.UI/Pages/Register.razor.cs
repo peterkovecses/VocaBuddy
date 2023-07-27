@@ -1,10 +1,12 @@
 ﻿using Shared.Exceptions;
+using VocaBuddy.UI.Exceptions;
+using VocaBuddy.UI.Models;
 
 namespace VocaBuddy.UI.Pages;
 
 public partial class RegisterBase : CustomComponentBase
 {
-    protected UserRegistrationRequest Model = new();
+    protected UserRegistrationRequestWithPasswordCheck Model = new();
     protected bool ShowAuthError = false;
     protected string AuthErrorText = string.Empty;
     protected bool ShowSuccessMessage = false;
@@ -21,18 +23,23 @@ public partial class RegisterBase : CustomComponentBase
 
         try
         {
-            await RegisterUser();
-            await SignInUser();
-            await DisplaySuccessMessage();
+            var result = await RegisterUserAsync();
+            ValidateResult(result);
+            await SignInUserAsync();
+            await DisplaySuccessMessageAsync();
             NavigateToIndexPage();
         }
-        catch (UserCreationException ex)
+        catch (UserExistsException ex)
+        {
+            DisplayErrorMessage(ex.Message);
+        }
+        catch (InvalidUserRegistrationInputException ex)
         {
             DisplayErrorMessage(ex.Message);
         }
         catch
         {
-            DisplayErrorMessage("Something went wrong.");
+            DisplayErrorMessage("Registration failed.");
         }
         finally
         {
@@ -40,12 +47,28 @@ public partial class RegisterBase : CustomComponentBase
         }
     }
 
-    private async Task RegisterUser()
+    private Task<IdentityResult> RegisterUserAsync()
+        => _authService.RegisterAsync(Model);
+
+    private static void ValidateResult(IdentityResult result)
     {
-        await _authService.RegisterAsync(Model);
+        if (RegistrationFailed(result))
+        {
+            throw result.Status switch
+            {
+                IdentityResultStatus.UserExists => new UserExistsException(),
+                IdentityResultStatus.InvalidCredentials => new InvalidUserRegistrationInputException(result.ErrorMessage!),
+                _ => new RegistrationFailedException(result.ErrorMessage!),
+            };
+        }
     }
 
-    private async Task SignInUser()
+    private static bool RegistrationFailed(IdentityResult result)
+    {
+        return result.Status != IdentityResultStatus.Success;
+    }
+
+    private async Task SignInUserAsync()
     {
         var loginRequest = new UserLoginRequest()
         {
@@ -56,7 +79,7 @@ public partial class RegisterBase : CustomComponentBase
         await _authService.LoginAsync(loginRequest);
     }
 
-    private async Task DisplaySuccessMessage()
+    private async Task DisplaySuccessMessageAsync()
     {
         ShowSuccessMessage = true;
         StateHasChanged();

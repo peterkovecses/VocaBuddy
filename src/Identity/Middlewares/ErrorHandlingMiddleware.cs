@@ -33,19 +33,20 @@ public class ErrorHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        var message = exception.Message;
+
         (HttpStatusCode code, IdentityResult result) = exception switch
-        {   
-            // TODO: set the appropiate results
-            UserCreationException => (HttpStatusCode.BadRequest, IdentityResult.Error()),
+        {
+            UserExistsException => (HttpStatusCode.Conflict, IdentityResult.UserExists(message)),
+            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, IdentityResult.InvalidUserRegistrationInput(message)),
+            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.InvalidCredentials(message)),
             UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
             RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
             NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
             JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
             InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
             ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.InvalidCredentials(exception.Message)),
             InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            UserExistsException=> (HttpStatusCode.Conflict, IdentityResult.Error()),
             _ => (HttpStatusCode.InternalServerError, IdentityResult.Error())
         };
 

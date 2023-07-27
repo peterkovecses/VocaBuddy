@@ -1,6 +1,5 @@
 ﻿using Identity.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using VocaBuddy.Identity.Models;
 using VocaBuddy.Shared.Models;
 
 namespace Identity.Controllers;
@@ -21,7 +20,7 @@ public class IdentityController : ControllerBase
     {
         await _identityService.RegisterAsync(request.Email, request.Password);
 
-        return Ok();
+        return Ok(IdentityResult.Success());
     }
 
     [HttpPost("login")]

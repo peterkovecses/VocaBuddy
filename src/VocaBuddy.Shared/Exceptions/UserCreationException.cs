@@ -1,6 +1,6 @@
 ﻿namespace Shared.Exceptions;
 
-public class UserCreationException : Exception
+public class InvalidUserRegistrationInputException : Exception
 {
-	public UserCreationException(string message) : base(message) { }
+	public InvalidUserRegistrationInputException(string message) : base(message) { }
 }

@@ -1,4 +1,4 @@
-﻿namespace Identity.Exceptions;
+﻿namespace Shared.Exceptions;
 
 public class UserExistsException : Exception
 {

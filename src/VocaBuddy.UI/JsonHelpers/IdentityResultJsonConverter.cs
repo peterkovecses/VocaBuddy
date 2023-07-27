@@ -43,18 +43,21 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
             throw new JsonException("The 'Status' field must be present in the IdentityResult JSON token as a required element.");
         }
 
-        switch (status.Value)
+        return status.Value switch
         {
-            case IdentityResultStatus.Success:
-                return data != null ? IdentityResult.Success(data) : IdentityResult.Success();
-
-            case IdentityResultStatus.InvalidCredentials:
-                return IdentityResult.InvalidCredentials(errorMessage ?? IdentityResult.DefaultErrorMessage);
-
-            case IdentityResultStatus.Error:
-            default:
-                return IdentityResult.Error(errorMessage ?? IdentityResult.DefaultErrorMessage);
-        }
+            IdentityResultStatus.Success => data is not null ? IdentityResult.Success(data) : IdentityResult.Success(),
+            IdentityResultStatus.UserExists => IdentityResult.UserExists(errorMessage!),
+            IdentityResultStatus.InvalidUserRegistrationInput => IdentityResult.InvalidUserRegistrationInput(errorMessage!),
+            IdentityResultStatus.InvalidCredentials => IdentityResult.InvalidCredentials(errorMessage!),
+            IdentityResultStatus.UsedUpRefreshToken => IdentityResult.UsedUpRefreshToken(errorMessage!),
+            IdentityResultStatus.RefreshTokenNotExists => IdentityResult.RefreshTokenNotExists(errorMessage!),
+            IdentityResultStatus.NotExpiredToken => IdentityResult.NotExpiredToken(errorMessage!),
+            IdentityResultStatus.JwtIdNotMatch => IdentityResult.JwtIdNotMatch(errorMessage!),
+            IdentityResultStatus.InvalidatedRefreshToken => IdentityResult.InvalidatedRefreshToken(errorMessage!),
+            IdentityResultStatus.ExpiredRefreshToken => IdentityResult.ExpiredRefreshToken(errorMessage!),
+            IdentityResultStatus.InvalidJwt => IdentityResult.InvalidJwt(errorMessage!),
+            _ => IdentityResult.Error(errorMessage ?? IdentityResult.DefaultErrorMessage),
+        };
     }
 
     public override void Write(Utf8JsonWriter writer, IdentityResult value, JsonSerializerOptions options)

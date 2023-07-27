@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Shared.Exceptions;
 using System.Net.Http.Json;
 using System.Text.Json;
 using VocaBuddy.UI.JsonHelpers;
@@ -20,46 +19,15 @@ public class IdentityApiClient : IIdentityApiClient
     public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
-
-        var jsonSerializerOptions = new JsonSerializerOptions
-        {
-            Converters =
-            {
-                new IdentityResultJsonConverter(),
-                new TokenHolderJsonConverter()
-            }
-        };
-
-        return await response.Content.ReadFromJsonAsync<IdentityResult>(jsonSerializerOptions)
-               ?? IdentityResult.Error();
+        
+        return await DeserializeContent(response);
     }
 
-    public async Task RegisterAsync(UserRegistrationRequest registrationRequest)
+    public async Task<IdentityResult> RegisterAsync(UserRegistrationRequest registrationRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RegisterEndpoint, registrationRequest);
 
-        if (response.IsSuccessStatusCode)
-        {
-            return;
-        }
-
-        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-        {
-            var errorMessage = await GetErrorMessage(response.Content);
-
-            throw new UserCreationException(errorMessage);
-        }
-
-        throw new HttpRequestException();
-
-        static async Task<string> GetErrorMessage(HttpContent content)
-        {
-            var stringContent = await content.ReadAsStringAsync();
-            var responseObject = JsonDocument.Parse(stringContent).RootElement;
-            var errorMessage = responseObject.GetProperty("error").GetString();
-
-            return errorMessage;
-        }
+        return await DeserializeContent(response);
     }
 
     public async Task<TokenHolder> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
@@ -69,4 +37,22 @@ public class IdentityApiClient : IIdentityApiClient
 
         return await response.Content.ReadFromJsonAsync<TokenHolder>();
     }
+
+    private static async Task<IdentityResult> DeserializeContent(HttpResponseMessage response)
+    {
+        var jsonSerializerOptions = CreateSerializerOptions();
+
+        return await response.Content.ReadFromJsonAsync<IdentityResult>(jsonSerializerOptions)
+               ?? IdentityResult.Error();
+    }
+
+    private static JsonSerializerOptions CreateSerializerOptions()
+        => new()
+        {
+            Converters =
+            {
+                        new IdentityResultJsonConverter(),
+                        new TokenHolderJsonConverter()
+            }
+        };
 }

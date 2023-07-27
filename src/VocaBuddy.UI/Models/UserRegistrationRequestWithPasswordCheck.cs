@@ -3,7 +3,7 @@ using VocaBuddy.UI.Validators;
 
 namespace VocaBuddy.UI.Models;
 
-public class UserRegistrationRequest
+public class UserRegistrationRequestWithPasswordCheck
 {
     [EmailAddress]
     [Required]
@@ -16,4 +16,7 @@ public class UserRegistrationRequest
     [Required]
     [Compare(nameof(Password), ErrorMessage = "The passwords do not match.")]
     public string ConfirmPassword { get; set; } = default!;
+
+    public UserRegistrationRequest ConvertToIdentityModel()
+        => new() { Email = this.Email, Password = this.Password };
 }

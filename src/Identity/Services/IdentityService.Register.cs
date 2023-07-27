@@ -34,7 +34,7 @@ public partial class IdentityService : IIdentityService
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
             {
-                throw new UserCreationException(MergeIdentityErrors(result.Errors));
+                throw new InvalidUserRegistrationInputException(MergeIdentityErrors(result.Errors));
             }
         }
 

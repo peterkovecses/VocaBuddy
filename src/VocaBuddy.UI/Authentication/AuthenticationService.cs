@@ -55,6 +55,6 @@ public class AuthenticationService : IAuthenticationService
         _authStateProvider.SignOutUser();
     }
 
-    public async Task RegisterAsync(UserRegistrationRequest userRegistrationRequest)
-        => await _client.RegisterAsync(userRegistrationRequest);
+    public async Task<IdentityResult> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
+        => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 }
