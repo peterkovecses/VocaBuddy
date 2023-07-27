@@ -7,7 +7,7 @@ namespace Identity.Services;
 
 public partial class IdentityService : IIdentityService
 {
-    public async Task<AuthenticationResult> LoginAsync(string email, string password)
+    public async Task<TokenHolder> LoginAsync(string email, string password)
     {
         var user = await FindUserByEmailAsync(email);
         await ThrowIfInvalidCredentialsAsync(user, password);

@@ -3,6 +3,7 @@ using Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
 using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.Shared.Models;
 
 namespace Identity.Middlewares;
 
@@ -32,23 +33,25 @@ public class ErrorHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        (HttpStatusCode code, string message) = exception switch
-        {
-            UserCreationException => (HttpStatusCode.BadRequest, exception.Message),
-            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
-            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, exception.Message),
-            NotExpiredTokenException => (HttpStatusCode.Unauthorized, exception.Message),
-            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, exception.Message),
-            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
-            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
-            InvalidJwtException => (HttpStatusCode.Unauthorized, exception.Message),
-            UserExistsException=> (HttpStatusCode.Conflict, exception.Message),
-            _ => (HttpStatusCode.InternalServerError, "An error occurred while processing the request.")
+        (HttpStatusCode code, IdentityResult result) = exception switch
+        {   
+            // TODO: set the appropiate results
+            UserCreationException => (HttpStatusCode.BadRequest, IdentityResult.Error()),
+            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.InvalidCredentials(exception.Message)),
+            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            UserExistsException=> (HttpStatusCode.Conflict, IdentityResult.Error()),
+            _ => (HttpStatusCode.InternalServerError, IdentityResult.Error())
         };
 
-        var result = JsonSerializer.Serialize(new { error = message });
+        var jsonContent = JsonSerializer.Serialize(result);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;
-        await context.Response.WriteAsync(result);
+        await context.Response.WriteAsync(jsonContent);
     }
 }

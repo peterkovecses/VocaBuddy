@@ -1,5 +1,4 @@
-﻿using Identity.Filters;
-using Identity.Interfaces;
+﻿using Identity.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using VocaBuddy.Identity.Models;
 using VocaBuddy.Shared.Models;
@@ -25,11 +24,12 @@ public class IdentityController : ControllerBase
         return Ok();
     }
 
-    [CustomExceptionFilter]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
     {
-        return Ok(await _identityService.LoginAsync(request.Email, request.Password));
+        var tokens = await _identityService.LoginAsync(request.Email, request.Password);
+        
+        return Ok(IdentityResult.Success(tokens));
     }
 
     [HttpPost("refresh")]

@@ -12,7 +12,7 @@ namespace Identity.Services;
 
 public partial class IdentityService : IIdentityService
 {
-    public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
+    public async Task<TokenHolder> RefreshTokenAsync(string token, string refreshToken)
     {
         var claimPrincipal = GetPrincipalFromToken(token);
         ValidatePrincipal(claimPrincipal);

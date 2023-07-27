@@ -2,6 +2,7 @@
 using Shared.Exceptions;
 using System.Net.Http.Json;
 using System.Text.Json;
+using VocaBuddy.UI.JsonHelpers;
 
 namespace VocaBuddy.UI.ApiHelper;
 
@@ -16,12 +17,21 @@ public class IdentityApiClient : IIdentityApiClient
         _identityOptions = identityOptions.Value;
     }
 
-    public async Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
 
-        return await response?.Content.ReadFromJsonAsync<AuthenticationResult>()
-               ?? AuthenticationResult.Error();
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            Converters =
+            {
+                new IdentityResultJsonConverter(),
+                new TokenHolderJsonConverter()
+            }
+        };
+
+        return await response.Content.ReadFromJsonAsync<IdentityResult>(jsonSerializerOptions)
+               ?? IdentityResult.Error();
     }
 
     public async Task RegisterAsync(UserRegistrationRequest registrationRequest)
@@ -52,11 +62,11 @@ public class IdentityApiClient : IIdentityApiClient
         }
     }
 
-    public async Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
+    public async Task<TokenHolder> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RefreshEndpoint, refreshTokenRequest);
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<AuthenticationResult>();
+        return await response.Content.ReadFromJsonAsync<TokenHolder>();
     }
 }

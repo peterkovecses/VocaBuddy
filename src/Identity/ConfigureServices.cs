@@ -1,5 +1,4 @@
 ﻿using Identity.Data;
-using Identity.Filters;
 using Identity.Interfaces;
 using Identity.Models;
 using Identity.Services;
@@ -36,10 +35,7 @@ public static class ConfigureServices
         .AddEntityFrameworkStores<IdentityContext>()
         .AddDefaultTokenProviders();
 
-        services.AddControllers(options =>
-        {
-            options.Filters.Add(new CustomExceptionFilterAttribute());
-        });
+        services.AddControllers();
 
         services.AddCors(options =>
         {

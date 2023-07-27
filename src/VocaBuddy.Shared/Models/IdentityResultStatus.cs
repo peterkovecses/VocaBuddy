@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.Shared.Models;
 
-public enum AuthenticationResultStatus
+public enum IdentityResultStatus
 {
     Success,
     InvalidCredentials,

@@ -1,4 +1,7 @@
-﻿namespace VocaBuddy.UI.Pages;
+﻿using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.UI.Exceptions;
+
+namespace VocaBuddy.UI.Pages;
 
 public partial class LoginBase : CustomComponentBase
 {
@@ -15,25 +18,36 @@ public partial class LoginBase : CustomComponentBase
         IsSubmitting = true;
         ShowAuthError = false;
 
-        var result = await _authService.LoginAsync(Model);
-        HandleResult(result);
+        try
+        {
+            var result = await _authService.LoginAsync(Model);
+            HandleResult(result);
+        }
+        catch (InvalidCredentialsException ex)
+        {
+            ShowErrorMessage(ex.Message);
+        }
+        catch
+        {
+            ShowErrorMessage("Login failed.");
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
     }
 
-    private void HandleResult(AuthenticationResult result)
+    private void HandleResult(IdentityResult result)
     {
-        IsSubmitting = false;
-
         switch (result.Status)
         {
-            case AuthenticationResultStatus.Success:
+            case IdentityResultStatus.Success:
                 NavManager.NavigateTo("/");
                 break;
-            case AuthenticationResultStatus.InvalidCredentials:
-                ShowErrorMessage(result.ErrorMessage!);
-                break;
+            case IdentityResultStatus.InvalidCredentials:
+                throw new InvalidCredentialsException();
             default:
-                ShowErrorMessage("Unsuccessful login");
-                break;
+                throw new LoginFailedException(result.ErrorMessage!);
         }
     }
 

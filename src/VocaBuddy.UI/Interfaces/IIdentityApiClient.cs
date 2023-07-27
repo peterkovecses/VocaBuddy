@@ -2,8 +2,8 @@
 {
     public interface IIdentityApiClient
     {
-        Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest);
+        Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest);
         Task RegisterAsync(UserRegistrationRequest registrationRequest);
-        Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
+        Task<TokenHolder> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }

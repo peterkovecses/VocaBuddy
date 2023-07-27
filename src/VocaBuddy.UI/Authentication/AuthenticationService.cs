@@ -1,5 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 
 namespace VocaBuddy.UI.Authentication;
 
@@ -22,28 +24,28 @@ public class AuthenticationService : IAuthenticationService
         _identityOptions = identityOptions.Value;
     }
 
-    public async Task<AuthenticationResult> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
 
         if (LoginSucceed(result))
         {
-            SignInUser(result);
-            await StoreTokens(result);
+            SignInUser(result.Data!);
+            await StoreTokens(result.Data);
         }
 
         return result;
 
-        static bool LoginSucceed(AuthenticationResult result)
-            => result.Status == AuthenticationResultStatus.Success;
+        static bool LoginSucceed(IdentityResult result)
+            => result.Status == IdentityResultStatus.Success;
 
-        void SignInUser(AuthenticationResult result)
-            => _authStateProvider.SignInUser(result.Token);
+        void SignInUser(TokenHolder tokens)
+            => _authStateProvider.SignInUser(tokens.AuthToken);
 
-        async Task StoreTokens(AuthenticationResult result)
+        async Task StoreTokens(TokenHolder tokens)
         {
-            await _localStorage.SetItemAsync(_identityOptions.AuthTokenStorageKey, result!.Token);
-            await _localStorage.SetItemAsync(_identityOptions.RefreshTokenStorageKey, result!.RefreshToken);
+            await _localStorage.SetItemAsync(_identityOptions.AuthTokenStorageKey, tokens.AuthToken);
+            await _localStorage.SetItemAsync(_identityOptions.RefreshTokenStorageKey, tokens.RefreshToken);
         }
     }
 

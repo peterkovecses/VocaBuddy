@@ -29,7 +29,7 @@ public partial class IdentityService : IIdentityService
         _tokenHandler = new();
     }
 
-    async Task<AuthenticationResult> CreateSuccessfulAuthenticationResultAsync(IdentityUser user)
+    async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(IdentityUser user)
     {
         var key = Encoding.ASCII.GetBytes(_tokenValidationParameters.Secret);
         var tokenDescription = await CreateTokenDescriptionAsync(user, key);
@@ -37,7 +37,7 @@ public partial class IdentityService : IIdentityService
         var refreshToken = CreateRefreshToken(user, token);
         await SaveRefreshTokenAsync(refreshToken);
 
-        return new AuthenticationResult() { Token = _tokenHandler.WriteToken(token), RefreshToken = refreshToken.Token };
+        return new TokenHolder() { AuthToken = _tokenHandler.WriteToken(token), RefreshToken = refreshToken.Token };
 
         async Task<SecurityTokenDescriptor> CreateTokenDescriptionAsync(IdentityUser user, byte[] key)
             => new()
