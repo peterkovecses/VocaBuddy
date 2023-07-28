@@ -1,81 +1,213 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace VocaBuddy.UI.JsonHelpers;
 
 public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
 {
+    public const string StatusProperty = "status";
+    public const string ErrorMessageProperty = "errorMessage";
+    public const string TokensProperty = "tokens";
+    public const string AuthTokenProperty = "authToken";
+    public const string RefreshTokenProperty = "refreshToken";
+
+    private IdentityResultStatus? _status;
+    private string? _errorMessage;
+    private string? _authToken;
+    private string? _refreshToken;
+
     public override IdentityResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        IdentityResultStatus? status = null;
-        string? errorMessage = null;
-        TokenHolder? data = null;
+        ThrowIfNotStartObject(reader);
+        MoveToNextJsonElement(ref reader);
+        ProcessJsonProperties(ref reader, options);
+        ValidateStatus(_status);
 
-        while (reader.Read())
+        return CreateIdentityResult();
+
+        static void ThrowIfNotStartObject(Utf8JsonReader reader)
         {
-            if (reader.TokenType == JsonTokenType.EndObject)
+            if (!IsStartObject(reader.TokenType))
             {
-                break;
-            }
-
-            if (reader.TokenType == JsonTokenType.PropertyName)
-            {
-                string propertyName = reader.GetString();
-                reader.Read();
-
-                if (propertyName.Equals("status", StringComparison.OrdinalIgnoreCase))
-                {
-                    status = (IdentityResultStatus)reader.GetInt32();
-                }
-                else if (propertyName.Equals("errorMessage", StringComparison.OrdinalIgnoreCase))
-                {
-                    errorMessage = reader.GetString();
-                }
-                else if (propertyName.Equals("data", StringComparison.OrdinalIgnoreCase))
-                {
-                    data = JsonSerializer.Deserialize<TokenHolder>(ref reader, options);
-                }
+                throw new JsonException();
             }
         }
 
-        if (!status.HasValue)
+        static bool IsStartObject(JsonTokenType tokenType)
+            => tokenType == JsonTokenType.StartObject;
+
+        static bool MoveToNextJsonElement(ref Utf8JsonReader reader)
+            => reader.Read();
+
+        static bool ReadJsonElementValue(ref Utf8JsonReader reader)
+            => reader.Read();
+
+        void ProcessJsonProperties(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
-            throw new JsonException("The 'Status' field must be present in the IdentityResult JSON token as a required element.");
+            while (!EndObject(reader.TokenType))
+            {
+                StoreJsonPropertyValue(ref reader, options);
+                MoveToNextJsonElement(ref reader);
+            }
         }
 
-        return status.Value switch
+        static bool EndObject(JsonTokenType tokenType)
+            => tokenType == JsonTokenType.EndObject;
+
+        void StoreJsonPropertyValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
-            IdentityResultStatus.Success => data is not null ? IdentityResult.Success(data) : IdentityResult.Success(),
-            IdentityResultStatus.UserExists => IdentityResult.UserExists(errorMessage!),
-            IdentityResultStatus.InvalidUserRegistrationInput => IdentityResult.InvalidUserRegistrationInput(errorMessage!),
-            IdentityResultStatus.InvalidCredentials => IdentityResult.InvalidCredentials(errorMessage!),
-            IdentityResultStatus.UsedUpRefreshToken => IdentityResult.UsedUpRefreshToken(errorMessage!),
-            IdentityResultStatus.RefreshTokenNotExists => IdentityResult.RefreshTokenNotExists(errorMessage!),
-            IdentityResultStatus.NotExpiredToken => IdentityResult.NotExpiredToken(errorMessage!),
-            IdentityResultStatus.JwtIdNotMatch => IdentityResult.JwtIdNotMatch(errorMessage!),
-            IdentityResultStatus.InvalidatedRefreshToken => IdentityResult.InvalidatedRefreshToken(errorMessage!),
-            IdentityResultStatus.ExpiredRefreshToken => IdentityResult.ExpiredRefreshToken(errorMessage!),
-            IdentityResultStatus.InvalidJwt => IdentityResult.InvalidJwt(errorMessage!),
-            _ => IdentityResult.Error(errorMessage ?? IdentityResult.DefaultErrorMessage),
-        };
-    }
+            var propertyName = GetPropertyName(ref reader);
+            ExtractValue(ref reader, options, propertyName);
+        }
+
+        void ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options, string propertyName)
+        {
+            ReadJsonElementValue(ref reader);
+
+            if (IsStatusProperty(propertyName))
+            {
+                _status = (IdentityResultStatus)reader.GetInt32();
+            }
+            else if (IsErrorMessageProperty(propertyName))
+            {
+                _errorMessage = reader.GetString();
+            }
+            else if (IsTokenProperty(propertyName))
+            {
+                ProcessTokens(ref reader);
+            }
+        }
+
+        static string GetPropertyName(ref Utf8JsonReader reader)
+        {
+            ThrowIfNotPropertyName(reader.TokenType);
+
+            return reader.GetString()!;
+        }
+
+        static void ThrowIfNotPropertyName(JsonTokenType tokenType)
+        {
+            if (!IsPropertyName(tokenType))
+            {
+                throw new JsonException();
+            }            
+        }
+
+        static bool IsPropertyName(JsonTokenType tokenType)
+            => tokenType == JsonTokenType.PropertyName;
+
+        static bool IsStatusProperty(string propertyName)
+            => propertyName.Equals(StatusProperty, StringComparison.OrdinalIgnoreCase);
+
+        static bool IsErrorMessageProperty(string propertyName)
+            => propertyName.Equals(ErrorMessageProperty, StringComparison.OrdinalIgnoreCase);
+
+        static bool IsTokenProperty(string propertyName)
+            => propertyName.Equals(TokensProperty, StringComparison.OrdinalIgnoreCase);
+
+        void ProcessTokens(ref Utf8JsonReader reader)
+        {
+            MoveToNextJsonElement(ref reader);
+
+            ProcessTokenJsonProperties(ref reader);
+        }
+
+        void ProcessTokenJsonProperties(ref Utf8JsonReader reader)
+        {
+            while (!EndObject(reader.TokenType))
+            {
+                StoreTokenJsonPropertyValue(ref reader);
+                MoveToNextJsonElement(ref reader);
+            }
+        }
+
+        void StoreTokenJsonPropertyValue(ref Utf8JsonReader reader)
+        {
+            string propertyName = GetPropertyName(ref reader);
+            ReadJsonElementValue(ref reader);
+
+            if (IsAuthTokenProperty(propertyName))
+            {
+                _authToken = reader.GetString();
+            }
+            else if (IsRefreshTokenProperty(propertyName))
+            {
+                _refreshToken = reader.GetString();
+            }
+        }
+
+        static bool IsAuthTokenProperty(string propertyName)
+            => propertyName.Equals(AuthTokenProperty, StringComparison.OrdinalIgnoreCase);
+
+        static bool IsRefreshTokenProperty(string propertyName)
+            => propertyName.Equals(RefreshTokenProperty, StringComparison.OrdinalIgnoreCase);
+
+        static void ValidateStatus(IdentityResultStatus? status)
+        {
+            if (status is null)
+            {
+                throw new JsonException($"The '{StatusProperty}' field is required.");
+            }
+        }
+
+        IdentityResult CreateIdentityResult()
+            => _status!.Value switch
+            {
+                IdentityResultStatus.Success => IdentityResult.Success(GetTokenHolder()),
+                IdentityResultStatus.UserExists => IdentityResult.UserExists(_errorMessage),
+                IdentityResultStatus.InvalidUserRegistrationInput => IdentityResult.InvalidUserRegistrationInput(_errorMessage),
+                IdentityResultStatus.InvalidCredentials => IdentityResult.InvalidCredentials(_errorMessage),
+                IdentityResultStatus.UsedUpRefreshToken => IdentityResult.UsedUpRefreshToken(_errorMessage),
+                IdentityResultStatus.RefreshTokenNotExists => IdentityResult.RefreshTokenNotExists(_errorMessage),
+                IdentityResultStatus.NotExpiredToken => IdentityResult.NotExpiredToken(_errorMessage),
+                IdentityResultStatus.JwtIdNotMatch => IdentityResult.JwtIdNotMatch(_errorMessage),
+                IdentityResultStatus.InvalidatedRefreshToken => IdentityResult.InvalidatedRefreshToken(_errorMessage),
+                IdentityResultStatus.ExpiredRefreshToken => IdentityResult.ExpiredRefreshToken(_errorMessage),
+                IdentityResultStatus.InvalidJwt => IdentityResult.InvalidJwt(_errorMessage),
+                _ => IdentityResult.Error(_errorMessage ?? IdentityResult.DefaultErrorMessage),
+            };
+
+        TokenHolder? GetTokenHolder()
+            => _authToken is not null && _refreshToken is not null
+                ? new TokenHolder { AuthToken = _authToken, RefreshToken = _refreshToken }
+                : null;
+    }    
 
     public override void Write(Utf8JsonWriter writer, IdentityResult value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
-        writer.WriteNumber("status", (int)value.Status);
-
-        if (value.ErrorMessage != null)
-        {
-            writer.WriteString("errorMessage", value.ErrorMessage);
-        }
-
-        if (value.Tokens != null)
-        {
-            writer.WritePropertyName("data");
-            JsonSerializer.Serialize(writer, value.Tokens, options);
-        }
-
+        WriteProperties(writer, value, options);
         writer.WriteEndObject();
+
+        static void WriteProperties(Utf8JsonWriter writer, IdentityResult value, JsonSerializerOptions options)
+        {
+            WriteStatus(writer, value);
+            WriteErrorMessage(writer, value);
+            WriteTokens(writer, value);
+        }
+
+        static void WriteStatus(Utf8JsonWriter writer, IdentityResult value)
+        {
+            writer.WriteNumber(StatusProperty, (int)value.Status);
+        }
+
+        static void WriteErrorMessage(Utf8JsonWriter writer, IdentityResult value)
+        {
+            if (value.ErrorMessage is not null)
+            {
+                writer.WriteString(ErrorMessageProperty, value.ErrorMessage);
+            }
+        }
+
+        static void WriteTokens(Utf8JsonWriter writer, IdentityResult value)
+        {
+            if (value.Tokens is not null)
+            {
+                writer.WriteStartObject(TokensProperty);
+                writer.WriteString(AuthTokenProperty, value.Tokens.AuthToken);
+                writer.WriteString(RefreshTokenProperty, value.Tokens.RefreshToken);
+                writer.WriteEndObject();
+            }
+        }
     }
 }

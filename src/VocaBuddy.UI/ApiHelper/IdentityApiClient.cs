@@ -19,7 +19,7 @@ public class IdentityApiClient : IIdentityApiClient
     public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
-        
+
         return await DeserializeContent(response);
     }
 
@@ -46,12 +46,5 @@ public class IdentityApiClient : IIdentityApiClient
     }
 
     private static JsonSerializerOptions CreateSerializerOptions()
-        => new()
-        {
-            Converters =
-            {
-                        new IdentityResultJsonConverter(),
-                        new TokenHolderJsonConverter()
-            }
-        };
+        => new() { Converters = { new IdentityResultJsonConverter() } };
 }

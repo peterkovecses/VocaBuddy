@@ -27,7 +27,7 @@ public partial class LoginBase : CustomComponentBase
         {
             ShowErrorMessage(ex.Message);
         }
-        catch
+        catch (Exception ex)
         {
             ShowErrorMessage("Login failed.");
         }
