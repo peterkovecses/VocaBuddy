@@ -40,13 +40,13 @@ public class ErrorHandlingMiddleware
             UserExistsException => (HttpStatusCode.Conflict, IdentityResult.UserExists(message)),
             InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, IdentityResult.InvalidUserRegistrationInput(message)),
             InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.InvalidCredentials(message)),
-            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
-            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.Error()),
+            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.UsedUpRefreshToken(message)),
+            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.RefreshTokenNotExists(message)),
+            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.NotExpiredToken(message)),
+            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.JwtIdNotMatch(message)),
+            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.InvalidatedRefreshToken(message)),
+            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.ExpiredRefreshToken(message)),
+            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.InvalidJwt(message)),
             _ => (HttpStatusCode.InternalServerError, IdentityResult.Error())
         };
 

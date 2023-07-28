@@ -70,10 +70,10 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
             writer.WriteString("errorMessage", value.ErrorMessage);
         }
 
-        if (value.Data != null)
+        if (value.Tokens != null)
         {
             writer.WritePropertyName("data");
-            JsonSerializer.Serialize(writer, value.Data, options);
+            JsonSerializer.Serialize(writer, value.Tokens, options);
         }
 
         writer.WriteEndObject();

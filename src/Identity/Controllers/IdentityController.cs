@@ -34,6 +34,8 @@ public class IdentityController : ControllerBase
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
     {
-        return Ok(await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken));
+        var tokens = await _identityService.RefreshTokenAsync(request.AuthToken, request.RefreshToken);
+
+        return Ok(IdentityResult.Success(tokens));
     }
 }

@@ -8,7 +8,7 @@ public sealed class IdentityResult
 
     public IdentityResultStatus Status { get; init; }
     public string? ErrorMessage { get; init; }
-    public TokenHolder? Data { get; init; }
+    public TokenHolder? Tokens { get; init; }
 
     public static IdentityResult Success()
         => new()
@@ -20,7 +20,7 @@ public sealed class IdentityResult
         => new()
         {
             Status = IdentityResultStatus.Success,
-            Data = data
+            Tokens = data
         };
 
     public static IdentityResult UserExists(string errorMessage)

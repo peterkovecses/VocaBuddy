@@ -5,5 +5,6 @@
         Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest);
         Task LogoutAsync();
         Task<IdentityResult> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
+        Task RefreshTokenAsync();
     }
 }

@@ -30,12 +30,11 @@ public class IdentityApiClient : IIdentityApiClient
         return await DeserializeContent(response);
     }
 
-    public async Task<TokenHolder> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
+    public async Task<IdentityResult> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RefreshEndpoint, refreshTokenRequest);
-        response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<TokenHolder>();
+        return await DeserializeContent(response);
     }
 
     private static async Task<IdentityResult> DeserializeContent(HttpResponseMessage response)
