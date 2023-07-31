@@ -52,20 +52,15 @@ public partial class RegisterBase : CustomComponentBase
 
     private static void ValidateResult(IdentityResult result)
     {
-        if (RegistrationFailed(result))
+        if (result.IsError)
         {
-            throw result.Status switch
+            throw result.Error switch
             {
-                IdentityResultStatus.UserExists => new UserExistsException(),
-                IdentityResultStatus.InvalidCredentials => new InvalidUserRegistrationInputException(result.ErrorMessage!),
+                IdentityError.UserExists => new UserExistsException(),
+                IdentityError.InvalidCredentials => new InvalidUserRegistrationInputException(result.ErrorMessage!),
                 _ => new RegistrationFailedException(result.ErrorMessage!),
             };
         }
-    }
-
-    private static bool RegistrationFailed(IdentityResult result)
-    {
-        return result.Status != IdentityResultStatus.Success;
     }
 
     private async Task SignInUserAsync()

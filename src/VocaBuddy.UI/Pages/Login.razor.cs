@@ -39,16 +39,16 @@ public partial class LoginBase : CustomComponentBase
 
     private void HandleResult(IdentityResult result)
     {
-        switch (result.Status)
+        if (result.IsSuccess)
         {
-            case IdentityResultStatus.Success:
-                NavManager.NavigateTo("/");
-                break;
-            case IdentityResultStatus.InvalidCredentials:
-                throw new InvalidCredentialsException();
-            default:
-                throw new LoginFailedException(result.ErrorMessage!);
+            NavManager.NavigateTo("/");
         }
+
+        throw result.Error switch
+        {
+            IdentityError.InvalidCredentials => new InvalidCredentialsException(),
+            _ => new LoginFailedException(result.ErrorMessage!),
+        };
     }
 
     private void ShowErrorMessage(string message)

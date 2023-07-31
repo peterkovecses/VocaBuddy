@@ -42,7 +42,7 @@ public class IdentityApiClient : IIdentityApiClient
         var jsonSerializerOptions = CreateSerializerOptions();
 
         return await response.Content.ReadFromJsonAsync<IdentityResult>(jsonSerializerOptions)
-               ?? IdentityResult.Error();
+               ?? IdentityResult.Unknown();
     }
 
     private static JsonSerializerOptions CreateSerializerOptions()

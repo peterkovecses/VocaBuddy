@@ -5,13 +5,13 @@ namespace VocaBuddy.UI.JsonHelpers;
 
 public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
 {
-    public const string StatusProperty = "status";
+    public const string ErrorProperty = "error";
     public const string ErrorMessageProperty = "errorMessage";
     public const string TokensProperty = "tokens";
     public const string AuthTokenProperty = "authToken";
     public const string RefreshTokenProperty = "refreshToken";
 
-    private IdentityResultStatus? _status;
+    private IdentityError? _error;
     private string? _errorMessage;
     private string? _authToken;
     private string? _refreshToken;
@@ -21,7 +21,6 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
         ThrowIfNotStartObject(reader);
         MoveToNextJsonElement(ref reader);
         ProcessJsonProperties(ref reader, options);
-        ValidateStatus(_status);
 
         return CreateIdentityResult();
 
@@ -64,9 +63,9 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
         {
             ReadJsonElementValue(ref reader);
 
-            if (IsStatusProperty(propertyName))
+            if (IsErrorProperty(propertyName))
             {
-                _status = (IdentityResultStatus)reader.GetInt32();
+                SetError(ref reader);
             }
             else if (IsErrorMessageProperty(propertyName))
             {
@@ -76,6 +75,16 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
             {
                 ProcessTokens(ref reader);
             }
+        }
+
+        void SetError(ref Utf8JsonReader reader)
+        {
+            try
+            {
+                reader.TryGetInt32(out var code);
+                _error = (IdentityError)code;
+            }
+            catch { }
         }
 
         static string GetPropertyName(ref Utf8JsonReader reader)
@@ -96,8 +105,8 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
         static bool IsPropertyName(JsonTokenType tokenType)
             => tokenType == JsonTokenType.PropertyName;
 
-        static bool IsStatusProperty(string propertyName)
-            => propertyName.Equals(StatusProperty, StringComparison.OrdinalIgnoreCase);
+        static bool IsErrorProperty(string propertyName)
+            => propertyName.Equals(ErrorProperty, StringComparison.OrdinalIgnoreCase);
 
         static bool IsErrorMessageProperty(string propertyName)
             => propertyName.Equals(ErrorMessageProperty, StringComparison.OrdinalIgnoreCase);
@@ -142,70 +151,86 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
         static bool IsRefreshTokenProperty(string propertyName)
             => propertyName.Equals(RefreshTokenProperty, StringComparison.OrdinalIgnoreCase);
 
-        static void ValidateStatus(IdentityResultStatus? status)
+        IdentityResult CreateIdentityResult()
         {
-            if (status is null)
+            if (_error is null)
             {
-                throw new JsonException($"The '{StatusProperty}' field is required.");
+                return CreateSuccessResult();
+            }
+
+            return CreateErrorResult();
+
+            IdentityResult CreateSuccessResult()
+            {
+                if (TokensHaveValue())
+                {
+                    return IdentityResult.Success(new TokenHolder { AuthToken = _authToken!, RefreshToken = _refreshToken! });
+                }
+
+                return IdentityResult.Success();
+            }
+
+            bool TokensHaveValue()
+            {
+                return _authToken is not null && _refreshToken is not null;
+            }
+
+            IdentityResult CreateErrorResult()
+            {
+                return _error.Value switch
+                {
+                    IdentityError.UserExists => IdentityResult.UserExists(_errorMessage!),
+                    IdentityError.InvalidUserRegistrationInput => IdentityResult.InvalidUserRegistrationInput(_errorMessage!),
+                    IdentityError.InvalidCredentials => IdentityResult.InvalidCredentials(_errorMessage!),
+                    IdentityError.UsedUpRefreshToken => IdentityResult.UsedUpRefreshToken(_errorMessage!),
+                    IdentityError.RefreshTokenNotExists => IdentityResult.RefreshTokenNotExists(_errorMessage!),
+                    IdentityError.NotExpiredToken => IdentityResult.NotExpiredToken(_errorMessage!),
+                    IdentityError.JwtIdNotMatch => IdentityResult.JwtIdNotMatch(_errorMessage!),
+                    IdentityError.InvalidatedRefreshToken => IdentityResult.InvalidatedRefreshToken(_errorMessage!),
+                    IdentityError.ExpiredRefreshToken => IdentityResult.ExpiredRefreshToken(_errorMessage!),
+                    IdentityError.InvalidJwt => IdentityResult.InvalidJwt(_errorMessage!),
+                    _ => IdentityResult.Unknown(_errorMessage ?? IdentityResult.DefaultErrorMessage),
+                };
             }
         }
-
-        IdentityResult CreateIdentityResult()
-            => _status!.Value switch
-            {
-                IdentityResultStatus.Success => IdentityResult.Success(GetTokenHolder()),
-                IdentityResultStatus.UserExists => IdentityResult.UserExists(_errorMessage),
-                IdentityResultStatus.InvalidUserRegistrationInput => IdentityResult.InvalidUserRegistrationInput(_errorMessage),
-                IdentityResultStatus.InvalidCredentials => IdentityResult.InvalidCredentials(_errorMessage),
-                IdentityResultStatus.UsedUpRefreshToken => IdentityResult.UsedUpRefreshToken(_errorMessage),
-                IdentityResultStatus.RefreshTokenNotExists => IdentityResult.RefreshTokenNotExists(_errorMessage),
-                IdentityResultStatus.NotExpiredToken => IdentityResult.NotExpiredToken(_errorMessage),
-                IdentityResultStatus.JwtIdNotMatch => IdentityResult.JwtIdNotMatch(_errorMessage),
-                IdentityResultStatus.InvalidatedRefreshToken => IdentityResult.InvalidatedRefreshToken(_errorMessage),
-                IdentityResultStatus.ExpiredRefreshToken => IdentityResult.ExpiredRefreshToken(_errorMessage),
-                IdentityResultStatus.InvalidJwt => IdentityResult.InvalidJwt(_errorMessage),
-                _ => IdentityResult.Error(_errorMessage ?? IdentityResult.DefaultErrorMessage),
-            };
-
-        TokenHolder? GetTokenHolder()
-            => _authToken is not null && _refreshToken is not null
-                ? new TokenHolder { AuthToken = _authToken, RefreshToken = _refreshToken }
-                : null;
     }    
 
-    public override void Write(Utf8JsonWriter writer, IdentityResult value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, IdentityResult result, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
-        WriteProperties(writer, value, options);
+        WriteProperties(writer, result, options);
         writer.WriteEndObject();
 
-        static void WriteProperties(Utf8JsonWriter writer, IdentityResult value, JsonSerializerOptions options)
+        static void WriteProperties(Utf8JsonWriter writer, IdentityResult result, JsonSerializerOptions options)
         {
-            WriteStatus(writer, value);
-            WriteErrorMessage(writer, value);
-            WriteTokens(writer, value);
+            WriteError(writer, result);
+            WriteErrorMessage(writer, result);
+            WriteTokens(writer, result);
         }
 
-        static void WriteStatus(Utf8JsonWriter writer, IdentityResult value)
+        static void WriteError(Utf8JsonWriter writer, IdentityResult result)
         {
-            writer.WriteNumber(StatusProperty, (int)value.Status);
-        }
-
-        static void WriteErrorMessage(Utf8JsonWriter writer, IdentityResult value)
-        {
-            if (value.ErrorMessage is not null)
+            if (result.Error is not null)
             {
-                writer.WriteString(ErrorMessageProperty, value.ErrorMessage);
+                writer.WriteNumber(ErrorProperty, (int)result.Error);
             }
         }
 
-        static void WriteTokens(Utf8JsonWriter writer, IdentityResult value)
+        static void WriteErrorMessage(Utf8JsonWriter writer, IdentityResult result)
         {
-            if (value.Tokens is not null)
+            if (result.ErrorMessage is not null)
+            {
+                writer.WriteString(ErrorMessageProperty, result.ErrorMessage);
+            }
+        }
+
+        static void WriteTokens(Utf8JsonWriter writer, IdentityResult result)
+        {
+            if (result.Tokens is not null)
             {
                 writer.WriteStartObject(TokensProperty);
-                writer.WriteString(AuthTokenProperty, value.Tokens.AuthToken);
-                writer.WriteString(RefreshTokenProperty, value.Tokens.RefreshToken);
+                writer.WriteString(AuthTokenProperty, result.Tokens.AuthToken);
+                writer.WriteString(RefreshTokenProperty, result.Tokens.RefreshToken);
                 writer.WriteEndObject();
             }
         }

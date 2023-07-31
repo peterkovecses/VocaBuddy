@@ -27,7 +27,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var result = await _client.LoginAsync(loginRequest);
 
-        if (SuccessfulResult(result))
+        if (result.IsSuccess)
         {
             SignInUser(result.Tokens!);
             await StoreTokensAsync(result.Tokens!);
@@ -53,7 +53,7 @@ public class AuthenticationService : IAuthenticationService
         var (authToken, refreshToken) = await RetrieveCurrentTokensAsync();
         var result = await _client.RefreshTokenAsync(new RefreshTokenRequest { AuthToken = authToken, RefreshToken = refreshToken });
 
-        if (SuccessfulResult(result))
+        if (result.IsSuccess)
         {
             throw new RefreshTokenException(result.ErrorMessage!);
         }
@@ -68,9 +68,6 @@ public class AuthenticationService : IAuthenticationService
             return (authToken, refreshToken);
         }
     }
-
-    private static bool SuccessfulResult(IdentityResult result)
-    => result.Status == IdentityResultStatus.Success;
 
     private async Task StoreTokensAsync(TokenHolder tokens)
     {

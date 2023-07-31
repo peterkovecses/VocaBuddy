@@ -1,8 +1,7 @@
 ﻿namespace VocaBuddy.Shared.Models;
 
-public enum IdentityResultStatus
+public enum IdentityError
 {
-    Success,
     UserExists,
     InvalidUserRegistrationInput,
     InvalidCredentials,
@@ -13,5 +12,5 @@ public enum IdentityResultStatus
     InvalidatedRefreshToken,
     ExpiredRefreshToken,
     InvalidJwt,
-    Error
+    Unknown
 }

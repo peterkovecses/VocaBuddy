@@ -47,7 +47,7 @@ public class ErrorHandlingMiddleware
             InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.InvalidatedRefreshToken(message)),
             ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.ExpiredRefreshToken(message)),
             InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.InvalidJwt(message)),
-            _ => (HttpStatusCode.InternalServerError, IdentityResult.Error())
+            _ => (HttpStatusCode.InternalServerError, IdentityResult.Unknown())
         };
 
         var jsonContent = JsonSerializer.Serialize(result);

@@ -6,97 +6,95 @@ public sealed class IdentityResult
 
     private IdentityResult() { }
 
-    public IdentityResultStatus Status { get; init; }
+    public IdentityError? Error { get; init; }
     public string? ErrorMessage { get; init; }
     public TokenHolder? Tokens { get; init; }
+    public bool IsSuccess => Error is null;
+    public bool IsError => !IsSuccess;
 
     public static IdentityResult Success()
-        => new()
-        {
-            Status = IdentityResultStatus.Success,
-        };
+        => new();
 
-    public static IdentityResult Success(TokenHolder data)
+    public static IdentityResult Success(TokenHolder tokens)
         => new()
         {
-            Status = IdentityResultStatus.Success,
-            Tokens = data
+            Tokens = tokens
         };
 
     public static IdentityResult UserExists(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.UserExists,
+            Error = IdentityError.UserExists,
             ErrorMessage = errorMessage
         };
 
     public static IdentityResult InvalidUserRegistrationInput(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.InvalidUserRegistrationInput,
+            Error = IdentityError.InvalidUserRegistrationInput,
             ErrorMessage = errorMessage
         };
 
     public static IdentityResult InvalidCredentials(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.InvalidCredentials,
+            Error = IdentityError.InvalidCredentials,
             ErrorMessage = errorMessage
         };
 
     public static IdentityResult UsedUpRefreshToken(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.UsedUpRefreshToken,
+            Error = IdentityError.UsedUpRefreshToken,
             ErrorMessage = errorMessage
         };
 
     public static IdentityResult RefreshTokenNotExists(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.RefreshTokenNotExists,
+            Error = IdentityError.RefreshTokenNotExists,
             ErrorMessage = errorMessage
         };
     
     public static IdentityResult NotExpiredToken(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.NotExpiredToken,
+            Error = IdentityError.NotExpiredToken,
             ErrorMessage = errorMessage
         };
     
     public static IdentityResult JwtIdNotMatch(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.JwtIdNotMatch,
+            Error = IdentityError.JwtIdNotMatch,
             ErrorMessage = errorMessage
         };
     
     public static IdentityResult InvalidatedRefreshToken(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.InvalidatedRefreshToken,
+            Error = IdentityError.InvalidatedRefreshToken,
             ErrorMessage = errorMessage
         };
 
     public static IdentityResult ExpiredRefreshToken(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.ExpiredRefreshToken,
+            Error = IdentityError.ExpiredRefreshToken,
             ErrorMessage = errorMessage
         };
 
     public static IdentityResult InvalidJwt(string errorMessage)
         => new()
         {
-            Status = IdentityResultStatus.InvalidJwt,
+            Error = IdentityError.InvalidJwt,
             ErrorMessage = errorMessage
         };
 
-    public static IdentityResult Error(string errorMessage = DefaultErrorMessage)
+    public static IdentityResult Unknown(string errorMessage = DefaultErrorMessage)
         => new()
         {
-            Status = IdentityResultStatus.Error,
+            Error = IdentityError.Unknown,
             ErrorMessage = errorMessage
         };
 }
