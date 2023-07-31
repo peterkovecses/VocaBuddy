@@ -30,13 +30,20 @@ public class ErrorHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        (HttpStatusCode code, string message) = exception switch
+        var (code, message) = GetResponseData(exception);
+        await SetResponse(context, code, message);
+    }
+
+    private static (HttpStatusCode, string) GetResponseData(Exception exception)
+        => exception switch
         {
             OperationCanceledException => (HttpStatusCode.Accepted, "Operation was cancelled."),
             NotFoundException => (HttpStatusCode.NotFound, exception.Message),
             _ => (HttpStatusCode.InternalServerError, "An error occurred while processing the request.")
         };
 
+    private static async Task SetResponse(HttpContext context, HttpStatusCode code, string message)
+    {
         var result = JsonSerializer.Serialize(new { error = message });
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;

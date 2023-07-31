@@ -176,22 +176,20 @@ public class IdentityResultJsonConverter : JsonConverter<IdentityResult>
             }
 
             IdentityResult CreateErrorResult()
-            {
-                return _error.Value switch
+                => _error.Value switch
                 {
-                    IdentityError.UserExists => IdentityResult.UserExists(_errorMessage!),
-                    IdentityError.InvalidUserRegistrationInput => IdentityResult.InvalidUserRegistrationInput(_errorMessage!),
-                    IdentityError.InvalidCredentials => IdentityResult.InvalidCredentials(_errorMessage!),
-                    IdentityError.UsedUpRefreshToken => IdentityResult.UsedUpRefreshToken(_errorMessage!),
-                    IdentityError.RefreshTokenNotExists => IdentityResult.RefreshTokenNotExists(_errorMessage!),
-                    IdentityError.NotExpiredToken => IdentityResult.NotExpiredToken(_errorMessage!),
-                    IdentityError.JwtIdNotMatch => IdentityResult.JwtIdNotMatch(_errorMessage!),
-                    IdentityError.InvalidatedRefreshToken => IdentityResult.InvalidatedRefreshToken(_errorMessage!),
-                    IdentityError.ExpiredRefreshToken => IdentityResult.ExpiredRefreshToken(_errorMessage!),
-                    IdentityError.InvalidJwt => IdentityResult.InvalidJwt(_errorMessage!),
-                    _ => IdentityResult.Unknown(_errorMessage ?? IdentityResult.DefaultErrorMessage),
+                    IdentityError.UserExists => IdentityResult.FromError(IdentityError.UserExists, _errorMessage!),
+                    IdentityError.InvalidUserRegistrationInput => IdentityResult.FromError(IdentityError.InvalidUserRegistrationInput, _errorMessage!),
+                    IdentityError.InvalidCredentials => IdentityResult.FromError(IdentityError.InvalidCredentials, _errorMessage!),
+                    IdentityError.UsedUpRefreshToken => IdentityResult.FromError(IdentityError.UsedUpRefreshToken, _errorMessage!),
+                    IdentityError.RefreshTokenNotExists => IdentityResult.FromError(IdentityError.RefreshTokenNotExists, _errorMessage!),
+                    IdentityError.NotExpiredToken => IdentityResult.FromError(IdentityError.NotExpiredToken, _errorMessage!),
+                    IdentityError.JwtIdNotMatch => IdentityResult.FromError(IdentityError.JwtIdNotMatch, _errorMessage!),
+                    IdentityError.InvalidatedRefreshToken => IdentityResult.FromError(IdentityError.InvalidatedRefreshToken, _errorMessage!),
+                    IdentityError.ExpiredRefreshToken => IdentityResult.FromError(IdentityError.ExpiredRefreshToken, _errorMessage!),
+                    IdentityError.InvalidJwt => IdentityResult.FromError(IdentityError.InvalidJwt, _errorMessage!),
+                    _ => IdentityResult.ServerError()
                 };
-            }
         }
     }    
 

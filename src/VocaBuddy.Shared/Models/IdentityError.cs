@@ -12,5 +12,5 @@ public enum IdentityError
     InvalidatedRefreshToken,
     ExpiredRefreshToken,
     InvalidJwt,
-    Unknown
+    Server
 }

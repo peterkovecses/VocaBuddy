@@ -33,23 +33,28 @@ public class ErrorHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var message = exception.Message;
+        var (code, result) = GetResponseData(exception, exception.Message);
+        await SetResponse(context, code, result);
+    }
 
-        (HttpStatusCode code, IdentityResult result) = exception switch
+    private static (HttpStatusCode, IdentityResult) GetResponseData(Exception exception, string message)
+        => exception switch
         {
-            UserExistsException => (HttpStatusCode.Conflict, IdentityResult.UserExists(message)),
-            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, IdentityResult.InvalidUserRegistrationInput(message)),
-            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.InvalidCredentials(message)),
-            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.UsedUpRefreshToken(message)),
-            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.RefreshTokenNotExists(message)),
-            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.NotExpiredToken(message)),
-            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.JwtIdNotMatch(message)),
-            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.InvalidatedRefreshToken(message)),
-            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.ExpiredRefreshToken(message)),
-            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.InvalidJwt(message)),
-            _ => (HttpStatusCode.InternalServerError, IdentityResult.Unknown())
+            UserExistsException => (HttpStatusCode.Conflict, IdentityResult.FromError(IdentityError.UserExists, message)),
+            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, IdentityResult.FromError(IdentityError.InvalidUserRegistrationInput, message)),
+            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.FromError(IdentityError.InvalidCredentials, message)),
+            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.UsedUpRefreshToken, message)),
+            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.RefreshTokenNotExists, message)),
+            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.NotExpiredToken, message)),
+            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.JwtIdNotMatch, message)),
+            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.InvalidatedRefreshToken, message)),
+            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.ExpiredRefreshToken, message)),
+            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.InvalidJwt, message)),
+            _ => (HttpStatusCode.InternalServerError, IdentityResult.ServerError())
         };
 
+    private static async Task SetResponse(HttpContext context, HttpStatusCode code, IdentityResult result)
+    {
         var jsonContent = JsonSerializer.Serialize(result);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;

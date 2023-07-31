@@ -2,7 +2,7 @@
 
 public sealed class IdentityResult
 {
-    public const string DefaultErrorMessage = "An error occurred while processing the request.";
+    public const string ServerErrorMessage = "An error occurred while processing the request.";
 
     private IdentityResult() { }
 
@@ -21,80 +21,17 @@ public sealed class IdentityResult
             Tokens = tokens
         };
 
-    public static IdentityResult UserExists(string errorMessage)
+    public static IdentityResult FromError(IdentityError error, string errorMessage)
         => new()
         {
-            Error = IdentityError.UserExists,
+            Error = error,
             ErrorMessage = errorMessage
         };
 
-    public static IdentityResult InvalidUserRegistrationInput(string errorMessage)
+    public static IdentityResult ServerError()
         => new()
         {
-            Error = IdentityError.InvalidUserRegistrationInput,
-            ErrorMessage = errorMessage
-        };
-
-    public static IdentityResult InvalidCredentials(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.InvalidCredentials,
-            ErrorMessage = errorMessage
-        };
-
-    public static IdentityResult UsedUpRefreshToken(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.UsedUpRefreshToken,
-            ErrorMessage = errorMessage
-        };
-
-    public static IdentityResult RefreshTokenNotExists(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.RefreshTokenNotExists,
-            ErrorMessage = errorMessage
-        };
-    
-    public static IdentityResult NotExpiredToken(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.NotExpiredToken,
-            ErrorMessage = errorMessage
-        };
-    
-    public static IdentityResult JwtIdNotMatch(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.JwtIdNotMatch,
-            ErrorMessage = errorMessage
-        };
-    
-    public static IdentityResult InvalidatedRefreshToken(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.InvalidatedRefreshToken,
-            ErrorMessage = errorMessage
-        };
-
-    public static IdentityResult ExpiredRefreshToken(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.ExpiredRefreshToken,
-            ErrorMessage = errorMessage
-        };
-
-    public static IdentityResult InvalidJwt(string errorMessage)
-        => new()
-        {
-            Error = IdentityError.InvalidJwt,
-            ErrorMessage = errorMessage
-        };
-
-    public static IdentityResult Unknown(string errorMessage = DefaultErrorMessage)
-        => new()
-        {
-            Error = IdentityError.Unknown,
-            ErrorMessage = errorMessage
+            Error = IdentityError.Server,
+            ErrorMessage = ServerErrorMessage
         };
 }
