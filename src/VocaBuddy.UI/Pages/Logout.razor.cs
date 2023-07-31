@@ -3,11 +3,11 @@
 public class LogoutBase : CustomComponentBase
 {
     [Inject]
-    private IAuthenticationService _authService { get; set; }
+    public IAuthenticationService AuthService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        await _authService.LogoutAsync();
+        await AuthService.LogoutAsync();
         NavManager.NavigateTo("/");
     }
 }

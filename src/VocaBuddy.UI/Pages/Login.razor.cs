@@ -3,7 +3,7 @@ using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages;
 
-public partial class LoginBase : CustomComponentBase
+public class LoginBase : CustomComponentBase
 {
     protected UserLoginRequest Model = new();
     protected bool ShowAuthError = false;
@@ -11,7 +11,10 @@ public partial class LoginBase : CustomComponentBase
     protected bool IsSubmitting { get; set; }
 
     [Inject]
-    private IAuthenticationService _authService { get; set; }
+    public IAuthenticationService AuthService { get; set; }
+
+    [Inject]
+    public ILogger<LoginBase> Logger { get; set; }
 
     protected async Task ExecuteLogin()
     {
@@ -20,15 +23,17 @@ public partial class LoginBase : CustomComponentBase
 
         try
         {
-            var result = await _authService.LoginAsync(Model);
+            var result = await AuthService.LoginAsync(Model);
             HandleResult(result);
         }
         catch (InvalidCredentialsException ex)
         {
+            Logger.LogError(ex, "Invalid credentials exception occured");
             ShowErrorMessage(ex.Message);
         }
         catch (Exception ex)
         {
+            Logger.LogError(ex, "An exception occured");
             ShowErrorMessage("Login failed.");
         }
         finally

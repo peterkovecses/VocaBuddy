@@ -1,10 +1,9 @@
 ﻿using Shared.Exceptions;
 using VocaBuddy.UI.Exceptions;
-using VocaBuddy.UI.Models;
 
 namespace VocaBuddy.UI.Pages;
 
-public partial class RegisterBase : CustomComponentBase
+public class RegisterBase : CustomComponentBase
 {
     protected UserRegistrationRequestWithPasswordCheck Model = new();
     protected bool ShowAuthError = false;
@@ -14,7 +13,10 @@ public partial class RegisterBase : CustomComponentBase
     protected bool IsSubmitting { get; set; }
 
     [Inject]
-    private IAuthenticationService _authService { get; set; }
+    public IAuthenticationService AuthService { get; set; }
+
+    [Inject]
+    public ILogger<LoginBase> Logger { get; set; }
 
     protected async Task ExecuteLogin()
     {
@@ -31,14 +33,17 @@ public partial class RegisterBase : CustomComponentBase
         }
         catch (UserExistsException ex)
         {
+            Logger.LogError(ex, "User exists exception occured");
             DisplayErrorMessage(ex.Message);
         }
         catch (InvalidUserRegistrationInputException ex)
         {
+            Logger.LogError(ex, "Invalid user registration input exception occured");
             DisplayErrorMessage(ex.Message);
         }
-        catch
+        catch(Exception ex)
         {
+            Logger.LogError(ex, "An exception occured");
             DisplayErrorMessage("Registration failed.");
         }
         finally
@@ -48,7 +53,7 @@ public partial class RegisterBase : CustomComponentBase
     }
 
     private Task<IdentityResult> RegisterUserAsync()
-        => _authService.RegisterAsync(Model);
+        => AuthService.RegisterAsync(Model);
 
     private static void ValidateResult(IdentityResult result)
     {
@@ -71,7 +76,7 @@ public partial class RegisterBase : CustomComponentBase
             Password = Model.Password
         };
 
-        await _authService.LoginAsync(loginRequest);
+        await AuthService.LoginAsync(loginRequest);
     }
 
     private async Task DisplaySuccessMessageAsync()

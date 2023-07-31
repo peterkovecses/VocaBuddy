@@ -1,8 +1,12 @@
+using Serilog;
 using VocaBuddy.Api.Middlewares;
 using VocaBuddy.Application;
 using VocaBuddy.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration)
+    => configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 builder.Services.AddApplicationServices();
@@ -21,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
