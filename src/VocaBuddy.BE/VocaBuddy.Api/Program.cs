@@ -1,4 +1,5 @@
 using Serilog;
+using VocaBuddy.Api;
 using VocaBuddy.Api.Middlewares;
 using VocaBuddy.Application;
 using VocaBuddy.Infrastructure;
@@ -11,6 +12,7 @@ builder.Host.UseSerilog((context, configuration)
 // Add services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApiServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -31,6 +33,8 @@ app.UseSerilogRequestLogging();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors("_myAllowSpecificOrigins");
 
 app.UseAuthorization();
 
