@@ -7,7 +7,7 @@ namespace VocaBuddy.UI;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         var identityConfigSection = configuration.GetSection(ConfigKeys.IdentityConfiguration);
         services.Configure<IdentityApiConfiguration>(identityConfigSection);

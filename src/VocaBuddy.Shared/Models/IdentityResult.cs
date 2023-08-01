@@ -1,10 +1,8 @@
 ﻿namespace VocaBuddy.Shared.Models;
 
-public sealed class IdentityResult
+public class IdentityResult
 {
     public const string ServerErrorMessage = "An error occurred while processing the request.";
-
-    private IdentityResult() { }
 
     public IdentityError? Error { get; init; }
     public string? ErrorMessage { get; init; }

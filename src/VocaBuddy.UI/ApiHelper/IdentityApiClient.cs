@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
-using VocaBuddy.UI.JsonHelpers;
 
 namespace VocaBuddy.UI.ApiHelper;
 
@@ -9,42 +8,40 @@ public class IdentityApiClient : IIdentityApiClient
 {
     private readonly HttpClient _client;
     private readonly IdentityApiConfiguration _identityOptions;
+    private readonly JsonSerializerOptions _jsonOptions;
 
     public IdentityApiClient(HttpClient client, IOptions<IdentityApiConfiguration> identityOptions)
     {
         _client = client;
         _identityOptions = identityOptions.Value;
+        _jsonOptions = new() { PropertyNameCaseInsensitive = true };
     }
 
     public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
 
-        return await DeserializeContent(response);
+        return await DeserializeResponseAsync<IdentityResult>(response);
     }
 
     public async Task<IdentityResult> RegisterAsync(UserRegistrationRequest registrationRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RegisterEndpoint, registrationRequest);
 
-        return await DeserializeContent(response);
+        return await DeserializeResponseAsync<IdentityResult>(response);
     }
 
     public async Task<IdentityResult> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RefreshEndpoint, refreshTokenRequest);
 
-        return await DeserializeContent(response);
+        return await DeserializeResponseAsync<IdentityResult>(response);
     }
 
-    private static async Task<IdentityResult> DeserializeContent(HttpResponseMessage response)
+    private async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response)
     {
-        var jsonSerializerOptions = CreateSerializerOptions();
+        var json = await response.Content.ReadAsStringAsync();
 
-        return await response.Content.ReadFromJsonAsync<IdentityResult>(jsonSerializerOptions)
-               ?? IdentityResult.ServerError();
+        return JsonSerializer.Deserialize<T>(json, _jsonOptions);
     }
-
-    private static JsonSerializerOptions CreateSerializerOptions()
-        => new() { Converters = { new IdentityResultJsonConverter() } };
 }
