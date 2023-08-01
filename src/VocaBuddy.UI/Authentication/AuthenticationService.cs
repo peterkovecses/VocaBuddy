@@ -23,14 +23,14 @@ public class AuthenticationService : IAuthenticationService
         _identityConfig = identityOptions.Value;
     }
 
-    public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
 
         if (result.IsSuccess)
         {
-            SignInUser(result.Tokens!);
-            await StoreTokensAsync(result.Tokens!);
+            SignInUser(result.Data!);
+            await StoreTokensAsync(result.Data!);
         }
 
         return result;
@@ -45,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
         _authStateProvider.SignOutUser();
     }
 
-    public async Task<IdentityResult> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
+    public async Task<Result<TokenHolder, IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
         => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 
     public async Task RefreshTokenAsync()
@@ -58,7 +58,7 @@ public class AuthenticationService : IAuthenticationService
             throw new RefreshTokenException(result.ErrorMessage!);
         }
 
-        await StoreTokensAsync(result.Tokens!);
+        await StoreTokensAsync(result.Data!);
 
         async Task<(string authToken, string refreshToken)> RetrieveCurrentTokensAsync()
         {

@@ -42,7 +42,7 @@ public class LoginBase : CustomComponentBase
         }
     }
 
-    private void HandleResult(IdentityResult result)
+    private void HandleResult(Result<TokenHolder, IdentityError> result)
     {
         if (result.IsSuccess)
         {

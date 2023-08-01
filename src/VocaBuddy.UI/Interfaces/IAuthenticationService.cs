@@ -2,9 +2,9 @@
 {
     public interface IAuthenticationService
     {
-        Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest);
+        Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest);
         Task LogoutAsync();
-        Task<IdentityResult> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
+        Task<Result<TokenHolder, IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
         Task RefreshTokenAsync();
     }
 }

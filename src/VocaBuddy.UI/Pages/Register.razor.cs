@@ -52,10 +52,10 @@ public class RegisterBase : CustomComponentBase
         }
     }
 
-    private Task<IdentityResult> RegisterUserAsync()
+    private Task<Result<TokenHolder, IdentityError>> RegisterUserAsync()
         => AuthService.RegisterAsync(Model);
 
-    private static void ValidateResult(IdentityResult result)
+    private static void ValidateResult(Result<TokenHolder, IdentityError> result)
     {
         if (result.IsError)
         {

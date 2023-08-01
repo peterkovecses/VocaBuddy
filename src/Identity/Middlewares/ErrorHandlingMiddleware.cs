@@ -37,23 +37,23 @@ public class ErrorHandlingMiddleware
         await SetResponse(context, code, result);
     }
 
-    private static (HttpStatusCode, IdentityResult) GetResponseData(Exception exception, string message)
+    private static (HttpStatusCode, Result<TokenHolder, IdentityError>) GetResponseData(Exception exception, string message)
         => exception switch
         {
-            UserExistsException => (HttpStatusCode.Conflict, IdentityResult.FromError(IdentityError.UserExists, message)),
-            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, IdentityResult.FromError(IdentityError.InvalidUserRegistrationInput, message)),
-            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityResult.FromError(IdentityError.InvalidCredentials, message)),
-            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.UsedUpRefreshToken, message)),
-            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.RefreshTokenNotExists, message)),
-            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.NotExpiredToken, message)),
-            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.JwtIdNotMatch, message)),
-            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.InvalidatedRefreshToken, message)),
-            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.ExpiredRefreshToken, message)),
-            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityResult.FromError(IdentityError.InvalidJwt, message)),
-            _ => (HttpStatusCode.InternalServerError, IdentityResult.ServerError())
+            UserExistsException => (HttpStatusCode.Conflict, Result<TokenHolder, IdentityError>.FromError(IdentityError.UserExists, message)),
+            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, Result<TokenHolder, IdentityError>.FromError(IdentityError.InvalidUserRegistrationInput, message)),
+            InvalidCredentialsException => (HttpStatusCode.BadRequest, Result<TokenHolder, IdentityError>.FromError(IdentityError.InvalidCredentials, message)),
+            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.UsedUpRefreshToken, message)),
+            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.RefreshTokenNotExists, message)),
+            NotExpiredTokenException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.NotExpiredToken, message)),
+            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.JwtIdNotMatch, message)),
+            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.InvalidatedRefreshToken, message)),
+            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.ExpiredRefreshToken, message)),
+            InvalidJwtException => (HttpStatusCode.Unauthorized, Result<TokenHolder, IdentityError>.FromError(IdentityError.InvalidJwt, message)),
+            _ => (HttpStatusCode.InternalServerError, Result<TokenHolder, IdentityError>.ServerError(IdentityError.Server))
         };
 
-    private static async Task SetResponse(HttpContext context, HttpStatusCode code, IdentityResult result)
+    private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result<TokenHolder, IdentityError> result)
     {
         var jsonContent = JsonSerializer.Serialize(result);
         context.Response.ContentType = "application/json";

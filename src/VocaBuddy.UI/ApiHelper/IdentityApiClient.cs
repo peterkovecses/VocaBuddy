@@ -17,25 +17,25 @@ public class IdentityApiClient : IIdentityApiClient
         _jsonOptions = new() { PropertyNameCaseInsensitive = true };
     }
 
-    public async Task<IdentityResult> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
 
-        return await DeserializeResponseAsync<IdentityResult>(response);
+        return await DeserializeResponseAsync<Result<TokenHolder, IdentityError>>(response);
     }
 
-    public async Task<IdentityResult> RegisterAsync(UserRegistrationRequest registrationRequest)
+    public async Task<Result<TokenHolder, IdentityError>> RegisterAsync(UserRegistrationRequest registrationRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RegisterEndpoint, registrationRequest);
 
-        return await DeserializeResponseAsync<IdentityResult>(response);
+        return await DeserializeResponseAsync<Result<TokenHolder, IdentityError>>(response);
     }
 
-    public async Task<IdentityResult> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
+    public async Task<Result<TokenHolder, IdentityError>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityOptions.RefreshEndpoint, refreshTokenRequest);
 
-        return await DeserializeResponseAsync<IdentityResult>(response);
+        return await DeserializeResponseAsync<Result<TokenHolder, IdentityError>>(response);
     }
 
     private async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response)
