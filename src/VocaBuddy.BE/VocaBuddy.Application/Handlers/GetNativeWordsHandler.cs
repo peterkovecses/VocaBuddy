@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using System.Linq.Expressions;
 using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Application.Queries;
+using VocaBuddy.Domain.Entities;
 using VocaBuddy.Shared.Dtos;
 
 namespace VocaBuddy.Application.Handlers;
@@ -21,7 +23,8 @@ public class GetNativeWordsHandler : IRequestHandler<GetNativeWordsQuery, List<N
         GetNativeWordsQuery request,
         CancellationToken cancellationToken)
     {
-        var nativeWords = await _nativeWords.GetAsync(cancellationToken);
+        Expression<Func<NativeWord, bool>> predicate = word => word.UserId == request.UserId; 
+        var nativeWords = await _nativeWords.GetAsync(predicate, cancellationToken);
 
         return _mapper.Map<List<NativeWordDto>>(nativeWords);
     }

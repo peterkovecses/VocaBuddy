@@ -21,7 +21,9 @@ public class NativeWordsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
-        var words = await _mediator.Send(new GetNativeWordsQuery(), token);
+        // temporary hard coded user id
+        var userId = "1";
+        var words = await _mediator.Send(new GetNativeWordsQuery(userId), token);
 
         return Ok(Result<List<NativeWordDto>, VocaBuddyError>.Success(words));
     }

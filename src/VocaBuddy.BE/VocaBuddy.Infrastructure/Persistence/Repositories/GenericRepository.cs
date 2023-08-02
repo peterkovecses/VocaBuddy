@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using VocaBuddy.Application.Interfaces;
 
 namespace VocaBuddy.Infrastructure.Persistence.Repositories
@@ -12,9 +13,12 @@ namespace VocaBuddy.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<List<TEntity>> GetAsync(CancellationToken token)
+        public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken token)
         {
-            return await _context.Set<TEntity>().ToListAsync(token);
+            return await _context
+                .Set<TEntity>()
+                .Where(predicate)
+                .ToListAsync(token);
         }
 
         public virtual async Task<TEntity?> FindByIdAsync(TId id, CancellationToken token)
