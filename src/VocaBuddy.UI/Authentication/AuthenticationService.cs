@@ -45,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
         _authStateProvider.SignOutUser();
     }
 
-    public async Task<Result<TokenHolder, IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
+    public async Task<Result<IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
         => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 
     public async Task RefreshTokenAsync()

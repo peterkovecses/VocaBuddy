@@ -1,47 +1,39 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
+using VocaBuddy.UI.Extensions;
 
 namespace VocaBuddy.UI.ApiHelper;
 
 public class IdentityApiClient : IIdentityApiClient
 {
     private readonly HttpClient _client;
-    private readonly IdentityApiConfiguration _identityOptions;
-    private readonly JsonSerializerOptions _jsonOptions;
+    private readonly IdentityApiConfiguration _identityConfig;
 
     public IdentityApiClient(HttpClient client, IOptions<IdentityApiConfiguration> identityOptions)
     {
         _client = client;
-        _identityOptions = identityOptions.Value;
-        _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+        _identityConfig = identityOptions.Value;
     }
 
     public async Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest)
     {
-        var response = await _client.PostAsJsonAsync(_identityOptions.LoginEndpoint, loginRequest);
+        var response = await _client.PostAsJsonAsync(_identityConfig.LoginEndpoint, loginRequest);
 
-        return await DeserializeResponseAsync<Result<TokenHolder, IdentityError>>(response);
+        return await response.DeserializeResponseAsync<Result<TokenHolder, IdentityError>>();
     }
 
-    public async Task<Result<TokenHolder, IdentityError>> RegisterAsync(UserRegistrationRequest registrationRequest)
+    public async Task<Result<IdentityError>> RegisterAsync(UserRegistrationRequest registrationRequest)
     {
-        var response = await _client.PostAsJsonAsync(_identityOptions.RegisterEndpoint, registrationRequest);
+        var response = await _client.PostAsJsonAsync(_identityConfig.RegisterEndpoint, registrationRequest);
 
-        return await DeserializeResponseAsync<Result<TokenHolder, IdentityError>>(response);
+        return await response.DeserializeResponseAsync<Result<IdentityError>>();
     }
 
     public async Task<Result<TokenHolder, IdentityError>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
-        var response = await _client.PostAsJsonAsync(_identityOptions.RefreshEndpoint, refreshTokenRequest);
+        var response = await _client.PostAsJsonAsync(_identityConfig.RefreshEndpoint, refreshTokenRequest);
 
-        return await DeserializeResponseAsync<Result<TokenHolder, IdentityError>>(response);
-    }
-
-    private async Task<T> DeserializeResponseAsync<T>(HttpResponseMessage response)
-    {
-        var json = await response.Content.ReadAsStringAsync();
-
-        return JsonSerializer.Deserialize<T>(json, _jsonOptions);
+        return await response.DeserializeResponseAsync<Result<TokenHolder, IdentityError>>();
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using VocaBuddy.UI.ApiHelper;
 using VocaBuddy.UI.Authentication;
+using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI;
 
@@ -12,6 +13,10 @@ public static class ConfigureServices
         var identityConfigSection = configuration.GetSection(ConfigKeys.IdentityConfiguration);
         services.Configure<IdentityApiConfiguration>(identityConfigSection);
         var identityConfig = identityConfigSection.Get<IdentityApiConfiguration>();
+
+        var vocaBuddyConfigSection = configuration.GetSection(ConfigKeys.VocaBuddyApiConfiguration);
+        services.Configure<VocabuddyApiConfiguration>(vocaBuddyConfigSection);
+        var vocaBuddyApiConfig = vocaBuddyConfigSection.Get<VocabuddyApiConfiguration>();
 
         services.Configure<PasswordConfiguration>(configuration.GetSection(ConfigKeys.PasswordConfiguration));
 
@@ -26,10 +31,16 @@ public static class ConfigureServices
 
         services.AddScoped<IJwtParser, JwtParser>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IWordService, WordService>();
 
         services.AddHttpClient<IIdentityApiClient, IdentityApiClient>(client =>
         {
             client.BaseAddress = new Uri(identityConfig.BaseUrl);
+        });
+
+        services.AddHttpClient<IVocaBuddyApiClient, VocaBuddyApiClient>(client =>
+        {
+            client.BaseAddress = new Uri(vocaBuddyApiConfig.BaseUrl);
         });
 
         return services;

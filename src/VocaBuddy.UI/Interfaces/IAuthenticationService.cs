@@ -4,7 +4,7 @@
     {
         Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest);
         Task LogoutAsync();
-        Task<Result<TokenHolder, IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
+        Task<Result<IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
         Task RefreshTokenAsync();
     }
 }
