@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Queries;
 using VocaBuddy.Shared.Dtos;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Controllers;
 
@@ -20,13 +21,17 @@ public class NativeWordsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
-        return Ok(await _mediator.Send(new GetNativeWordsQuery(), token));
+        var words = await _mediator.Send(new GetNativeWordsQuery(), token);
+
+        return Ok(Result<List<NativeWordDto>, VocaBuddyError>.Success(words));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNativeWord(int id, CancellationToken token)
     {
-        return Ok(await _mediator.Send(new GetNativeWordByIdQuery(id), token));
+        var word = await _mediator.Send(new GetNativeWordByIdQuery(id), token);
+
+        return Ok(Result<NativeWordDto, VocaBuddyError>.Success(word));
     }
 
     [HttpPost]
@@ -39,11 +44,11 @@ public class NativeWordsController : ControllerBase
 
         var createdNativeWordDto = await _mediator.Send(new InsertNativeWordCommand(nativeWord), token);
 
-        return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, createdNativeWordDto);
+        return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result<NativeWordDto, VocaBuddyError>.Success(createdNativeWordDto));
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNativeWord(int id, NativeWordDto nativeWord)
+    public async Task<IActionResult> UpdateNativeWord(int id, NativeWordDto nativeWord, CancellationToken token)
     {
         if (id != nativeWord.Id)
         {
@@ -55,8 +60,16 @@ public class NativeWordsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _mediator.Send(new UpdateNativeWordCommand(nativeWord));
+        await _mediator.Send(new UpdateNativeWordCommand(nativeWord), token);
 
-        return Ok();
+        return Ok(Result<VocaBuddyError>.Success());
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteNativeWord(int id, CancellationToken token)
+    {
+        await _mediator.Send(new DeleteNativeWordCommand(id), token);
+
+        return Ok(Result<VocaBuddyError>.Success());
     }
 }

@@ -2,4 +2,5 @@
 
 public class WordsBase : CustomComponentBase
 {
+    protected List<NativeWordWithTranslations> Model;
 }

@@ -24,6 +24,7 @@ public class InsertNativeWordHandler : IRequestHandler<InsertNativeWordCommand, 
         await _unitOfWork.NativeWords.AddAsync(nativeWord, cancellationToken);
         await _unitOfWork.CompleteAsync();
         request.NativeWordDto.Id = nativeWord.Id;
+        request.NativeWordDto.Translations = _mapper.Map<List<ForeignWordDto>>(nativeWord.Translations);
 
         return request.NativeWordDto;
     }
