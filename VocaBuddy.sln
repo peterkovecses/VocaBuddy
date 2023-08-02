@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocaBuddy.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.Tests", "tests\UI.Tests\UI.Tests.csproj", "{DF6A569D-2EFD-4D47-9CF2-581ED21AB706}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Tests", "tests\Api.Tests\Api.Tests.csproj", "{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Tests", "tests\Api.Tests\Api.Tests.csproj", "{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

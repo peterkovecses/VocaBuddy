@@ -20,7 +20,7 @@ public class IdentityController : ControllerBase
     {
         await _identityService.RegisterAsync(request.Email, request.Password);
 
-        return Ok(Result<TokenHolder, IdentityError>.Success());
+        return Ok(Result<IdentityError>.Success());
     }
 
     [HttpPost("login")]
