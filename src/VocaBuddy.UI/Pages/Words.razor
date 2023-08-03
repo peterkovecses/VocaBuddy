@@ -1,26 +1,59 @@
 ﻿@page "/words"
 @inherits WordsBase
 
-<h3>Words</h3>
+<div class="container">
+    <h3>Words</h3>
 
-<table class="table table-striped">
-    <thead class="thead-light">
-        <tr>
-            <th scope="col">Word</th>
-            <th scope="col">Translations</th>
-            <th scope="col">Update</th>
-            <th scope="col">Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var word in Model)
-        {
-            <tr>
-                <td><a href="">@word.Text</a></td>
-                <td>@word.TranslationsString</td>
-                <td><a href=""><span class="oi oi-pencil"></span></a></td>
-                <td><a href=""><span class="oi oi-delete"></span></a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Filter..."
+                       @bind="Filter"
+                       @bind:event="oninput">
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Word</th>
+                    <th scope="col">Translations</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Loading)
+                {
+                    <tr>
+                        <td colspan="4">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var word in Model)
+                    {
+                        if (!IsVisible(word))
+                        {
+                            continue;
+                        }
+                        <tr>
+                            <td><a href="">@word.Text</a></td>
+                            <td>@word.TranslationsString</td>
+                            <td><a href=""><span class="oi oi-pencil"></span></a></td>
+                            <td><a href=""><span class="oi oi-delete"></span></a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

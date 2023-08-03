@@ -21,9 +21,7 @@ namespace VocaBuddy.UI.Shared
         }
 
         private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)
-        {
-            await UpdateAuthenticationState();
-        }
+            => await UpdateAuthenticationState();
 
         private async Task UpdateAuthenticationState()
         {
