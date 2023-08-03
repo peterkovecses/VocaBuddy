@@ -1,4 +1,6 @@
-﻿using VocaBuddy.Shared.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.Shared.Interfaces;
 using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages;
@@ -42,17 +44,17 @@ public class LoginBase : CustomComponentBase
         }
     }
 
-    private void HandleResult(Result<TokenHolder, IdentityError> result)
+    private void HandleResult(Result<TokenHolder, BaseError> result)
     {
         if (result.IsSuccess)
         {
             NavManager.NavigateTo("/");
         }
 
-        throw result.Error switch
+        throw result.Error!.Code switch
         {
-            IdentityError.InvalidCredentials => new InvalidCredentialsException(),
-            _ => new LoginFailedException(result.ErrorMessage!),
+            IdentityError.Code.InvalidCredentials => new InvalidCredentialsException(),
+            _ => new LoginFailedException(result.Error!.Message),
         };
     }
 

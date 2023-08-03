@@ -1,6 +1,8 @@
-﻿namespace Identity.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
+
+namespace Identity.Exceptions;
 
 public class UsedUpRefreshTokenException : Exception
 {
-    public UsedUpRefreshTokenException() : base("This refresh token has been invalidated.") { }
+    public UsedUpRefreshTokenException() : base(IdentityError.Message.UsedUpRefreshToken) { }
 }

@@ -1,7 +1,7 @@
-﻿using Azure;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using VocaBuddy.Application.Exceptions;
+using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Middlewares;
@@ -32,19 +32,19 @@ public class ErrorHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var (code, message) = GetResponseData(exception, exception.Message);
+        var (code, message) = GetResponseData(exception);
         await SetResponse(context, code, message);
     }
 
-    private static (HttpStatusCode, Result<VocaBuddyError>) GetResponseData(Exception exception, string message)
+    private static (HttpStatusCode, Result<BaseError>) GetResponseData(Exception exception)
         => exception switch
         {
-            OperationCanceledException => (HttpStatusCode.Accepted, Result<VocaBuddyError>.FromError(VocaBuddyError.Canceled, "Operation was cancelled.")),
-            NotFoundException => (HttpStatusCode.NotFound, Result<VocaBuddyError>.FromError(VocaBuddyError.NotFound, message)),
-            _ => (HttpStatusCode.InternalServerError, Result<VocaBuddyError>.ServerError(VocaBuddyError.Server))
+            OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(new CanceledError())),
+            NotFoundException => (HttpStatusCode.NotFound, Result.Failure(new NotFoundError(exception.Message))),
+            _ => (HttpStatusCode.InternalServerError, Result.Failure(new BaseError()))
         };
 
-    private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result<VocaBuddyError> result)
+    private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result<BaseError> result)
     {
         var jsonContent = JsonSerializer.Serialize(result);
         context.Response.ContentType = "application/json";

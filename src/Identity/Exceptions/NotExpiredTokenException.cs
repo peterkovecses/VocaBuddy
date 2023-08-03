@@ -1,7 +1,9 @@
-﻿namespace Identity.Exceptions
+﻿using VocaBuddy.Shared.Errors;
+
+namespace Identity.Exceptions
 {
     public class NotExpiredTokenException : Exception
     {
-        public NotExpiredTokenException() : base("This token hasn not expired yet.") { }
+        public NotExpiredTokenException() : base(IdentityError.Message.NotExpiredToken) { }
     }
 }

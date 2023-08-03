@@ -20,7 +20,7 @@ public class IdentityController : ControllerBase
     {
         await _identityService.RegisterAsync(request.Email, request.Password);
 
-        return Ok(Result<IdentityError>.Success());
+        return Ok(Result.Success());
     }
 
     [HttpPost("login")]
@@ -28,7 +28,7 @@ public class IdentityController : ControllerBase
     {
         var tokens = await _identityService.LoginAsync(request.Email, request.Password);
         
-        return Ok(Result<TokenHolder, IdentityError>.Success(tokens));
+        return Ok(Result.Success(tokens));
     }
 
     [HttpPost("refresh")]
@@ -36,6 +36,6 @@ public class IdentityController : ControllerBase
     {
         var tokens = await _identityService.RefreshTokenAsync(request.AuthToken, request.RefreshToken);
 
-        return Ok(Result<TokenHolder, IdentityError>.Success(tokens));
+        return Ok(Result.Success(tokens));
     }
 }

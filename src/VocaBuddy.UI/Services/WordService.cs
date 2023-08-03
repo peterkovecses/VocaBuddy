@@ -18,6 +18,16 @@ public class WordService : IWordService
         return ConvertToWordsWithTranslations(words);
     }
 
+    public Task<NativeWordDto> GetWord(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateWord(NativeWordDto word)
+    {
+        throw new NotImplementedException();
+    }
+
     private static List<NativeWordWithTranslations> ConvertToWordsWithTranslations(List<NativeWordDto> words)
     {
         var result = new List<NativeWordWithTranslations>();

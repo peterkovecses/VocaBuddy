@@ -25,7 +25,7 @@ public class NativeWordsController : ControllerBase
         var userId = "1";
         var words = await _mediator.Send(new GetNativeWordsQuery(userId), token);
 
-        return Ok(Result<List<NativeWordDto>, VocaBuddyError>.Success(words));
+        return Ok(Result.Success(words));
     }
 
     [HttpGet("{id}")]
@@ -33,7 +33,7 @@ public class NativeWordsController : ControllerBase
     {
         var word = await _mediator.Send(new GetNativeWordByIdQuery(id), token);
 
-        return Ok(Result<NativeWordDto, VocaBuddyError>.Success(word));
+        return Ok(Result.Success(word));
     }
 
     [HttpPost]
@@ -46,7 +46,7 @@ public class NativeWordsController : ControllerBase
 
         var createdNativeWordDto = await _mediator.Send(new InsertNativeWordCommand(nativeWord), token);
 
-        return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result<NativeWordDto, VocaBuddyError>.Success(createdNativeWordDto));
+        return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result.Success(createdNativeWordDto));
     }
 
     [HttpPut("{id}")]
@@ -64,7 +64,7 @@ public class NativeWordsController : ControllerBase
 
         await _mediator.Send(new UpdateNativeWordCommand(nativeWord), token);
 
-        return Ok(Result<VocaBuddyError>.Success());
+        return Ok(Result.Success());
     }
 
     [HttpDelete]
@@ -72,6 +72,6 @@ public class NativeWordsController : ControllerBase
     {
         await _mediator.Send(new DeleteNativeWordCommand(id), token);
 
-        return Ok(Result<VocaBuddyError>.Success());
+        return Ok(Result.Success());
     }
 }

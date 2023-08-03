@@ -1,5 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
+using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Interfaces;
 using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Authentication;
@@ -23,7 +25,7 @@ public class AuthenticationService : IAuthenticationService
         _identityConfig = identityOptions.Value;
     }
 
-    public async Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<Result<TokenHolder, BaseError>> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
 
@@ -45,7 +47,7 @@ public class AuthenticationService : IAuthenticationService
         _authStateProvider.SignOutUser();
     }
 
-    public async Task<Result<IdentityError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
+    public async Task<Result<BaseError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
         => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 
     public async Task RefreshTokenAsync()
@@ -53,9 +55,9 @@ public class AuthenticationService : IAuthenticationService
         var (authToken, refreshToken) = await RetrieveCurrentTokensAsync();
         var result = await _client.RefreshTokenAsync(new RefreshTokenRequest { AuthToken = authToken, RefreshToken = refreshToken });
 
-        if (result.IsSuccess)
+        if (result.IsError)
         {
-            throw new RefreshTokenException(result.ErrorMessage!);
+            throw new RefreshTokenException(result.Error!.Message);
         }
 
         await StoreTokensAsync(result.Data!);

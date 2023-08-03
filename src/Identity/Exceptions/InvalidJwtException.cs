@@ -1,6 +1,8 @@
-﻿namespace Identity.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
+
+namespace Identity.Exceptions;
 
 public class InvalidJwtException : Exception
 {
-    public InvalidJwtException() : base("Token is not a JWT with valid security algorithm.") { }
+    public InvalidJwtException() : base(IdentityError.Message.InvalidJwt) { }
 }

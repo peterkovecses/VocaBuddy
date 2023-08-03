@@ -1,4 +1,6 @@
 ﻿using Shared.Exceptions;
+using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Interfaces;
 using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages;
@@ -52,18 +54,18 @@ public class RegisterBase : CustomComponentBase
         }
     }
 
-    private Task<Result<IdentityError>> RegisterUserAsync()
+    private Task<Result<BaseError>> RegisterUserAsync()
         => AuthService.RegisterAsync(Model);
 
-    private static void ValidateResult(Result<IdentityError> result)
+    private static void ValidateResult(Result<BaseError> result)
     {
         if (result.IsError)
         {
-            throw result.Error switch
+            throw result.Error!.Code switch
             {
-                IdentityError.UserExists => new UserExistsException(),
-                IdentityError.InvalidCredentials => new InvalidUserRegistrationInputException(result.ErrorMessage!),
-                _ => new RegistrationFailedException(result.ErrorMessage!),
+                IdentityError.Code.UserExists => new UserExistsException(),
+                IdentityError.Code.InvalidUserRegistrationInput => new InvalidUserRegistrationInputException(result.Error!.Message),
+                _ => new RegistrationFailedException(result.Error!.Message),
             };
         }
     }

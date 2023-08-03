@@ -24,6 +24,6 @@ public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand>
         }
 
         _unitOfWork.NativeWords.Remove(nativeWordToDelete);
-        _unitOfWork.CompleteAsync();
+        await _unitOfWork.CompleteAsync();
     }
 }

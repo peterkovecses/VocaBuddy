@@ -1,6 +1,8 @@
-﻿namespace Identity.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
+
+namespace Identity.Exceptions;
 
 public class RefreshTokenNotExistsException : Exception
 {
-    public RefreshTokenNotExistsException() : base("This refresh token does not exists.") { }
+    public RefreshTokenNotExistsException() : base(IdentityError.Message.RefreshTokenNotExists) { }
 }

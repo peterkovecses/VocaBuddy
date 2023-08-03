@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
-using System.Text.Json;
+using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Interfaces;
 using VocaBuddy.UI.Extensions;
 
 namespace VocaBuddy.UI.ApiHelper;
@@ -16,24 +17,26 @@ public class IdentityApiClient : IIdentityApiClient
         _identityConfig = identityOptions.Value;
     }
 
-    public async Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<Result<TokenHolder, BaseError>> LoginAsync(UserLoginRequest loginRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.LoginEndpoint, loginRequest);
 
-        return await response.DeserializeResponseAsync<Result<TokenHolder, IdentityError>>();
+        return await response.DeserializeResponseAsync<Result<TokenHolder, BaseError>>();
     }
 
-    public async Task<Result<IdentityError>> RegisterAsync(UserRegistrationRequest registrationRequest)
+    public async Task<Result<BaseError>> RegisterAsync(UserRegistrationRequest registrationRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.RegisterEndpoint, registrationRequest);
 
-        return await response.DeserializeResponseAsync<Result<IdentityError>>();
+        var result = await response.DeserializeResponseAsync<Result<BaseError>>();
+
+        return result;
     }
 
-    public async Task<Result<TokenHolder, IdentityError>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
+    public async Task<Result<TokenHolder, BaseError>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.RefreshEndpoint, refreshTokenRequest);
 
-        return await response.DeserializeResponseAsync<Result<TokenHolder, IdentityError>>();
+        return await response.DeserializeResponseAsync<Result<TokenHolder, BaseError>>();
     }
 }

@@ -1,60 +1,49 @@
-﻿namespace VocaBuddy.Shared.Models;
+﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Interfaces;
 
-public abstract class Result
+namespace VocaBuddy.Shared.Models;
+
+public class Result
 {
-    public const string ServerErrorMessage = "An error occurred while processing the request.";
+    public Result(bool success)
+    {
+        IsSuccess = success;
+    }
 
-    public string? ErrorMessage { get; init; }
-}
-
-public class Result<TError> : Result where TError : struct
-{
-    public TError? Error { get; init; }
-    public bool IsSuccess => Error is null;
+    public bool IsSuccess { get; init; }
     public bool IsError => !IsSuccess;
 
-    public static Result<TError> Success()
-        => new();
+    public static Result Success()
+        => new(true);
 
-    public static Result<TError> FromError(TError error, string errorMessage)
-        => new()
-        {
-            Error = error,
-            ErrorMessage = errorMessage
-        };
+    public static Result<TValue, BaseError> Success<TValue>(TValue data)
+        => new(data);
 
-    public static Result<TError> ServerError(TError error)
-        => new()
-        {
-            Error = error,
-            ErrorMessage = ServerErrorMessage
-        };
+    public static Result<BaseError> Failure(BaseError error)
+        => new(error);
 }
 
-public class Result<TValue, TError> : Result<TError> where TError : struct
+public class Result<TError> : Result where TError : IError
 {
-    public TValue? Data { get; init; }
+    public TError? Error { get; init; }
 
-    public static new Result<TValue, TError> Success()
-        => new();
+    public Result() : base(true)
+    {
 
-    public static Result<TValue, TError> Success(TValue data)
-        => new()
-        {
-            Data = data
-        };
+    }
 
-    public static new Result<TValue, TError> FromError(TError error, string errorMessage)
-        => new()
-        {
-            Error = error,
-            ErrorMessage = errorMessage
-        };
+    public Result(TError error) : base(false)
+    {
+        Error = error;
+    }
+}
 
-    public static new Result<TValue, TError> ServerError(TError error)
-        => new()
-        {
-            Error = error,
-            ErrorMessage = ServerErrorMessage
-        };
+public class Result<TValue, TError> : Result<TError> where TError : IError
+{
+    public TValue Data { get; init; }
+
+    public Result(TValue data) : base()
+    {
+        Data = data;
+    }
 }

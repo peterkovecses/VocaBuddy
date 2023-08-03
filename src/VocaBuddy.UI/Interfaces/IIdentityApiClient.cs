@@ -1,9 +1,12 @@
-﻿namespace VocaBuddy.UI.Interfaces
+﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Interfaces;
+
+namespace VocaBuddy.UI.Interfaces
 {
     public interface IIdentityApiClient
     {
-        Task<Result<TokenHolder, IdentityError>> LoginAsync(UserLoginRequest loginRequest);
-        Task<Result<IdentityError>> RegisterAsync(UserRegistrationRequest registrationRequest);
-        Task<Result<TokenHolder, IdentityError>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
+        Task<Result<TokenHolder, BaseError>> LoginAsync(UserLoginRequest loginRequest);
+        Task<Result<BaseError>> RegisterAsync(UserRegistrationRequest registrationRequest);
+        Task<Result<TokenHolder, BaseError>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }
