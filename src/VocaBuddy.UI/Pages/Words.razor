@@ -3,22 +3,24 @@
 
 <h3>Words</h3>
 
-<div class="container-fluid">
-    <div class="row">
+<table class="table table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Word</th>
+            <th scope="col">Translations</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var word in Model)
         {
-            <div class="col-xl-4 col-lg-6 mb-3">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <a href="">
-                                @word.Text
-                            </a>
-                            <p class="mb-1">@word.TranslationsString</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td><a href="">@word.Text</a></td>
+                <td>@word.TranslationsString</td>
+                <td><a href=""><span class="oi oi-pencil"></span></a></td>
+                <td><a href=""><span class="oi oi-delete"></span></a></td>
+            </tr>
         }
-    </div>
-</div>
+    </tbody>
+</table>
