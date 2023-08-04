@@ -2,37 +2,24 @@
 
 public class WordsBase : CustomComponentBase
 {
-    protected List<NativeWordWithTranslations> Model = new();
+    protected List<NativeWordViewModel> Words;
+    protected bool Loading = true;
 
     [Inject]
     public IWordService WordService { get; set; }
-    public bool Loading { get; set; } = true;
-    public string Filter { get; set; }
+    protected string Filter { get; set; } = string.Empty;
+    protected List<NativeWordViewModel> FilteredWords
+        => Words.Where(word => ContainsTerm(word)).ToList();
 
     protected override async Task OnInitializedAsync()
     {
         Loading = true;
-        Model = await WordService.GetWordsAsync();
+        Words = await WordService.GetWordsAsync();
         Loading = false;
     }
 
-    public bool IsVisible(NativeWordWithTranslations word)
-    {
-        if (string.IsNullOrEmpty(Filter))
-        {
-            return true;
-        }
-
-        if (ContainsTerm(word))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool ContainsTerm(NativeWordWithTranslations word)
+    private bool ContainsTerm(NativeWordViewModel word)
         => word.Text.Contains(
-            Filter, StringComparison.OrdinalIgnoreCase) 
+            Filter, StringComparison.OrdinalIgnoreCase)
                 || word.TranslationsString.Contains(Filter, StringComparison.OrdinalIgnoreCase);
 }

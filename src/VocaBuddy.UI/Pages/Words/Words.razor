@@ -39,12 +39,8 @@
                 }
                 else
                 {
-                    foreach (var word in Model)
+                    foreach (var word in FilteredWords)
                     {
-                        if (!IsVisible(word))
-                        {
-                            continue;
-                        }
                         <tr>
                             <td>@word.Text</td>
                             <td>@word.TranslationsString</td>

@@ -11,7 +11,7 @@ public class WordService : IWordService
         _client = client;
     }
 
-    public async Task<List<NativeWordWithTranslations>> GetWordsAsync()
+    public async Task<List<NativeWordViewModel>> GetWordsAsync()
     {
         var words = (await _client.GetNativeWordsAsync()).Data;
 
@@ -28,14 +28,14 @@ public class WordService : IWordService
         throw new NotImplementedException();
     }
 
-    private static List<NativeWordWithTranslations> ConvertToWordsWithTranslations(List<NativeWordDto> words)
+    private static List<NativeWordViewModel> ConvertToWordsWithTranslations(List<NativeWordDto> words)
     {
-        var result = new List<NativeWordWithTranslations>();
+        var result = new List<NativeWordViewModel>();
 
         foreach (var word in words)
         {
             result.Add(
-                new NativeWordWithTranslations
+                new NativeWordViewModel
                 {
                     Id = word.Id,
                     Text = word.Text,
