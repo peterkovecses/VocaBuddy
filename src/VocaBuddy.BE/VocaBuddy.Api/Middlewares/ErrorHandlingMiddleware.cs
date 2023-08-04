@@ -36,15 +36,15 @@ public class ErrorHandlingMiddleware
         await SetResponse(context, code, message);
     }
 
-    private static (HttpStatusCode, Result<BaseError>) GetResponseData(Exception exception)
+    private static (HttpStatusCode, Result) GetResponseData(Exception exception)
         => exception switch
         {
-            OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(new CanceledError())),
-            NotFoundException => (HttpStatusCode.NotFound, Result.Failure(new NotFoundError(exception.Message))),
-            _ => (HttpStatusCode.InternalServerError, Result.Failure(new BaseError()))
+            OperationCanceledException => (HttpStatusCode.Accepted, VocaBuddyError.Canceled()),
+            NotFoundException => (HttpStatusCode.NotFound, VocaBuddyError.Notfound(exception.Message)),
+            _ => (HttpStatusCode.InternalServerError, Result.BaseError())
         };
 
-    private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result<BaseError> result)
+    private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result result)
     {
         var jsonContent = JsonSerializer.Serialize(result);
         context.Response.ContentType = "application/json";

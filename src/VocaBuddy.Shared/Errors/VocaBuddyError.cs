@@ -1,15 +1,17 @@
-﻿namespace VocaBuddy.Shared.Errors; 
+﻿using VocaBuddy.Shared.Models;
 
-public static class VocaBuddyError 
+namespace VocaBuddy.Shared.Errors;
+
+public static class VocaBuddyError
 {
-    public static class Code
-    {
-        public const string Canceled = "Canceled";
-        public const string NotFound = "NotFound";
-    }
+    public const string CanceledCode = "Canceled";
+    public const string NotFoundCode = "NotFound";
 
-    public static class Message
-    {
-        public const string Canceled = "Operation was cancelled.";
-    }
+    public const string CanceledMessage = "Operation was cancelled.";
+
+    public static Result Canceled() 
+        => new(new ErrorInfo(CanceledCode, CanceledMessage));
+
+    public static Result Notfound(string message) 
+        => new(new ErrorInfo(NotFoundCode, message));
 }

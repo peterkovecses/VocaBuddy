@@ -2,7 +2,7 @@
 
 namespace VocaBuddy.Shared.Errors;
 
-public class BaseError : IError
+public class ErrorInfo
 {
     private const string BaseMessage = "An error occurred while processing the request.";
     private const string BaseCode = "BaseError";
@@ -10,7 +10,7 @@ public class BaseError : IError
     public string Code { get; init; }
     public string Message { get; init; }
 
-    public BaseError(string code = BaseCode, string message = BaseMessage)
+    public ErrorInfo(string code = BaseCode, string message = BaseMessage)
     {
         Code = code;
         Message = message;

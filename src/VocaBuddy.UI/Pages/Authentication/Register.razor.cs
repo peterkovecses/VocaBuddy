@@ -54,17 +54,17 @@ public class RegisterBase : CustomComponentBase
         }
     }
 
-    private Task<Result<BaseError>> RegisterUserAsync()
+    private Task<Result<ErrorInfo>> RegisterUserAsync()
         => AuthService.RegisterAsync(Model);
 
-    private static void ValidateResult(Result<BaseError> result)
+    private static void ValidateResult(Result<ErrorInfo> result)
     {
         if (result.IsError)
         {
             throw result.Error!.Code switch
             {
-                IdentityError.Code.UserExists => new UserExistsException(),
-                IdentityError.Code.InvalidUserRegistrationInput => new InvalidUserRegistrationInputException(result.Error!.Message),
+                IdentityError.UserExistsCode => new UserExistsException(),
+                IdentityError.InvalidUserRegistrationInputCode => new InvalidUserRegistrationInputException(result.Error!.Message),
                 _ => new RegistrationFailedException(result.Error!.Message),
             };
         }

@@ -44,7 +44,7 @@ public class LoginBase : CustomComponentBase
         }
     }
 
-    private void HandleResult(Result<TokenHolder, BaseError> result)
+    private void HandleResult(Result<TokenHolder> result)
     {
         if (result.IsSuccess)
         {
@@ -53,7 +53,7 @@ public class LoginBase : CustomComponentBase
 
         throw result.Error!.Code switch
         {
-            IdentityError.Code.InvalidCredentials => new InvalidCredentialsException(),
+            IdentityError.InvalidCredentialsCode => new InvalidCredentialsException(),
             _ => new LoginFailedException(result.Error!.Message),
         };
     }

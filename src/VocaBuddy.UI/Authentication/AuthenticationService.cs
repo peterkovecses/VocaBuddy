@@ -25,7 +25,7 @@ public class AuthenticationService : IAuthenticationService
         _identityConfig = identityOptions.Value;
     }
 
-    public async Task<Result<TokenHolder, BaseError>> LoginAsync(UserLoginRequest loginRequest)
+    public async Task<Result<TokenHolder>> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
 
@@ -47,7 +47,7 @@ public class AuthenticationService : IAuthenticationService
         _authStateProvider.SignOutUser();
     }
 
-    public async Task<Result<BaseError>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
+    public async Task<Result<ErrorInfo>> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
         => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 
     public async Task RefreshTokenAsync()

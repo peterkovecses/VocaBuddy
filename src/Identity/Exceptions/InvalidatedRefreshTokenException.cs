@@ -4,5 +4,5 @@ namespace Identity.Exceptions;
 
 public class InvalidatedRefreshTokenException : Exception
 {
-    public InvalidatedRefreshTokenException() : base(IdentityError.Message.InvalidatedRefreshToken) { }
+    public InvalidatedRefreshTokenException() : base(IdentityError.InvalidatedRefreshTokenMessage) { }
 }

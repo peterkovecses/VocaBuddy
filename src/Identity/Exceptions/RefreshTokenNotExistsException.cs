@@ -4,5 +4,5 @@ namespace Identity.Exceptions;
 
 public class RefreshTokenNotExistsException : Exception
 {
-    public RefreshTokenNotExistsException() : base(IdentityError.Message.RefreshTokenNotExists) { }
+    public RefreshTokenNotExistsException() : base(IdentityError.RefreshTokenNotExistsMessage) { }
 }

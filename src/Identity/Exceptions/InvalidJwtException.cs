@@ -4,5 +4,5 @@ namespace Identity.Exceptions;
 
 public class InvalidJwtException : Exception
 {
-    public InvalidJwtException() : base(IdentityError.Message.InvalidJwt) { }
+    public InvalidJwtException() : base(IdentityError.InvalidJwtMessage) { }
 }

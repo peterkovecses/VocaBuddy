@@ -4,5 +4,5 @@ namespace VocaBuddy.Shared.Exceptions;
 
 public class InvalidCredentialsException : Exception
 {
-    public InvalidCredentialsException() : base(IdentityError.Message.InvalidCredentials) { }
+    public InvalidCredentialsException() : base(IdentityError.InvalidCredentialsMessage) { }
 }

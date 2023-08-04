@@ -4,5 +4,5 @@ namespace Shared.Exceptions;
 
 public class UserExistsException : Exception
 {
-    public UserExistsException() : base(IdentityError.Message.UserExists) { }
+    public UserExistsException() : base(IdentityError.UserExistsMessage) { }
 }

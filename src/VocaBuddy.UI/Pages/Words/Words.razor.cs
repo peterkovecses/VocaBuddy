@@ -6,8 +6,8 @@ public class WordsBase : CustomComponentBase
 
     [Inject]
     public IWordService WordService { get; set; }
-    public string Filter { get; set; }
     public bool Loading { get; set; } = true;
+    public string Filter { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

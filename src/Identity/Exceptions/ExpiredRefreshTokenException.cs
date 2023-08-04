@@ -4,5 +4,5 @@ namespace Identity.Exceptions;
 
 public class ExpiredRefreshTokenException : Exception
 {
-    public ExpiredRefreshTokenException() : base(IdentityError.Message.ExpiredRefreshToken) { }
+    public ExpiredRefreshTokenException() : base(IdentityError.ExpiredRefreshTokenMessage) { }
 }

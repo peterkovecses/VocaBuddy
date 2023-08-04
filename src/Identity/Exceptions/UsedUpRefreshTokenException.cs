@@ -4,5 +4,5 @@ namespace Identity.Exceptions;
 
 public class UsedUpRefreshTokenException : Exception
 {
-    public UsedUpRefreshTokenException() : base(IdentityError.Message.UsedUpRefreshToken) { }
+    public UsedUpRefreshTokenException() : base(IdentityError.UsedUpRefreshTokenMessage) { }
 }
