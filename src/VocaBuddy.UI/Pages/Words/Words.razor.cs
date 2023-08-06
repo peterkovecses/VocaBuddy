@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace VocaBuddy.UI.Pages;
+﻿namespace VocaBuddy.UI.Pages;
 
 public class WordsBase : ComponentBase
 {
@@ -48,6 +46,13 @@ public class WordsBase : ComponentBase
     {
         PageSize = size;
         CurrentPage = 1;
+    }
+
+    protected void OnPageSizeChanged(ChangeEventArgs e)
+    {
+        PageSize = Convert.ToInt32(e.Value);
+        int totalPages = (int)Math.Ceiling(FilteredWords.Count / (decimal)PageSize);
+        CurrentPage = Math.Min(CurrentPage, totalPages);
     }
 
     private bool ContainsTerm(NativeWordViewModel word)

@@ -78,6 +78,12 @@
                                 <li class="page-item @(1 == CurrentPage ? "active" : "")" @onclick="() => ChangePage(1)">
                                     <a class="page-link">1</a>
                                 </li>
+                                if (startIndex > 2)
+                                {
+                                    <li class="page-item disabled">
+                                        <a tabindex="-1" class="page-link">...</a>
+                                    </li>
+                                }
                             }
 
                             for (int i = startIndex; i <= endIndex; i++)
@@ -90,6 +96,12 @@
 
                             if (endIndex != totalPages)
                             {
+                                if (endIndex < totalPages - 1)
+                                {
+                                    <li class="page-item disabled">
+                                        <a tabindex="-1" class="page-link">...</a>
+                                    </li>
+                                }
                                 <li class="page-item @(totalPages == CurrentPage ? "active" : "")" @onclick="() => ChangePage(totalPages)">
                                     <a class="page-link">@totalPages</a>
                                 </li>
@@ -104,7 +116,7 @@
             <div class="col-md-6 d-flex align-items-center justify-content-md-end">
                 <div class="form-group">
                     <label>Page size: </label>
-                    <select class="form-control w-auto mx-2" @bind="PageSize" @bind:event="oninput">
+                    <select class="form-control w-auto mx-2" @bind="PageSize" @oninput="OnPageSizeChanged">
                         @foreach (var size in PageSizes)
                         {
                             <option value="@size">@size</option>
