@@ -3,7 +3,7 @@ using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Interfaces;
 using VocaBuddy.UI.Exceptions;
 
-namespace VocaBuddy.UI.Pages;
+namespace VocaBuddy.UI.Pages.Authentication;
 
 public class RegisterBase : CustomComponentBase
 {
@@ -18,7 +18,7 @@ public class RegisterBase : CustomComponentBase
     public IAuthenticationService AuthService { get; set; }
 
     [Inject]
-    public ILogger<LoginBase> Logger { get; set; }
+    public ILogger<RegisterBase> Logger { get; set; }
 
     protected async Task ExecuteLogin()
     {

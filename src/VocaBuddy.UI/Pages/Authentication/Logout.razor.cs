@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.Pages;
+﻿namespace VocaBuddy.UI.Pages.Authentication;
 
 public class LogoutBase : CustomComponentBase
 {
