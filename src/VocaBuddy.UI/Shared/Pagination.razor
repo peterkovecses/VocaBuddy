@@ -1,0 +1,70 @@
+﻿@inherits PaginationBase
+@typeparam TItem
+
+<div class="row">
+    <div class="col-md-6">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @{
+                    int totalPages = (int)Math.Ceiling(TotalItems / (Decimal)PageSize);
+                }
+                <li class="page-item @(CurrentPage == 1 ? "disabled" : "")" @onclick="() => { if (CurrentPage > 1) OnPageChanged.InvokeAsync(CurrentPage - 1); }">
+                    <a class="page-link" aria-label="Previous" aria-disabled="@(CurrentPage == 1 ? "true" : "false")">Previous</a>
+                </li>
+                @{
+                    int displayedPages = Math.Min(totalPages, 5);
+                    int startIndex = Math.Max(1, Math.Min(totalPages - displayedPages + 1, CurrentPage - displayedPages / 2));
+                    int endIndex = startIndex + displayedPages - 1;
+
+                    if (startIndex != 1)
+                    {
+                        <li class="page-item @(1 == CurrentPage ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(1)">
+                            <a class="page-link">1</a>
+                        </li>
+                        if (startIndex > 2)
+                        {
+                            <li class="page-item disabled">
+                                <a tabindex="-1" class="page-link">...</a>
+                            </li>
+                        }
+                    }
+
+                    for (int i = startIndex; i <= endIndex; i++)
+                    {
+                        int pageNumber = i;
+                        <li class="page-item @(pageNumber == CurrentPage ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">
+                            <a class="page-link">@pageNumber</a>
+                        </li>
+                    }
+
+                    if (endIndex != totalPages)
+                    {
+                        if (endIndex < totalPages - 1)
+                        {
+                            <li class="page-item disabled">
+                                <a tabindex="-1" class="page-link">...</a>
+                            </li>
+                        }
+                        <li class="page-item @(totalPages == CurrentPage ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(totalPages)">
+                            <a class="page-link">@totalPages</a>
+                        </li>
+                    }
+                }
+                <li class="page-item @(CurrentPage >= totalPages ? "disabled" : "")" @onclick="() => { if (CurrentPage < totalPages) OnPageChanged.InvokeAsync(CurrentPage + 1); }">
+                    <a class="page-link" aria-label="Next" aria-disabled="@(CurrentPage >= totalPages ? "true" : "false")">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="col-md-6 d-flex align-items-center justify-content-md-end">
+        <div class="form-group">
+            <label>Page size: </label>
+            <select class="form-control w-auto mx-2" @bind="PageSize" @oninput="OnPageSizeChangedHandler">
+                @foreach (var size in PageSizes)
+                {
+                    <option value="@size">@size</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>

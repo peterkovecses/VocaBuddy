@@ -1,6 +1,8 @@
-﻿namespace VocaBuddy.UI.Pages.Authentication;
+﻿using VocaBuddy.UI.BaseComponents;
 
-public class LogoutBase : CustomComponentBase
+namespace VocaBuddy.UI.Pages.Authentication;
+
+public class LogoutBase : NavComponentBase
 {
     [Inject]
     public IAuthenticationService AuthService { get; set; }

@@ -1,11 +1,11 @@
 ﻿using Shared.Exceptions;
 using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Interfaces;
+using VocaBuddy.UI.BaseComponents;
 using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
-public class RegisterBase : CustomComponentBase
+public class RegisterBase : NavComponentBase
 {
     protected UserRegistrationRequestWithPasswordCheck Model = new();
     protected bool ShowAuthError = false;

@@ -1,10 +1,11 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.UI.BaseComponents;
 using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
-public class LoginBase : CustomComponentBase
+public class LoginBase : NavComponentBase
 {
     protected UserLoginRequest Model = new();
     protected bool ShowAuthError = false;
