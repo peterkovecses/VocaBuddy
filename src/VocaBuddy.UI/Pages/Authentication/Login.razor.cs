@@ -53,7 +53,7 @@ public class LoginBase : NavComponentBase
 
         throw result.Error!.Code switch
         {
-            IdentityError.InvalidCredentialsCode => new InvalidCredentialsException(),
+            IdentityErrorCode.InvalidCredentials => new InvalidCredentialsException(),
             _ => new LoginFailedException(result.Error!.Message),
         };
     }

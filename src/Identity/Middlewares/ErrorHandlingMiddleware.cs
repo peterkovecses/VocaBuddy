@@ -2,7 +2,6 @@
 using Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
-using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Exceptions;
 using VocaBuddy.Shared.Models;
 
@@ -32,27 +31,54 @@ public class ErrorHandlingMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var (code, result) = GetResponseData(exception);
         await SetResponse(context, code, result);
     }
 
-    private static (HttpStatusCode, Result) GetResponseData(Exception exception)
-        => exception switch
+    private (HttpStatusCode, Result) GetResponseData(Exception exception)
+    {
+        var baseResponseData = (HttpStatusCode.InternalServerError, Result.BaseError());
+
+        if (exception is ApplicationExceptionBase appException)
         {
-            UserExistsException => (HttpStatusCode.Conflict, IdentityError.UserExists()),
-            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest, IdentityError.InvalidUserRegistrationInput(exception.Message)),
-            InvalidCredentialsException => (HttpStatusCode.BadRequest, IdentityError.InvalidCredentials()),
-            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityError.UsedUpRefreshToken()),
-            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized, IdentityError.RefreshTokenNotExists()),
-            NotExpiredTokenException => (HttpStatusCode.Unauthorized, IdentityError.NotExpiredToken()),
-            JwtIdNotMatchException => (HttpStatusCode.Unauthorized, IdentityError.JwtIdNotMatch()),
-            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityError.InvalidatedRefreshToken()),
-            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized, IdentityError.ExpiredRefreshToken()),
-            InvalidJwtException => (HttpStatusCode.Unauthorized, IdentityError.InvalidJwt()),
-            _ => (HttpStatusCode.InternalServerError, Result.BaseError())
+            var result = Result.FromException(appException);
+
+            try
+            {
+                HttpStatusCode code = GetStatusCode(appException);
+
+                return (code, result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An exception occured");
+
+                return baseResponseData;
+            }
+        }
+
+        return baseResponseData;
+    }
+
+    private static HttpStatusCode GetStatusCode(ApplicationExceptionBase appException)
+    {
+        return appException switch
+        {
+            UserExistsException => (HttpStatusCode.Conflict),
+            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest),
+            InvalidCredentialsException => (HttpStatusCode.BadRequest),
+            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized),
+            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized),
+            NotExpiredTokenException => (HttpStatusCode.Unauthorized),
+            JwtIdNotMatchException => (HttpStatusCode.Unauthorized),
+            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized),
+            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized),
+            InvalidJwtException => (HttpStatusCode.Unauthorized),
+            _ => throw new UnmappedApplicationException(appException.GetType())
         };
+    }
 
     private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result result)
     {

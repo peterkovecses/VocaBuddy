@@ -1,6 +1,12 @@
-﻿namespace Shared.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Exceptions;
 
-public class InvalidUserRegistrationInputException : Exception
+namespace Shared.Exceptions;
+
+public class InvalidUserRegistrationInputException : ApplicationExceptionBase
 {
-	public InvalidUserRegistrationInputException(string message) : base(message) { }
+	public InvalidUserRegistrationInputException(string message) : base(message) 
+	{
+		ErrorCode = IdentityErrorCode.InvalidUserRegistrationInput;
+	}
 }

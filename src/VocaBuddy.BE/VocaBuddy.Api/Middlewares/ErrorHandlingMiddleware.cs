@@ -2,6 +2,7 @@
 using System.Text.Json;
 using VocaBuddy.Application.Exceptions;
 using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Exceptions;
 using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Middlewares;
@@ -30,19 +31,49 @@ public class ErrorHandlingMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var (code, message) = GetResponseData(exception);
         await SetResponse(context, code, message);
     }
 
-    private static (HttpStatusCode, Result) GetResponseData(Exception exception)
-        => exception switch
+    private (HttpStatusCode, Result) GetResponseData(Exception exception)
+    {
+        var baseResponseData = (HttpStatusCode.InternalServerError, Result.BaseError());
+
+        if (exception is ApplicationExceptionBase appException)
         {
-            OperationCanceledException => (HttpStatusCode.Accepted, VocaBuddyError.Canceled()),
-            NotFoundException => (HttpStatusCode.NotFound, VocaBuddyError.Notfound(exception.Message)),
-            _ => (HttpStatusCode.InternalServerError, Result.BaseError())
+            var result = Result.FromException(appException);
+
+            try
+            {
+                HttpStatusCode code = GetStatusCode(appException);
+
+                return (code, result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An exception occured");
+
+                return baseResponseData;
+            }
+        }
+
+        return exception switch
+        {
+            OperationCanceledException => (HttpStatusCode.Accepted, Result.CustomError(new ErrorInfo(VocaBuddyErrorCodes.Canceled, "Operation was cancelled."))),
+            _ => baseResponseData
         };
+    }
+
+    private static HttpStatusCode GetStatusCode(ApplicationExceptionBase appException)
+    {
+        return appException switch
+        {
+            NotFoundException => (HttpStatusCode.NotFound),
+            _ => throw new UnmappedApplicationException(appException.GetType())
+        };
+    }
 
     private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result result)
     {

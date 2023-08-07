@@ -1,8 +1,12 @@
 ﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Exceptions;
 
-public class InvalidatedRefreshTokenException : Exception
+public class InvalidatedRefreshTokenException : ApplicationExceptionBase
 {
-    public InvalidatedRefreshTokenException() : base(IdentityError.InvalidatedRefreshTokenMessage) { }
+    public InvalidatedRefreshTokenException() : base("This refresh token has been invalidated.") 
+    {
+        ErrorCode = IdentityErrorCode.InvalidatedRefreshToken;
+    }
 }

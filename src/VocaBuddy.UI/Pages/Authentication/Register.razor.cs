@@ -63,8 +63,8 @@ public class RegisterBase : NavComponentBase
         {
             throw result.Error!.Code switch
             {
-                IdentityError.UserExistsCode => new UserExistsException(),
-                IdentityError.InvalidUserRegistrationInputCode => new InvalidUserRegistrationInputException(result.Error!.Message),
+                IdentityErrorCode.UserExists => new UserExistsException(),
+                IdentityErrorCode.InvalidUserRegistrationInput => new InvalidUserRegistrationInputException(result.Error!.Message),
                 _ => new RegistrationFailedException(result.Error!.Message),
             };
         }

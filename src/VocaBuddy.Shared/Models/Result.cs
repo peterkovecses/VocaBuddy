@@ -1,4 +1,5 @@
 ﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Exceptions;
 
 namespace VocaBuddy.Shared.Models;
 
@@ -27,6 +28,12 @@ public class Result
 
     public static Result BaseError()
         => new(false);
+
+    public static Result FromException(ApplicationExceptionBase exception)
+        => new(new ErrorInfo(exception.ErrorCode, exception.Message));
+
+    public static Result CustomError(ErrorInfo info)
+        => new(info);
 }
 
 public class Result<TValue> : Result
