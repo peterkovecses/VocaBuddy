@@ -62,6 +62,13 @@ public class ListComponentBase : ComponentBase
         CurrentSortType = sortType;
     }
 
+    protected void ToggleSortOrder()
+    {
+        CurrentSortOrder = CurrentSortOrder == SortOrder.Ascending
+            ? SortOrder.Descending
+            : SortOrder.Ascending;
+    }
+
     protected enum SortOrder
     {
         Ascending,

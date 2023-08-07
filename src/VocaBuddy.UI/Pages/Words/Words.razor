@@ -12,18 +12,17 @@
                 @bind:event="oninput">
             </div>
         </div>
-        <div class="col-md-4 d-flex align-items-center">
-            <span>
-                <label for="sortType">Sort by:</label>
-                <select id="sortType" class="form-control-inline" @oninput="e => ChangeSortType(e.Value.ToString())">
-                    <option value="Alphabetical" selected>Alphabetical</option>
-                    <option value="CreatedUtc">CreatedUtc</option>
-                </select>
-            </span>
-            &nbsp;
-            <span>
-                <input type="checkbox" @onchange="ChangeSortOrder"> Descending
-            </span>
+
+        <div class="col-md-4 d-flex align-items-center justify-content-end">
+            <label for="sortType" class="me-2">Sort by:</label>
+            <select id="sortType" class="form-control-inline me-2" @oninput="e => ChangeSortType(e.Value.ToString())">
+                <option value="Alphabetical" selected>Alphabetical</option>
+                <option value="CreatedUtc">CreatedUtc</option>
+            </select>
+            <button @onclick="ToggleSortOrder"
+                    class="btn btn-link p-0">
+                <i class="@(CurrentSortOrder == SortOrder.Ascending ? "oi oi-sort-ascending" : "oi oi-sort-descending")"></i>
+            </button>
         </div>
     </div>
 
