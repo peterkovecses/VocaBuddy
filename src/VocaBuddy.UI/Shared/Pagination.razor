@@ -1,7 +1,13 @@
 ﻿@inherits PaginationBase
 @typeparam TItem
 
-<div class="row">
+<style>
+    .pagination > .page-item > .page-link {
+        cursor: pointer;
+    }
+</style>
+
+<div class="row mt-2 mb-3">
     <div class="col-md-6">
         <nav aria-label="Page navigation">
             <ul class="pagination">
@@ -57,9 +63,9 @@
         </nav>
     </div>
     <div class="col-md-6 d-flex align-items-center justify-content-md-end">
-        <div class="form-group">
-            <label>Page size: </label>
-            <select class="form-control w-auto mx-2" @bind="PageSize" @oninput="OnPageSizeChangedHandler">
+        <div class="form-group d-inline-block mr-2 mb-3">
+            <label class="d-inline-block me-1" for="pageSizeSelect">Page size:</label>
+            <select class="form-control d-inline-block w-auto" id="pageSizeSelect" @bind="PageSize" @oninput="OnPageSizeChangedHandler">
                 @foreach (var size in PageSizes)
                 {
                     <option value="@size">@size</option>

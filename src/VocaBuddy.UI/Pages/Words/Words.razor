@@ -4,20 +4,20 @@
 <div class="container">
     <h3>Words</h3>
 
-    <div class="row justify-content-between">
-        <div class="col-md-4">
-            <div class="form-group">
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="form-group mb-3 mb-lg-0">
                 <input class="form-control" type="text" placeholder="Filter..."
                 @bind="Filter"
                 @bind:event="oninput">
             </div>
         </div>
 
-        <div class="col-md-4 d-flex align-items-center justify-content-end">
+        <div class="col-lg-6 col-md-12 d-flex align-items-center justify-content-md-start justify-content-lg-end sorting-control">
             <label for="sortType" class="me-2">Sort by:</label>
             <select id="sortType" class="form-control-inline me-2" @oninput="e => SetSortBy(e.Value.ToString())">
                 <option value="Alphabetical" selected>Alphabetical</option>
-                <option value="CreatedUtc">CreatedUtc</option>
+                <option value="CreatedUtc">Created</option>
             </select>
             <button @onclick="ToggleSortOrder"
                     class="btn btn-link p-0">
@@ -67,17 +67,10 @@
 
     @if (!Loading)
     {
-        <style>
-            .pagination > .page-item > .page-link {
-                cursor: pointer;
-            }
-        </style>
-
         <Pagination TItem="NativeWordViewModel"
                     CurrentPage="CurrentPage"
                     PageSize="PageSize"
                     TotalItems="FilteredWords.Count"
-                    PageSizes="PageSizes"
                     OnPageChanged="OnChangePage"
                     OnPageSizeChanged="OnChangePageSize"></Pagination>
     }
