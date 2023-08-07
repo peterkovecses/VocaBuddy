@@ -6,7 +6,7 @@ public class ListComponentBase : ComponentBase
 
     protected bool Loading { get; set; } = true;
     protected int CurrentPage { get; set; } = 1;
-    protected int PageSize { get; set; } = 11;
+    protected int PageSize { get; set; } = 15;
     protected SortOrder CurrentSortOrder { get; set; } = SortOrder.Ascending;
     protected SortBy CurrentSortBy { get; set; } = SortBy.Alphabetical;
 

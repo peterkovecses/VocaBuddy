@@ -11,23 +11,16 @@
     <div class="col-md-6">
         <nav aria-label="Page navigation">
             <ul class="pagination">
-                @{
-                    int totalPages = (int)Math.Ceiling(TotalItems / (Decimal)PageSize);
-                }
-                <li class="page-item @(CurrentPage == 1 ? "disabled" : "")" @onclick="() => { if (CurrentPage > 1) OnPageChanged.InvokeAsync(CurrentPage - 1); }">
-                    <a class="page-link" aria-label="Previous" aria-disabled="@(CurrentPage == 1 ? "true" : "false")">Previous</a>
+                <li class="page-item @DisableWhenCurrentIsFirstPage()" @onclick="() => NavigateToPreviousPage()">
+                    <a class="page-link" aria-label="Previous" aria-disabled="@IsFirstPage()">Previous</a>
                 </li>
                 @{
-                    int displayedPages = Math.Min(totalPages, 5);
-                    int startIndex = Math.Max(1, Math.Min(totalPages - displayedPages + 1, CurrentPage - displayedPages / 2));
-                    int endIndex = startIndex + displayedPages - 1;
-
-                    if (startIndex != 1)
+                    if (RequiresDisplayFirstPageSeparately())
                     {
-                        <li class="page-item @(1 == CurrentPage ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(1)">
+                        <li class="page-item @EnableWhenCurrentPageIsFirstPage()" @onclick="() => OnPageChanged.InvokeAsync(1)">
                             <a class="page-link">1</a>
                         </li>
-                        if (startIndex > 2)
+                        if (RequiresGapBeforeFirstDisplayedPage())
                         {
                             <li class="page-item disabled">
                                 <a tabindex="-1" class="page-link">...</a>
@@ -35,29 +28,29 @@
                         }
                     }
 
-                    for (int i = startIndex; i <= endIndex; i++)
+                    for (int i = FirstDisplayedPage; i <= LastDisplayedPage; i++)
                     {
-                        int pageNumber = i;
-                        <li class="page-item @(pageNumber == CurrentPage ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">
+                        var pageNumber = i;
+                        <li class="page-item @EnableWhenPageNumberEqualsCurrentPage(pageNumber)" @onclick="() => OnPageChanged.InvokeAsync(pageNumber)">
                             <a class="page-link">@pageNumber</a>
                         </li>
                     }
 
-                    if (endIndex != totalPages)
+                    if (RequiresDisplayLastPageSeparately())
                     {
-                        if (endIndex < totalPages - 1)
+                        if (RequiresGapAfterLastDisplayedPage())
                         {
                             <li class="page-item disabled">
                                 <a tabindex="-1" class="page-link">...</a>
                             </li>
                         }
-                        <li class="page-item @(totalPages == CurrentPage ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(totalPages)">
-                            <a class="page-link">@totalPages</a>
+                        <li class="page-item @EnableWhenCurrentPageIsLastPage()" @onclick="() => OnPageChanged.InvokeAsync(TotalPages)">
+                            <a class="page-link">@TotalPages</a>
                         </li>
                     }
                 }
-                <li class="page-item @(CurrentPage >= totalPages ? "disabled" : "")" @onclick="() => { if (CurrentPage < totalPages) OnPageChanged.InvokeAsync(CurrentPage + 1); }">
-                    <a class="page-link" aria-label="Next" aria-disabled="@(CurrentPage >= totalPages ? "true" : "false")">Next</a>
+                <li class="page-item @DisableWhenCurrentIsLastPage()" @onclick="() => NavigateToNextPage()">
+                    <a class="page-link" aria-label="Next" aria-disabled="@IsLastPage()">Next</a>
                 </li>
             </ul>
         </nav>
