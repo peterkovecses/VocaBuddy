@@ -19,8 +19,14 @@ public class WordsBase : ListComponentBase
     protected List<NativeWordViewModel> FilteredWords
         => Words?.Where(word => ContainsTerm(word)).ToList() ?? new List<NativeWordViewModel>();
 
+    protected List<NativeWordViewModel> SortedFilteredWords
+        => (CurrentSortOrder == SortOrder.Ascending
+                ? FilteredWords.OrderBy(word => CurrentSortType == SortType.Alphabetical ? word.Text : word.CreatedUtc.ToString())
+                : FilteredWords.OrderByDescending(word => CurrentSortType == SortType.Alphabetical ? word.Text : word.CreatedUtc.ToString()))
+            .ToList();
+
     protected List<NativeWordViewModel> PagedWords
-        => FilteredWords.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+        => SortedFilteredWords.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
     private bool ContainsTerm(NativeWordViewModel word)
         => word.Text.Contains(

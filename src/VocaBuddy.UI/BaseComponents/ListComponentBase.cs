@@ -19,6 +19,9 @@ public class ListComponentBase : ComponentBase
         }
     }
 
+    protected SortOrder CurrentSortOrder { get; set; } = SortOrder.Ascending;
+    protected SortType CurrentSortType { get; set; } = SortType.Alphabetical;
+
     protected void OnChangePage(int pageIndex)
         => CurrentPage = pageIndex;
 
@@ -26,5 +29,48 @@ public class ListComponentBase : ComponentBase
     {
         PageSize = size;
         CurrentPage = 1;
+    }
+
+    protected void ChangeSortType(string sortType)
+    {
+        if (Enum.TryParse<SortType>(sortType, out var result))
+        {
+            SortTable(result);
+        }
+    }
+
+    protected void ChangeSortOrder(ChangeEventArgs e)
+    {
+        bool isDescending = Convert.ToBoolean(e.Value);
+        CurrentSortOrder = isDescending ? SortOrder.Ascending : SortOrder.Descending;
+        SortTable(CurrentSortType);
+    }
+
+    protected void SortTable(SortType sortType)
+    {
+        if (CurrentSortType != sortType)
+        {
+            CurrentSortOrder = SortOrder.Ascending;
+        }
+        else
+        {
+            CurrentSortOrder = CurrentSortOrder == SortOrder.Ascending
+                ? SortOrder.Descending
+                : SortOrder.Ascending;
+        }
+
+        CurrentSortType = sortType;
+    }
+
+    protected enum SortOrder
+    {
+        Ascending,
+        Descending
+    }
+
+    protected enum SortType
+    {
+        Alphabetical,
+        CreatedUtc
     }
 }
