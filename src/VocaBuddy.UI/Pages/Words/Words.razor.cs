@@ -21,8 +21,8 @@ public class WordsBase : ListComponentBase
 
     protected List<NativeWordViewModel> SortedFilteredWords
         => (CurrentSortOrder == SortOrder.Ascending
-                ? FilteredWords.OrderBy(word => CurrentSortType == SortType.Alphabetical ? word.Text : word.CreatedUtc.ToString())
-                : FilteredWords.OrderByDescending(word => CurrentSortType == SortType.Alphabetical ? word.Text : word.CreatedUtc.ToString()))
+                ? FilteredWords.OrderBy(word => CurrentSortBy == SortBy.Alphabetical ? word.Text : word.CreatedUtc.ToString())
+                : FilteredWords.OrderByDescending(word => CurrentSortBy == SortBy.Alphabetical ? word.Text : word.CreatedUtc.ToString()))
             .ToList();
 
     protected List<NativeWordViewModel> PagedWords

@@ -15,7 +15,7 @@
 
         <div class="col-md-4 d-flex align-items-center justify-content-end">
             <label for="sortType" class="me-2">Sort by:</label>
-            <select id="sortType" class="form-control-inline me-2" @oninput="e => ChangeSortType(e.Value.ToString())">
+            <select id="sortType" class="form-control-inline me-2" @oninput="e => SetSortBy(e.Value.ToString())">
                 <option value="Alphabetical" selected>Alphabetical</option>
                 <option value="CreatedUtc">CreatedUtc</option>
             </select>
