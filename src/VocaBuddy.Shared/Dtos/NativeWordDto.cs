@@ -3,9 +3,9 @@
 public class NativeWordDto
 {
     public int Id { get; set; }
-    public required string Text { get; set; }
-    public required string UserId { get; set; }
+    public string Text { get; set; }
+    public string UserId { get; set; }
     public DateTime CreatedUtc { get; set; }
 
-    public required virtual List<ForeignWordDto> Translations { get; set; }
+    public virtual List<ForeignWordDto> Translations { get; set; }
 }

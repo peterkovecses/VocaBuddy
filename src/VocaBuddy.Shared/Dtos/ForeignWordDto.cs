@@ -3,7 +3,7 @@
 public class ForeignWordDto
 {
     public int Id { get; set; }
-    public required string Text { get; set; }
+    public string Text { get; set; }
 
-    public required int NativeWordId { get; set; }
+    public int NativeWordId { get; set; }
 }

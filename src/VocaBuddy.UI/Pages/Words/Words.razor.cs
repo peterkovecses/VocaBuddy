@@ -4,7 +4,7 @@ namespace VocaBuddy.UI.Pages.Words;
 
 public class WordsBase : ListComponentBase
 {
-    protected List<NativeWordViewModel> Words;
+    protected List<NativeWordListViewModel> Words;
 
     [Inject]
     public IWordService WordService { get; set; }
@@ -16,19 +16,19 @@ public class WordsBase : ListComponentBase
         Loading = false;
     }
 
-    protected List<NativeWordViewModel> FilteredWords
-        => Words?.Where(word => ContainsTerm(word)).ToList() ?? new List<NativeWordViewModel>();
+    protected List<NativeWordListViewModel> FilteredWords
+        => Words?.Where(word => ContainsTerm(word)).ToList() ?? new List<NativeWordListViewModel>();
 
-    protected List<NativeWordViewModel> SortedWords
+    protected List<NativeWordListViewModel> SortedWords
         => (CurrentSortOrder == SortOrder.Ascending
                 ? FilteredWords.OrderBy(word => CurrentSortBy == SortBy.Alphabetical ? word.Text : word.CreatedUtc.ToString())
                 : FilteredWords.OrderByDescending(word => CurrentSortBy == SortBy.Alphabetical ? word.Text : word.CreatedUtc.ToString()))
             .ToList();
 
-    protected List<NativeWordViewModel> PagedWords
+    protected List<NativeWordListViewModel> PagedWords
         => SortedWords.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
-    private bool ContainsTerm(NativeWordViewModel word)
+    private bool ContainsTerm(NativeWordListViewModel word)
         => word.Text.Contains(
             Filter, StringComparison.OrdinalIgnoreCase)
                 || word.TranslationsString.Contains(Filter, StringComparison.OrdinalIgnoreCase);

@@ -2,7 +2,10 @@
 @inherits WordsBase
 
 <div class="container">
-    <h3>Words</h3>
+    <div class="row col-md-6 justify-content-between">
+        <h3>Words</h3>
+        <a class="btn btn-primary" href="/create-word">Create Word</a>
+    </div>
 
     <div class="row">
         <div class="col-lg-6 col-md-12">
@@ -67,7 +70,7 @@
 
     @if (!Loading)
     {
-        <Pagination TItem="NativeWordViewModel"
+        <Pagination TItem="NativeWordListViewModel"
                     CurrentPage="CurrentPage"
                     PageSize="PageSize"
                     TotalItems="FilteredWords.Count"

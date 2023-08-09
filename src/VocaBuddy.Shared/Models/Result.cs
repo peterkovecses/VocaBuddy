@@ -26,13 +26,13 @@ public class Result
     public static Result<TValue> Success<TValue>(TValue data)
         => new(data);
 
-    public static Result BaseError()
+    public static Result Failure()
         => new(false);
 
-    public static Result FromException(ApplicationExceptionBase exception)
+    public static Result Failure(ApplicationExceptionBase exception)
         => new(new ErrorInfo(exception.ErrorCode, exception.Message));
 
-    public static Result CustomError(ErrorInfo info)
+    public static Result Failure(ErrorInfo info)
         => new(info);
 }
 

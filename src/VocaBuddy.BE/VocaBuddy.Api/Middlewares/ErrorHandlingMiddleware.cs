@@ -11,6 +11,8 @@ public class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandlingMiddleware> _logger;
+    private static readonly (HttpStatusCode, Result) _baseResponseData 
+        = (HttpStatusCode.InternalServerError, Result.Failure());
 
     public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
     {
@@ -39,31 +41,26 @@ public class ErrorHandlingMiddleware
 
     private (HttpStatusCode, Result) GetResponseData(Exception exception)
     {
-        var baseResponseData = (HttpStatusCode.InternalServerError, Result.BaseError());
-
-        if (exception is ApplicationExceptionBase appException)
+        try
         {
-            var result = Result.FromException(appException);
-
-            try
+            if (exception is not ApplicationExceptionBase appException)
             {
-                HttpStatusCode code = GetStatusCode(appException);
-
-                return (code, result);
+                return exception switch
+                {
+                    OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.Canceled, "Operation was cancelled."))),
+                    _ => _baseResponseData
+                };
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An exception occured");
 
-                return baseResponseData;
-            }
+            return (GetStatusCode(appException), Result.Failure(appException));
         }
 
-        return exception switch
+        catch (Exception ex)
         {
-            OperationCanceledException => (HttpStatusCode.Accepted, Result.CustomError(new ErrorInfo(VocaBuddyErrorCodes.Canceled, "Operation was cancelled."))),
-            _ => baseResponseData
-        };
+            _logger.LogError(ex, "An exception occured");
+
+            return _baseResponseData;
+        }
     }
 
     private static HttpStatusCode GetStatusCode(ApplicationExceptionBase appException)
@@ -71,7 +68,7 @@ public class ErrorHandlingMiddleware
         return appException switch
         {
             NotFoundException => (HttpStatusCode.NotFound),
-            _ => throw new UnmappedApplicationException(appException.GetType())
+            _ => throw new UnmappedApplicationException(appException)
         };
     }
 

@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.UI.Models;
 
-public class NativeWordViewModel
+public class NativeWordListViewModel
 {
     public int Id { get; set; }
     public required string Text { get; set; }
