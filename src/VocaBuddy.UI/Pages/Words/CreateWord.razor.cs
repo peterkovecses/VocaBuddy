@@ -3,37 +3,45 @@ using VocaBuddy.UI.BaseComponents;
 
 namespace VocaBuddy.UI.Pages.Words;
 
-public class CreateWordBase : NavComponentBase
+public class CreateWordBase : CustomComponentBase
 {
-    protected NativeWordDto NewWord { get; set; } = new NativeWordDto
+    protected NativeWordDto Model { get; set; } = new NativeWordDto
     {
         Translations = new List<ForeignWordDto> { new ForeignWordDto() }
     };
-
-    protected bool ShowFormValidation { get; set; } = false;
 
     [Inject] 
     public IWordService WordService { get; set; }
 
     protected void AddTranslation()
     {
-        NewWord.Translations.Add(new ForeignWordDto());
+        Model.Translations.Add(new ForeignWordDto());
     }
 
     protected void RemoveTranslation(int index)
     {
-        NewWord.Translations.RemoveAt(index);
+        Model.Translations.RemoveAt(index);
     }
 
-    protected async Task CreateNewWord()
+    protected async Task CreateWordAsync()
     {
-        await WordService.CreateWord(NewWord);
-        NavManager.NavigateTo("/words");
+        try
+        {
+            await WordService.CreateWord(Model);
+            HandleSuccess("The word has been successfully created.");
+            await DisplayStatusMessageAsync();
+            NavManager.NavigateTo("/words");
+        }
+        // TODO: Handle specific exceptions
+        catch(Exception ex)
+        {
+            HandleError(ex, "Failed to create the word.");
+        }
     }
 
     protected bool CheckFormValidity()
     {
-        return !string.IsNullOrWhiteSpace(NewWord.Text) &&
-               NewWord.Translations.All(t => !string.IsNullOrWhiteSpace(t.Text));
+        return !string.IsNullOrWhiteSpace(Model.Text) &&
+               Model.Translations.All(t => !string.IsNullOrWhiteSpace(t.Text));
     }
 }

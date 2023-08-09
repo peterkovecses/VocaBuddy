@@ -4,24 +4,32 @@
 <div class="container">
     <h3>Create Word</h3>
 
-    <form @onsubmit="CreateNewWord" class="mt-3">
+    @if (IsStatusMessageSet)
+    {
+        var statusMessageClass = OperationSucceeded ? "alert alert-success" : "alert alert-danger";
+        <div class="@statusMessageClass col-md-6" role="alert">
+            @StatusMessage
+        </div>
+    }
+
+    <form @onsubmit="CreateWordAsync" class="mt-3">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-3">
-                    <label for="wordText">Word</label>
-                    <input id="wordText" class="form-control" type="text" @bind="NewWord.Text" required />
+                    <label for="wordText">Word in your native language</label>
+                    <input id="wordText" class="form-control" type="text" @bind="Model.Text" required />
                 </div>
             </div>
         </div>
 
         <label>Translations</label>
-        @for (int i = 0; i < NewWord.Translations.Count; i++)
+        @for (int i = 0; i < Model.Translations.Count; i++)
         {
             int index = i;
             <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input class="form-control" type="text" @bind="NewWord.Translations[index].Text" required />
+                        <input class="form-control" type="text" @bind="Model.Translations[index].Text" required />
                         @if (index != 0)
                         {
                             <button class="btn btn-danger input-group-append" @onclick="() => RemoveTranslation(index)">
@@ -43,6 +51,5 @@
                 <a class="btn btn-secondary" href="/words">Cancel</a>
             </div>
         </div>
-
     </form>
 </div>

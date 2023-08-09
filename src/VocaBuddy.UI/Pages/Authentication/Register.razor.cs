@@ -5,14 +5,9 @@ using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
-public class RegisterBase : NavComponentBase
+public class RegisterBase : CustomComponentBase
 {
     protected UserRegistrationRequestWithPasswordCheck Model = new();
-    protected bool ShowAuthError = false;
-    protected string AuthErrorText = string.Empty;
-    protected bool ShowSuccessMessage = false;
-    protected string SuccessMessageText = "Successful registration";
-    protected bool IsSubmitting { get; set; }
 
     [Inject]
     public IAuthenticationService AuthService { get; set; }
@@ -22,53 +17,36 @@ public class RegisterBase : NavComponentBase
 
     protected async Task ExecuteLogin()
     {
-        IsSubmitting = true;
-        ShowAuthError = false;
+        IsLoading = true;
 
         try
         {
-            var result = await RegisterUserAsync();
-            ValidateResult(result);
+            await RegisterUserAsync();
+            HandleSuccess("Successful registration.");
+            await DisplayStatusMessageAsync();
             await SignInUserAsync();
-            await DisplaySuccessMessageAsync();
-            NavigateToIndexPage();
+            NavManager.NavigateTo("/");
         }
         catch (UserExistsException ex)
         {
-            Logger.LogError(ex, "User exists exception occured");
-            DisplayErrorMessage(ex.Message);
+            HandleError(ex);
         }
         catch (InvalidUserRegistrationInputException ex)
         {
-            Logger.LogError(ex, "Invalid user registration input exception occured");
-            DisplayErrorMessage(ex.Message);
+            HandleError(ex);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            Logger.LogError(ex, "An exception occured");
-            DisplayErrorMessage("Registration failed.");
+            HandleError(ex, "Registration failed.");
         }
         finally
         {
-            IsSubmitting = false;
+            IsLoading = false;
         }
     }
 
-    private Task<Result<ErrorInfo>> RegisterUserAsync()
+    private Task RegisterUserAsync()
         => AuthService.RegisterAsync(Model);
-
-    private static void ValidateResult(Result<ErrorInfo> result)
-    {
-        if (result.IsError)
-        {
-            throw result.Error!.Code switch
-            {
-                IdentityErrorCode.UserExists => new UserExistsException(),
-                IdentityErrorCode.InvalidUserRegistrationInput => new InvalidUserRegistrationInputException(result.Error!.Message),
-                _ => new RegistrationFailedException(result.Error!.Message),
-            };
-        }
-    }
 
     private async Task SignInUserAsync()
     {
@@ -79,23 +57,5 @@ public class RegisterBase : NavComponentBase
         };
 
         await AuthService.LoginAsync(loginRequest);
-    }
-
-    private async Task DisplaySuccessMessageAsync()
-    {
-        ShowSuccessMessage = true;
-        StateHasChanged();
-        await Task.Delay(1500);
-    }
-
-    private void DisplayErrorMessage(string message)
-    {
-        AuthErrorText = message;
-        ShowAuthError = true;
-    }
-
-    private void NavigateToIndexPage()
-    {
-        NavManager.NavigateTo("/");
     }
 }

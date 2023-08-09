@@ -5,12 +5,9 @@ using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
-public class LoginBase : NavComponentBase
+public class LoginBase : CustomComponentBase
 {
     protected UserLoginRequest Model = new();
-    protected bool ShowAuthError = false;
-    protected string AuthErrorText = string.Empty;
-    protected bool IsSubmitting { get; set; }
 
     [Inject]
     public IAuthenticationService AuthService { get; set; }
@@ -20,47 +17,24 @@ public class LoginBase : NavComponentBase
 
     protected async Task ExecuteLogin()
     {
-        IsSubmitting = true;
-        ShowAuthError = false;
+        IsLoading = true;
 
         try
         {
-            var result = await AuthService.LoginAsync(Model);
-            HandleResult(result);
+            await AuthService.LoginAsync(Model);
+            NavManager.NavigateTo("/");
         }
         catch (InvalidCredentialsException ex)
         {
-            Logger.LogError(ex, "Invalid credentials exception occured");
-            ShowErrorMessage(ex.Message);
+            HandleError(ex);
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "An exception occured");
-            ShowErrorMessage("Login failed.");
+            HandleError(ex, "Login failed.");
         }
         finally
         {
-            IsSubmitting = false;
+            IsLoading = false;
         }
-    }
-
-    private void HandleResult(Result<TokenHolder> result)
-    {
-        if (result.IsSuccess)
-        {
-            NavManager.NavigateTo("/");
-        }
-
-        throw result.Error!.Code switch
-        {
-            IdentityErrorCode.InvalidCredentials => new InvalidCredentialsException(),
-            _ => new LoginFailedException(result.Error!.Message),
-        };
-    }
-
-    private void ShowErrorMessage(string message)
-    {
-        AuthErrorText = message;
-        ShowAuthError = true;
     }
 }
