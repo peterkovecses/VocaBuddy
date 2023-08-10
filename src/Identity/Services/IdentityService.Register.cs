@@ -1,7 +1,6 @@
 ﻿using Identity.Exceptions;
 using Identity.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Shared.Exceptions;
 
 namespace Identity.Services;
 

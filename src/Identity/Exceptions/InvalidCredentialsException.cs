@@ -1,6 +1,7 @@
 ﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Exceptions;
 
-namespace VocaBuddy.Shared.Exceptions;
+namespace Identity.Exceptions;
 
 public class InvalidCredentialsException : ApplicationExceptionBase
 {

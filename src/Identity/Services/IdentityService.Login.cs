@@ -1,6 +1,6 @@
-﻿using Identity.Interfaces;
+﻿using Identity.Exceptions;
+using Identity.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using VocaBuddy.Shared.Exceptions;
 using VocaBuddy.Shared.Models;
 
 namespace Identity.Services;
