@@ -1,8 +1,8 @@
-﻿@page "/create-word"
-@inherits CreateWordBase
+﻿@page "/create-or-update-word/{WordId:int?}"
+@inherits CreateOrUpdateWordBase
 
 <div class="container">
-    <h3>Create Word</h3>
+    <h3>@(WordId.HasValue ? "Update" : "Create") Word</h3>
 
     @if (IsStatusMessageSet)
     {
@@ -12,7 +12,7 @@
         </div>
     }
 
-    <form @onsubmit="CreateWordAsync" class="mt-3">
+    <form @onsubmit="CreateOrUpdateWordAsync" class="mt-3">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-3">

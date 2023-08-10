@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex flex-row justify-content-between mb-2">
         <h3>Words</h3>
-        <a class="btn btn-primary" href="/create-word">Create Word</a>
+        <a class="btn btn-primary" href="/create-or-update-word">Create Word</a>
     </div>
 
     <div class="row">
@@ -56,10 +56,11 @@
                 {
                     foreach (var word in PagedWords)
                     {
+                        var updateLink = $"/create-or-update-word/{word.Id}";
                         <tr>
                             <td>@word.Text</td>
                             <td>@word.TranslationsString</td>
-                            <td><a href=""><span class="oi oi-pencil"></span></a></td>
+                            <td><a href="@updateLink"><span class="oi oi-pencil"></span></a></td>
                             <td><a href=""><span class="oi oi-delete"></span></a></td>
                         </tr>
                     }

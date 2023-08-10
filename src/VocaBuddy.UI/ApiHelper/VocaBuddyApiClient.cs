@@ -23,9 +23,23 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
         return await response.DeserializeAsync<Result<List<NativeWordDto>>>();
     }
 
+    public async Task<Result<NativeWordDto>> GetNativeWordAsync(int id)
+    {
+        var response = await _client.GetAsync($"{_vocaBuddyApiConfig.GetNativeWordEndpoint}/{id}");
+
+        return await response.DeserializeAsync<Result<NativeWordDto>>();
+    }
+
     public async Task<Result> CreateNativeWord(NativeWordDto word)
     {
         var response = await _client.PostAsJsonAsync(_vocaBuddyApiConfig.CreateNativeWordEndpoint, word);
+
+        return await response.DeserializeAsync<Result>();
+    }
+
+    public async Task<Result> UpdateNativeWord(NativeWordDto word)
+    {
+        var response = await _client.PutAsJsonAsync($"{_vocaBuddyApiConfig.UpdateNativeWordEndpoint}/{word.Id}", word);
 
         return await response.DeserializeAsync<Result>();
     }

@@ -19,11 +19,8 @@ public class WordsBase : ListComponentBase
     protected List<NativeWordListViewModel> FilteredWords
         => Words?.Where(word => ContainsTerm(word)).ToList() ?? new List<NativeWordListViewModel>();
 
-    protected List<NativeWordListViewModel> SortedWords
-        => (CurrentSortOrder == SortOrder.Ascending
-                ? FilteredWords.OrderBy(word => CurrentSortBy == SortBy.Alphabetical ? word.Text : word.CreatedUtc.ToString())
-                : FilteredWords.OrderByDescending(word => CurrentSortBy == SortBy.Alphabetical ? word.Text : word.CreatedUtc.ToString()))
-            .ToList();
+    protected IEnumerable<NativeWordListViewModel> SortedWords
+        => SortWords(FilteredWords);
 
     protected List<NativeWordListViewModel> PagedWords
         => SortedWords.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
@@ -32,4 +29,20 @@ public class WordsBase : ListComponentBase
         => word.Text.Contains(
             Filter, StringComparison.OrdinalIgnoreCase)
                 || word.TranslationsString.Contains(Filter, StringComparison.OrdinalIgnoreCase);
+
+    private IOrderedEnumerable<NativeWordListViewModel> SortWords(ICollection<NativeWordListViewModel> words)
+    {
+        if (CurrentSortBy == SortBy.Alphabetical)
+        {
+            return CurrentSortOrder == SortOrder.Ascending
+                ? words.OrderBy(w => w.Text)
+                : words.OrderByDescending(w => w.Text);
+        }
+        else
+        {
+            return CurrentSortOrder == SortOrder.Ascending
+                ? words.OrderBy(w => w.CreatedUtc)
+                : words.OrderByDescending(w => w.CreatedUtc);
+        }
+    }
 }

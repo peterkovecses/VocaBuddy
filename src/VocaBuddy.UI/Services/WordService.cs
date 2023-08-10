@@ -18,11 +18,14 @@ public class WordService : IWordService
         return ConvertToWordsWithTranslations(words);
     }
 
+    public Task<Result<NativeWordDto>> GetWordAsync(int id)
+        => _client.GetNativeWordAsync(id);
+
     public async Task<Result> CreateWord(NativeWordDto word)
         => await _client.CreateNativeWord(word);
 
-    public Task UpdateWord(NativeWordDto word)
-        => throw new NotImplementedException();
+    public async Task<Result> UpdateWord(NativeWordDto word)
+        => await _client.UpdateNativeWord(word);
 
     private static List<NativeWordListViewModel> ConvertToWordsWithTranslations(List<NativeWordDto> words)
     {
