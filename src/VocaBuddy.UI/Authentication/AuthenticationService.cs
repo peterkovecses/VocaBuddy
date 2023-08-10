@@ -1,9 +1,5 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
-using Shared.Exceptions;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
-using VocaBuddy.Shared.Interfaces;
 using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Authentication;
@@ -27,27 +23,20 @@ public class AuthenticationService : IAuthenticationService
         _identityConfig = identityOptions.Value;
     }
 
-    public async Task LoginAsync(UserLoginRequest loginRequest)
+    public async Task<Result> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
-        ValidateResult(result);
-        SignInUser(result.Data!);
-        await StoreTokensAsync(result.Data!);
+        
+        if (result.IsSuccess)
+        {
+            SignInUser(result.Data!);
+            await StoreTokensAsync(result.Data!);
+        }
+
+        return result;
 
         void SignInUser(TokenHolder tokens)
             => _authStateProvider.SignInUser(tokens.AuthToken);
-
-        static void ValidateResult(Result<TokenHolder> result)
-        {
-            if (result.IsError)
-            {
-                throw result.Error!.Code switch
-                {
-                    IdentityErrorCode.InvalidCredentials => new InvalidCredentialsException(),
-                    _ => new LoginFailedException(result.Error!.Message),
-                };
-            }
-        }
     }
 
     public async Task LogoutAsync()
@@ -56,24 +45,8 @@ public class AuthenticationService : IAuthenticationService
         _authStateProvider.SignOutUser();
     }
 
-    public async Task RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
-    {
-        var result = await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
-        ValidateResult(result);
-
-        static void ValidateResult(Result<ErrorInfo> result)
-        {
-            if (result.IsError)
-            {
-                throw result.Error!.Code switch
-                {
-                    IdentityErrorCode.UserExists => new UserExistsException(),
-                    IdentityErrorCode.InvalidUserRegistrationInput => new InvalidUserRegistrationInputException(result.Error!.Message),
-                    _ => new RegistrationFailedException(result.Error!.Message),
-                };
-            }
-        }
-    }
+    public async Task<Result> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
+        => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 
     public async Task RefreshTokenAsync()
     {

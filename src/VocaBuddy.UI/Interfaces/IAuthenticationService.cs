@@ -2,9 +2,9 @@
 {
     public interface IAuthenticationService
     {
-        Task LoginAsync(UserLoginRequest loginRequest);
+        Task<Result> LoginAsync(UserLoginRequest loginRequest);
         Task LogoutAsync();
-        Task RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
+        Task<Result> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
         Task RefreshTokenAsync();
     }
 }

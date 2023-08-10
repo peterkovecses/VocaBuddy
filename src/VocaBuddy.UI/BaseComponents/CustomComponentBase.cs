@@ -1,6 +1,4 @@
-﻿using VocaBuddy.UI.Pages.Authentication;
-
-namespace VocaBuddy.UI.BaseComponents;
+﻿namespace VocaBuddy.UI.BaseComponents;
 
 public class CustomComponentBase : ComponentBase
 {
@@ -11,9 +9,6 @@ public class CustomComponentBase : ComponentBase
     [Inject]
     protected NavigationManager NavManager { get; set; }
 
-    [Inject]
-    public ILogger<LoginBase> Logger { get; set; }
-
     protected bool IsStatusMessageSet
         => !string.IsNullOrEmpty(StatusMessage);
 
@@ -23,17 +18,5 @@ public class CustomComponentBase : ComponentBase
         OperationSucceeded = true;
         StateHasChanged();
         await Task.Delay(1500);
-    }
-
-    protected void HandleError(Exception exception)
-    {
-        Logger.LogError(exception, "An exception occured");
-        StatusMessage = exception.Message;
-    }
-
-    protected void HandleError(Exception exception, string message)
-    {
-        Logger.LogError(exception, "An exception occured");
-        StatusMessage = message;
     }
 }

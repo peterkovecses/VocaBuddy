@@ -1,4 +1,4 @@
-﻿using VocaBuddy.Shared.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
 
 namespace VocaBuddy.UI.Pages.Authentication;
@@ -10,29 +10,27 @@ public class LoginBase : CustomComponentBase
     [Inject]
     public IAuthenticationService AuthService { get; set; }
 
-    [Inject]
-    public ILogger<LoginBase> Logger { get; set; }
-
     protected async Task ExecuteLogin()
     {
         IsLoading = true;
+        var result = await AuthService.LoginAsync(Model);
+        IsLoading = false;
+        HandleResult(result);
+    }
 
-        try
+    private void HandleResult(Result result)
+    {
+        if (result.IsSuccess)
         {
-            await AuthService.LoginAsync(Model);
             NavManager.NavigateTo("/");
         }
-        catch (InvalidCredentialsException ex)
+        else
         {
-            HandleError(ex);
-        }
-        catch (Exception ex)
-        {
-            HandleError(ex, "Login failed.");
-        }
-        finally
-        {
-            IsLoading = false;
+            StatusMessage = result.Error!.Code switch
+            {
+                IdentityErrorCode.InvalidCredentials => result.Error.Message,
+                _ => "Login failed."
+            };
         }
     }
 }

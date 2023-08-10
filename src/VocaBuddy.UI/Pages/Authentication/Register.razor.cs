@@ -1,7 +1,5 @@
-﻿using Shared.Exceptions;
-using VocaBuddy.Shared.Errors;
+﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
-using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
@@ -12,40 +10,32 @@ public class RegisterBase : CustomComponentBase
     [Inject]
     public IAuthenticationService AuthService { get; set; }
 
-    [Inject]
-    public ILogger<RegisterBase> Logger { get; set; }
-
     protected async Task ExecuteLogin()
     {
         IsLoading = true;
+        var result = await AuthService.RegisterAsync(Model);
+        IsLoading = false;
+        await HandleResult(result);
+    }
 
-        try
+    private async Task HandleResult(Result result)
+    {
+        if (result.IsSuccess)
         {
-            await RegisterUserAsync();
             await DisplaySuccess("Successful registration.");
             await SignInUserAsync();
             NavManager.NavigateTo("/");
         }
-        catch (UserExistsException ex)
+        else
         {
-            HandleError(ex);
-        }
-        catch (InvalidUserRegistrationInputException ex)
-        {
-            HandleError(ex);
-        }
-        catch (Exception ex)
-        {
-            HandleError(ex, "Registration failed.");
-        }
-        finally
-        {
-            IsLoading = false;
+            StatusMessage = result.Error!.Code switch
+            {
+                IdentityErrorCode.UserExists => result.Error.Message,
+                IdentityErrorCode.InvalidUserRegistrationInput => result.Error.Message,
+                _ => "Registration failed."
+            };
         }
     }
-
-    private Task RegisterUserAsync()
-        => AuthService.RegisterAsync(Model);
 
     private async Task SignInUserAsync()
     {
