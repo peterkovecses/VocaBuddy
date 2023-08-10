@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Text.Json;
 using VocaBuddy.Application.Exceptions;
 using VocaBuddy.Shared.Errors;
@@ -48,6 +50,7 @@ public class ErrorHandlingMiddleware
                 return exception switch
                 {
                     OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.Canceled, "Operation was cancelled."))),
+                    DbUpdateException when exception.InnerException is SqlException { Number: 2601 } => (HttpStatusCode.BadRequest, Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.Duplicate, exception.Message))),
                     _ => _baseResponseData
                 };
             }

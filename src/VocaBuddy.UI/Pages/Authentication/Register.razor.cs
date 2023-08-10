@@ -22,8 +22,7 @@ public class RegisterBase : CustomComponentBase
         try
         {
             await RegisterUserAsync();
-            HandleSuccess("Successful registration.");
-            await DisplayStatusMessageAsync();
+            await DisplaySuccess("Successful registration.");
             await SignInUserAsync();
             NavManager.NavigateTo("/");
         }

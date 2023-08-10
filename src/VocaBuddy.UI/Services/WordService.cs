@@ -23,9 +23,9 @@ public class WordService : IWordService
         throw new NotImplementedException();
     }
 
-    public Task CreateWord(NativeWordDto word)
+    public async Task<Result> CreateWord(NativeWordDto word)
     {
-        throw new NotImplementedException();
+        return await _client.CreateNativeWord(word);
     }
 
     public Task UpdateWord(NativeWordDto word)

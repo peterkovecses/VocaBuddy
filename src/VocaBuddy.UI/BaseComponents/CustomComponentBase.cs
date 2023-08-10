@@ -17,10 +17,12 @@ public class CustomComponentBase : ComponentBase
     protected bool IsStatusMessageSet
         => !string.IsNullOrEmpty(StatusMessage);
 
-    protected void HandleSuccess(string message)
+    protected async Task DisplaySuccess(string message)
     {
         StatusMessage = message;
         OperationSucceeded = true;
+        StateHasChanged();
+        await Task.Delay(1500);
     }
 
     protected void HandleError(Exception exception)
@@ -33,11 +35,5 @@ public class CustomComponentBase : ComponentBase
     {
         Logger.LogError(exception, "An exception occured");
         StatusMessage = message;
-    }
-
-    protected async Task DisplayStatusMessageAsync()
-    {
-        StateHasChanged();
-        await Task.Delay(1500);
     }
 }

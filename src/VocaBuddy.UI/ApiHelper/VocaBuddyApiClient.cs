@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Net.Http.Json;
 using VocaBuddy.Shared.Dtos;
 using VocaBuddy.UI.Extensions;
 
@@ -19,6 +20,13 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     {
         var response = await _client.GetAsync(_vocaBuddyApiConfig.GetNativeWordsEndpoint);
 
-        return await response.DeserializeResponseAsync<Result<List<NativeWordDto>>>();
+        return await response.DeserializeAsync<Result<List<NativeWordDto>>>();
+    }
+
+    public async Task<Result> CreateNativeWord(NativeWordDto word)
+    {
+        var response = await _client.PostAsJsonAsync(_vocaBuddyApiConfig.CreateNativeWordEndpoint, word);
+
+        return await response.DeserializeAsync<Result>();
     }
 }

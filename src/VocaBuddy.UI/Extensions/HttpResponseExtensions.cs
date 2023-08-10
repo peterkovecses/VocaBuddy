@@ -4,7 +4,7 @@ namespace VocaBuddy.UI.Extensions;
 
 public static class HttpResponseExtensions
 {
-    public static async Task<T> DeserializeResponseAsync<T>(this HttpResponseMessage response)
+    public static async Task<T> DeserializeAsync<T>(this HttpResponseMessage response)
     {
         var json = await response.Content.ReadAsStringAsync();
 

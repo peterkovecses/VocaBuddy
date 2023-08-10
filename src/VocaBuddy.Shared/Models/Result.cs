@@ -1,4 +1,5 @@
-﻿using VocaBuddy.Shared.Errors;
+﻿using System.Text.Json.Serialization;
+using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Exceptions;
 
 namespace VocaBuddy.Shared.Models;
@@ -11,6 +12,7 @@ public class Result
         Error = success == false ? new() : default;
     }
 
+    [JsonConstructor]
     public Result(ErrorInfo error)
     {
         Error = error;

@@ -4,4 +4,5 @@ public class VocabuddyApiConfiguration
 {
     public string BaseUrl { get; set; }
     public string GetNativeWordsEndpoint { get; set; }
+    public string CreateNativeWordEndpoint { get; set; }
 }

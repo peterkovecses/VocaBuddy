@@ -49,6 +49,12 @@
             <div class="col-md-6 d-flex justify-content-end">
                 <button type="submit" class="btn btn-success me-2">Save</button>
                 <a class="btn btn-secondary" href="/words">Cancel</a>
+                @if (IsLoading)
+                {
+                    <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                }
             </div>
         </div>
     </form>

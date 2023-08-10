@@ -1,7 +1,5 @@
-﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
+﻿using VocaBuddy.Shared.Exceptions;
 using VocaBuddy.UI.BaseComponents;
-using VocaBuddy.UI.Exceptions;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
