@@ -2,7 +2,6 @@
 using MediatR;
 using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Exceptions;
-using VocaBuddy.Application.Extensions;
 using VocaBuddy.Application.Interfaces;
 
 namespace VocaBuddy.Application.Handlers;
@@ -24,7 +23,6 @@ public class UpdateNativeWorldHandler : IRequestHandler<UpdateNativeWordCommand>
             = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWordDto.Id, cancellationToken) 
                 ?? throw new NotFoundException(request.NativeWordDto.Id);
 
-        request.NativeWordDto.ToLower();
         _mapper.Map(request.NativeWordDto, nativeWordToUpdate);
         await _unitOfWork.CompleteAsync();
     }

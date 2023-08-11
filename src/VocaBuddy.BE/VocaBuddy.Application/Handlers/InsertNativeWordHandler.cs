@@ -4,7 +4,6 @@ using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Domain.Entities;
 using VocaBuddy.Shared.Dtos;
-using VocaBuddy.Application.Extensions;
 
 namespace VocaBuddy.Application.Handlers;
 
@@ -21,7 +20,6 @@ public class InsertNativeWordHandler : IRequestHandler<InsertNativeWordCommand, 
 
     public async Task<NativeWordDto> Handle(InsertNativeWordCommand request, CancellationToken cancellationToken)
     {
-        request.NativeWordDto.ToLower();
         var nativeWord = _mapper.Map<NativeWord>(request.NativeWordDto);
         await _unitOfWork.NativeWords.AddAsync(nativeWord, cancellationToken);
         await _unitOfWork.CompleteAsync();
