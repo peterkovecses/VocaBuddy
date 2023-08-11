@@ -12,9 +12,9 @@ public class LoginBase : CustomComponentBase
 
     protected async Task ExecuteLogin()
     {
-        IsLoading = true;
+        Loading = true;
         var result = await AuthService.LoginAsync(Model);
-        IsLoading = false;
+        Loading = false;
         HandleResult(result);
     }
 

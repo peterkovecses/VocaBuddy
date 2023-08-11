@@ -8,4 +8,5 @@ public interface IWordService
     Task<Result<NativeWordDto>> GetWordAsync(int id);
     Task<Result> CreateWord(NativeWordDto word);
     Task<Result> UpdateWord(NativeWordDto word);
+    Task<Result> DeleteWordAsync(int id);
 }

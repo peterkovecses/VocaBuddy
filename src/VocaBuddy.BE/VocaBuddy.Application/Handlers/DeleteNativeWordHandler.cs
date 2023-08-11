@@ -16,13 +16,7 @@ public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand>
 
     public async Task Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
     {
-        var nativeWordToDelete = await _unitOfWork.NativeWords.FindByIdAsync(request.Id, cancellationToken);
-
-        if (nativeWordToDelete is null)
-        {
-            throw new NotFoundException(request.Id);
-        }
-
+        var nativeWordToDelete = await _unitOfWork.NativeWords.FindByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException(request.Id);
         _unitOfWork.NativeWords.Remove(nativeWordToDelete);
         await _unitOfWork.CompleteAsync();
     }

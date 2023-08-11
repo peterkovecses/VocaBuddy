@@ -36,8 +36,8 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <button type="submit" class="btn btn-success" disabled="@IsLoading">Register</button>
-                    @if (IsLoading)
+                    <button type="submit" class="btn btn-success" disabled="@Loading">Register</button>
+                    @if (Loading)
                     {
                         <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
                             <span class="visually-hidden">Loading...</span>

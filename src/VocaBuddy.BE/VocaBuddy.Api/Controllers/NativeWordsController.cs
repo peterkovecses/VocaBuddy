@@ -67,7 +67,7 @@ public class NativeWordsController : ControllerBase
         return Ok(Result.Success());
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNativeWord(int id, CancellationToken token)
     {
         await _mediator.Send(new DeleteNativeWordCommand(id), token);

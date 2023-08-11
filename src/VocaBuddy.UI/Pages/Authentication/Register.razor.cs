@@ -12,9 +12,9 @@ public class RegisterBase : CustomComponentBase
 
     protected async Task ExecuteLogin()
     {
-        IsLoading = true;
+        Loading = true;
         var result = await AuthService.RegisterAsync(Model);
-        IsLoading = false;
+        Loading = false;
         await HandleResult(result);
     }
 
@@ -22,7 +22,7 @@ public class RegisterBase : CustomComponentBase
     {
         if (result.IsSuccess)
         {
-            await DisplaySuccess("Successful registration.");
+            await DisplaySuccessAsync("Successful registration.");
             await SignInUserAsync();
             NavManager.NavigateTo("/");
         }

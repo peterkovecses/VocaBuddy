@@ -27,6 +27,9 @@ public class WordService : IWordService
     public async Task<Result> UpdateWord(NativeWordDto word)
         => await _client.UpdateNativeWord(word);
 
+    public async Task<Result> DeleteWordAsync(int id)
+        => await _client.DeleteNativeWordAsync(id);
+
     private static List<NativeWordListViewModel> ConvertToWordsWithTranslations(List<NativeWordDto> words)
     {
         var result = new List<NativeWordListViewModel>();

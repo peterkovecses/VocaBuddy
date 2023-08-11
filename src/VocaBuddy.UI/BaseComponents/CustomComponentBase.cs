@@ -4,7 +4,7 @@ public class CustomComponentBase : ComponentBase
 {
     protected string StatusMessage { get; set; }
     protected bool OperationSucceeded { get; set; }
-    protected bool IsLoading { get; set; }
+    protected bool Loading { get; set; }
 
     [Inject]
     protected NavigationManager NavManager { get; set; }
@@ -12,11 +12,14 @@ public class CustomComponentBase : ComponentBase
     protected bool IsStatusMessageSet
         => !string.IsNullOrEmpty(StatusMessage);
 
-    protected async Task DisplaySuccess(string message)
+    protected async Task DisplaySuccessAsync(string message)
     {
         StatusMessage = message;
         OperationSucceeded = true;
         StateHasChanged();
         await Task.Delay(1500);
     }
+
+    protected void ClearStatusMessage()
+        => StatusMessage = string.Empty;
 }

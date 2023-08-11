@@ -1,10 +1,11 @@
 ﻿namespace VocaBuddy.UI.BaseComponents;
 
-public class ListComponentBase : ComponentBase
+public class ListComponentBase : CustomComponentBase
 {
     private string _filter = string.Empty;
+    protected bool ConfirmDeleteVisible;
+    protected int ItemToDeleteId;
 
-    protected bool Loading { get; set; } = true;
     protected int CurrentPage { get; set; } = 1;
     protected int PageSize { get; set; } = 15;
     protected SortOrder CurrentSortOrder { get; set; } = SortOrder.Ascending;
@@ -18,6 +19,16 @@ public class ListComponentBase : ComponentBase
             _filter = value;
             CurrentPage = 1;
         }
+    }
+
+    protected void ShowConfirmDelete() => ConfirmDeleteVisible = true;
+
+    protected void CloseConfirmDelete() => ConfirmDeleteVisible = false;
+
+    protected void ConfirmDeleteWordAsync(int id)
+    {
+        ItemToDeleteId = id;
+        ShowConfirmDelete();
     }
 
     protected void OnChangePage(int pageIndex)

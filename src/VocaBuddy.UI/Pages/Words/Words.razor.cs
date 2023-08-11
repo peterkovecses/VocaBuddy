@@ -1,4 +1,5 @@
-﻿using VocaBuddy.UI.BaseComponents;
+﻿using VocaBuddy.Shared.Errors;
+using VocaBuddy.UI.BaseComponents;
 
 namespace VocaBuddy.UI.Pages.Words;
 
@@ -25,6 +26,13 @@ public class WordsBase : ListComponentBase
     protected List<NativeWordListViewModel> PagedWords
         => SortedWords.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
+    protected async Task DeleteWordAsync()
+    {
+        var result = await WordService.DeleteWordAsync(ItemToDeleteId);
+        HandleResult(ItemToDeleteId, result);
+        CloseConfirmDelete();
+    }
+
     private bool ContainsTerm(NativeWordListViewModel word)
         => word.Text.Contains(
             Filter, StringComparison.OrdinalIgnoreCase)
@@ -44,5 +52,32 @@ public class WordsBase : ListComponentBase
                 ? words.OrderBy(w => w.CreatedUtc)
                 : words.OrderByDescending(w => w.CreatedUtc);
         }
+    }
+
+    private void HandleResult(int id, Result result)
+    {
+        if (result.IsSuccess)
+        {
+            RemoveWord(id);
+        }
+        else
+        {
+            StatusMessage = result.Error!.Code switch
+            {
+                VocaBuddyErrorCodes.NotFound => "The word you want to delete does not exist in your dictionary.",
+                _ => "Failed to delete word."
+            };
+
+            if (result.Error!.Code == VocaBuddyErrorCodes.NotFound)
+            {
+                RemoveWord(id);
+            }
+        }
+    }
+
+    private void RemoveWord(int id)
+    {
+        var deletedWord = Words.Where(word => word.Id == id).Single();
+        Words.Remove(deletedWord);
     }
 }

@@ -2,7 +2,7 @@
 @inherits WordsBase
 
 <div class="container">
-    <div class="d-flex flex-row justify-content-between mb-2">
+    <div class="d-flex flex-row justify-content-between mb-3">
         <h3>Words</h3>
         <a class="btn btn-primary" href="/create-or-update-word">Create Word</a>
     </div>
@@ -28,6 +28,14 @@
             </button>
         </div>
     </div>
+
+    @if (IsStatusMessageSet)
+    {
+        var statusMessageClass = OperationSucceeded ? "alert alert-success" : "alert alert-danger";
+        <div class="@statusMessageClass mt-4" role="alert">
+            @StatusMessage
+        </div>
+    }
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -61,13 +69,18 @@
                             <td>@word.Text</td>
                             <td>@word.TranslationsString</td>
                             <td><a href="@updateLink"><span class="oi oi-pencil"></span></a></td>
-                            <td><a href=""><span class="oi oi-delete"></span></a></td>
+                            <td><span class="oi oi-delete" style="color: red; cursor: pointer;" @onclick="()=> ConfirmDeleteWordAsync(word.Id)"></span></td>
                         </tr>
                     }
                 }
             </tbody>
         </table>
     </div>
+
+<DeleteConfirmation
+    IsModalVisible="ConfirmDeleteVisible"
+    CloseModal="EventCallback.Factory.Create(this, CloseConfirmDelete)"
+    OnConfirm="EventCallback.Factory.Create(this, async () => await DeleteWordAsync())" />
 
     @if (!Loading)
     {
