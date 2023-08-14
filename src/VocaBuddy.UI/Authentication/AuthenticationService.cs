@@ -41,7 +41,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task LogoutAsync()
     {
-        await _localStorage.RemoveItemAsync(_identityConfig.AuthTokenStorageKey);
+        await _localStorage.RemoveItemAsync(ConfigKeys.AuthTokenStorageKey);
         _authStateProvider.SignOutUser();
     }
 
@@ -62,8 +62,8 @@ public class AuthenticationService : IAuthenticationService
 
         async Task<(string authToken, string refreshToken)> RetrieveCurrentTokensAsync()
         {
-            var authToken = await _localStorage.GetItemAsStringAsync(_identityConfig.AuthTokenStorageKey);
-            var refreshToken = await _localStorage.GetItemAsStringAsync(_identityConfig.RefreshTokenStorageKey);
+            var authToken = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
+            var refreshToken = await _localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
 
             return (authToken, refreshToken);
         }
@@ -71,7 +71,7 @@ public class AuthenticationService : IAuthenticationService
 
     private async Task StoreTokensAsync(TokenHolder tokens)
     {
-        await _localStorage.SetItemAsync(_identityConfig.AuthTokenStorageKey, tokens.AuthToken);
-        await _localStorage.SetItemAsync(_identityConfig.RefreshTokenStorageKey, tokens.RefreshToken);
+        await _localStorage.SetItemAsync(ConfigKeys.AuthTokenStorageKey, tokens.AuthToken);
+        await _localStorage.SetItemAsync(ConfigKeys.RefreshTokenStorageKey, tokens.RefreshToken);
     }
 }
