@@ -98,8 +98,6 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     private static NativeWordDto InitializeEmptyModel()
         => new()
         {
-            // For now we're hard-coding the id
-            UserId = "4c27e48e-8bea-4e56-8ab5-48d8ab88e6b5",
             Translations = new List<ForeignWordDto> { new ForeignWordDto() }
         };
 

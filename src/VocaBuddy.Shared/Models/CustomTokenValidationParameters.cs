@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Identity.Models;
+namespace VocaBuddy.Shared.Models;
 
 public class CustomTokenValidationParameters
 {

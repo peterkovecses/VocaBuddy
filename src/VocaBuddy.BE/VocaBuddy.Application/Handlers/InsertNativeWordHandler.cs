@@ -20,6 +20,7 @@ public class InsertNativeWordHandler : IRequestHandler<InsertNativeWordCommand, 
 
     public async Task<NativeWordDto> Handle(InsertNativeWordCommand request, CancellationToken cancellationToken)
     {
+        request.NativeWordDto.UserId = request.UserId;
         var nativeWord = _mapper.Map<NativeWord>(request.NativeWordDto);
         await _unitOfWork.NativeWords.AddAsync(nativeWord, cancellationToken);
         await _unitOfWork.CompleteAsync();

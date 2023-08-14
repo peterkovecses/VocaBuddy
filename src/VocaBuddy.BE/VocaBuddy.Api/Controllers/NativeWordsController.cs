@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Queries;
 using VocaBuddy.Shared.Dtos;
@@ -7,6 +9,7 @@ using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Controllers;
 
+[Authorize]
 [Route("api/native-words")]
 [ApiController]
 public class NativeWordsController : ControllerBase
@@ -21,8 +24,7 @@ public class NativeWordsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
-        // temporary hard coded user id
-        var userId = "4c27e48e-8bea-4e56-8ab5-48d8ab88e6b5";
+        var userId = HttpContext.User.FindFirstValue("Id");
         var words = await _mediator.Send(new GetNativeWordsQuery(userId), token);
 
         return Ok(Result.Success(words));
@@ -44,7 +46,8 @@ public class NativeWordsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var createdNativeWordDto = await _mediator.Send(new InsertNativeWordCommand(nativeWord), token);
+        var userId = HttpContext.User.FindFirstValue("Id");
+        var createdNativeWordDto = await _mediator.Send(new InsertNativeWordCommand(nativeWord, userId), token);
 
         return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result.Success(createdNativeWordDto));
     }

@@ -1,9 +1,9 @@
 ﻿using Identity.Data;
 using Identity.Interfaces;
-using Identity.Models;
 using Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using VocaBuddy.Shared.Models;
 
 namespace Identity;
 

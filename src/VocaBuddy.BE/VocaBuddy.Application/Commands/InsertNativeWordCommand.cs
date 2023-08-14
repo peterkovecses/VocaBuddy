@@ -3,4 +3,4 @@ using VocaBuddy.Shared.Dtos;
 
 namespace VocaBuddy.Application.Commands;
 
-public record InsertNativeWordCommand(NativeWordDto NativeWordDto) : IRequest<NativeWordDto>;
+public record InsertNativeWordCommand(NativeWordDto NativeWordDto, string UserId) : IRequest<NativeWordDto>;

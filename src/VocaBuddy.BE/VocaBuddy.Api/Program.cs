@@ -12,7 +12,7 @@ builder.Host.UseSerilog((context, configuration)
 // Add services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddApiServices();
+builder.Services.AddApiServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +36,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("_myAllowSpecificOrigins");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

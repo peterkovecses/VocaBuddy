@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Blazored.LocalStorage;
+using Microsoft.Extensions.Options;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Net.Http.Json;
 using VocaBuddy.Shared.Dtos;
 using VocaBuddy.UI.Extensions;
@@ -8,16 +12,25 @@ namespace VocaBuddy.UI.ApiHelper;
 public class VocaBuddyApiClient : IVocaBuddyApiClient
 {
     private readonly HttpClient _client;
+    private readonly ILocalStorageService _localStorage;
     private readonly VocabuddyApiConfiguration _vocaBuddyApiConfig;
+    private readonly IdentityApiConfiguration _identityConfig;
 
-    public VocaBuddyApiClient(HttpClient client, IOptions<VocabuddyApiConfiguration> vocaBuddyApiOptions)
+    public VocaBuddyApiClient(
+        HttpClient client,
+        IOptions<VocabuddyApiConfiguration> vocaBuddyApiOptions,
+        IOptions<IdentityApiConfiguration> identityOptions,
+        ILocalStorageService localStorage)
     {
         _client = client;
+        _localStorage = localStorage;
         _vocaBuddyApiConfig = vocaBuddyApiOptions.Value;
+        _identityConfig = identityOptions.Value;
     }
 
     public async Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
     {
+        await SetAuthorizationHeader();
         var response = await _client.GetAsync(_vocaBuddyApiConfig.NativeWordsEndpoints);
 
         return await response.DeserializeAsync<Result<List<NativeWordDto>>>();
@@ -49,5 +62,12 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
         var response = await _client.DeleteAsync($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
 
         return await response.DeserializeAsync<Result>();
+    }
+
+    private async Task SetAuthorizationHeader()
+    {
+        var tokenWithQuotes = await _localStorage.GetItemAsStringAsync(_identityConfig.AuthTokenStorageKey);
+        var token = tokenWithQuotes.Trim('"');
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 }
