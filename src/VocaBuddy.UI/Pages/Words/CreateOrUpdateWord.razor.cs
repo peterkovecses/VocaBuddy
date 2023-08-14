@@ -1,11 +1,14 @@
 ﻿using VocaBuddy.Shared.Dtos;
 using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
+using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Pages.Words;
 
 public class CreateOrUpdateWordBase : CustomComponentBase
 {
+    private const string SaveFailed = "Failed to save the word.";
+
     [Parameter]
     public int? WordId { get; set; }
 
@@ -13,6 +16,9 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     [Inject]
     public IWordService WordService { get; set; }
+
+    [Inject]
+    public NotificationService NotificationService { get; set; }
 
     public bool Update => WordId.HasValue;
 
@@ -32,11 +38,21 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     protected async Task CreateOrUpdateWordAsync()
     {
-        ValidateTranslations();
-        Loading = true;
-        var result = await ExecuteOperationAsync();
-        Loading = false;
-        await HandleResultAsync(result);
+        try
+        {
+            ValidateTranslations();
+            Loading = true;
+            var result = await ExecuteOperationAsync();
+            await HandleResultAsync(result);
+        }
+        catch (Exception)
+        {
+            StatusMessage = SaveFailed;
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 
     private void ValidateTranslations()
@@ -59,12 +75,12 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         {
             if (Update)
             {
-                await DisplaySuccessAsync("The word has been successfully saved.");
+                NotificationService.ShowSuccess("The word has been successfully saved.");
                 NavManager.NavigateTo("/words");
             }
             else
             {
-                await DisplaySuccessAsync("The word has been successfully saved.");
+                NotificationService.ShowSuccess("The word has been successfully saved.");
                 ClearModel();
                 ClearStatusMessage();
             }
@@ -74,7 +90,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             StatusMessage = result.Error!.Code switch
             {
                 VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
-                _ => "Failed to save the word."
+                _ => SaveFailed
             };
         }
     }
@@ -82,7 +98,8 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     private static NativeWordDto InitializeEmptyModel()
         => new()
         {
-            UserId = "1",
+            // For now we're hard-coding the id
+            UserId = "4c27e48e-8bea-4e56-8ab5-48d8ab88e6b5",
             Translations = new List<ForeignWordDto> { new ForeignWordDto() }
         };
 

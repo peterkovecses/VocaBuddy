@@ -29,14 +29,6 @@
         </div>
     </div>
 
-    @if (IsStatusMessageSet)
-    {
-        var statusMessageClass = OperationSucceeded ? "alert alert-success" : "alert alert-danger";
-        <div class="@statusMessageClass mt-4" role="alert">
-            @StatusMessage
-        </div>
-    }
-
     <div class="table-responsive">
         <table class="table table-striped">
             <thead class="thead-light">

@@ -22,7 +22,7 @@ public class NativeWordsController : ControllerBase
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
         // temporary hard coded user id
-        var userId = "1";
+        var userId = "4c27e48e-8bea-4e56-8ab5-48d8ab88e6b5";
         var words = await _mediator.Send(new GetNativeWordsQuery(userId), token);
 
         return Ok(Result.Success(words));

@@ -21,14 +21,14 @@ public class WordService : IWordService
     public Task<Result<NativeWordDto>> GetWordAsync(int id)
         => _client.GetNativeWordAsync(id);
 
-    public async Task<Result> CreateWord(NativeWordDto word)
-        => await _client.CreateNativeWord(word);
+    public Task<Result> CreateWord(NativeWordDto word)
+        => _client.CreateNativeWord(word);
 
-    public async Task<Result> UpdateWord(NativeWordDto word)
-        => await _client.UpdateNativeWord(word);
+    public Task<Result> UpdateWord(NativeWordDto word)
+        => _client.UpdateNativeWord(word);
 
-    public async Task<Result> DeleteWordAsync(int id)
-        => await _client.DeleteNativeWordAsync(id);
+    public Task<Result> DeleteWordAsync(int id)
+        => _client.DeleteNativeWordAsync(id);
 
     private static List<NativeWordListViewModel> ConvertToWordsWithTranslations(List<NativeWordDto> words)
     {

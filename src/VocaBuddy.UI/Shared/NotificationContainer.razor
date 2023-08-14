@@ -1,0 +1,13 @@
+﻿@inherits NotificationContainerBase
+
+<div class="notification-container">
+    @foreach (var notification in Notifications)
+    {
+        var cssClass = notification.IsSuccess ? "alert alert-success" : "alert alert-danger";
+
+        <div class="@cssClass" @key="notification.Id">
+            <span>@notification.Message</span>
+            <button class="btn-close" @onclick="() => RemoveNotification(notification)"></button>
+        </div>
+    }
+</div>

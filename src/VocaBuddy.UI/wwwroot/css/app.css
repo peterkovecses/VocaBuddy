@@ -19,7 +19,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -98,4 +98,27 @@ a, .btn-link {
 
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
+    }
+
+.notification-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1000;
+}
+
+.pagination > .page-item > .page-link {
+    cursor: pointer;
+}
+
+.btn-close {
+    font-size: 0.75rem;
+    background-color: transparent;
+    border: none;
+    color: #808080;
+    cursor: pointer;
+}
+
+    .btn-close:hover {
+        color: #000000;
     }

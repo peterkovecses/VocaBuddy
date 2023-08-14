@@ -5,6 +5,7 @@ namespace VocaBuddy.UI.Pages.Authentication;
 
 public class LoginBase : CustomComponentBase
 {
+    private const string LoginFailed = "Login failed.";
     protected UserLoginRequest Model = new();
 
     [Inject]
@@ -12,10 +13,20 @@ public class LoginBase : CustomComponentBase
 
     protected async Task ExecuteLogin()
     {
-        Loading = true;
-        var result = await AuthService.LoginAsync(Model);
-        Loading = false;
-        HandleResult(result);
+        try
+        {
+            Loading = true;
+            var result = await AuthService.LoginAsync(Model);
+            HandleResult(result);
+        }
+        catch
+        {
+            StatusMessage = LoginFailed;
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 
     private void HandleResult(Result result)
@@ -24,13 +35,11 @@ public class LoginBase : CustomComponentBase
         {
             NavManager.NavigateTo("/");
         }
-        else
+
+        StatusMessage = result.Error!.Code switch
         {
-            StatusMessage = result.Error!.Code switch
-            {
-                IdentityErrorCode.InvalidCredentials => result.Error.Message,
-                _ => "Login failed."
-            };
-        }
+            IdentityErrorCode.InvalidCredentials => result.Error.Message,
+            _ => LoginFailed
+        };
     }
 }

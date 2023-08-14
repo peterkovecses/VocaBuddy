@@ -1,40 +1,53 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
+using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
 public class RegisterBase : CustomComponentBase
 {
+    private const string RegistrationFailed = "Registration failed.";
     protected UserRegistrationRequestWithPasswordCheck Model = new();
 
     [Inject]
     public IAuthenticationService AuthService { get; set; }
 
+    [Inject]
+    public NotificationService NotificationService { get; set; }
+
     protected async Task ExecuteLogin()
     {
-        Loading = true;
-        var result = await AuthService.RegisterAsync(Model);
-        Loading = false;
-        await HandleResult(result);
+        try
+        {
+            Loading = true;
+            var result = await AuthService.RegisterAsync(Model);
+            await HandleResult(result);
+        }
+        catch
+        {
+            StatusMessage = RegistrationFailed;
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 
     private async Task HandleResult(Result result)
     {
         if (result.IsSuccess)
         {
-            await DisplaySuccessAsync("Successful registration.");
+            NotificationService.ShowSuccess("Successful registration.");
             await SignInUserAsync();
             NavManager.NavigateTo("/");
         }
-        else
+
+        StatusMessage = result.Error!.Code switch
         {
-            StatusMessage = result.Error!.Code switch
-            {
-                IdentityErrorCode.UserExists => result.Error.Message,
-                IdentityErrorCode.InvalidUserRegistrationInput => result.Error.Message,
-                _ => "Registration failed."
-            };
-        }
+            IdentityErrorCode.UserExists => result.Error.Message,
+            IdentityErrorCode.InvalidUserRegistrationInput => result.Error.Message,
+            _ => RegistrationFailed
+        };
     }
 
     private async Task SignInUserAsync()

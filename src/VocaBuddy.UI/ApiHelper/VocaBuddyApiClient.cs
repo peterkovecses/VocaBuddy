@@ -44,10 +44,10 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
         return await response.DeserializeAsync<Result>();
     }
 
-    public async Task<Result<NativeWordDto>> DeleteNativeWordAsync(int id)
+    public async Task<Result> DeleteNativeWordAsync(int id)
     {
         var response = await _client.DeleteAsync($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
 
-        return await response.DeserializeAsync<Result<NativeWordDto>>();
+        return await response.DeserializeAsync<Result>();
     }
 }

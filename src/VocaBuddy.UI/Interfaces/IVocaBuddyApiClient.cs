@@ -8,5 +8,5 @@ public interface IVocaBuddyApiClient
     Task<Result<NativeWordDto>> GetNativeWordAsync(int id);
     Task<Result> CreateNativeWord(NativeWordDto word);
     Task<Result> UpdateNativeWord(NativeWordDto word);
-    Task<Result<NativeWordDto>> DeleteNativeWordAsync(int id);
+    Task<Result> DeleteNativeWordAsync(int id);
 }

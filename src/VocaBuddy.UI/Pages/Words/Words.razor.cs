@@ -1,20 +1,35 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
+using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Pages.Words;
 
 public class WordsBase : ListComponentBase
 {
+    private const string DeleteFailed = "Failed to delete word.";
     protected List<NativeWordListViewModel> Words;
 
     [Inject]
     public IWordService WordService { get; set; }
 
+    [Inject]
+    public NotificationService NotificationService { get; set; }
+
     protected async override Task OnInitializedAsync()
     {
-        Loading = true;
-        Words = await WordService.GetWordsAsync();
-        Loading = false;
+        try
+        {
+            Loading = true;
+            Words = await WordService.GetWordsAsync();
+        }
+        catch
+        {
+            NotificationService.ShowFailure("Failed to load words.");
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 
     protected List<NativeWordListViewModel> FilteredWords
@@ -28,9 +43,19 @@ public class WordsBase : ListComponentBase
 
     protected async Task DeleteWordAsync()
     {
-        var result = await WordService.DeleteWordAsync(ItemToDeleteId);
-        HandleResult(ItemToDeleteId, result);
-        CloseConfirmDelete();
+        try
+        {
+            var result = await WordService.DeleteWordAsync(ItemToDeleteId);
+            HandleResult(ItemToDeleteId, result);
+        }
+        catch (Exception)
+        {
+            NotificationService.ShowFailure(DeleteFailed);
+        }
+        finally
+        {
+            CloseConfirmDelete();
+        }
     }
 
     private bool ContainsTerm(NativeWordListViewModel word)
@@ -59,14 +84,17 @@ public class WordsBase : ListComponentBase
         if (result.IsSuccess)
         {
             RemoveWord(id);
+            NotificationService.ShowSuccess("The word was successfully deleted.");
         }
         else
         {
-            StatusMessage = result.Error!.Code switch
+            var message = result.Error!.Code switch
             {
                 VocaBuddyErrorCodes.NotFound => "The word you want to delete does not exist in your dictionary.",
-                _ => "Failed to delete word."
+                _ => DeleteFailed
             };
+
+            NotificationService.ShowFailure(message);
 
             if (result.Error!.Code == VocaBuddyErrorCodes.NotFound)
             {

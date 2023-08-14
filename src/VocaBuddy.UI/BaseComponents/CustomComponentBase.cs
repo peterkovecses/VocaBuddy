@@ -12,14 +12,6 @@ public class CustomComponentBase : ComponentBase
     protected bool IsStatusMessageSet
         => !string.IsNullOrEmpty(StatusMessage);
 
-    protected async Task DisplaySuccessAsync(string message)
-    {
-        StatusMessage = message;
-        OperationSucceeded = true;
-        StateHasChanged();
-        await Task.Delay(1500);
-    }
-
     protected void ClearStatusMessage()
         => StatusMessage = string.Empty;
 }
