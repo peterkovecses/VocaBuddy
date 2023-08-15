@@ -20,14 +20,14 @@ public class IdentityApiClient : IIdentityApiClient
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.LoginEndpoint, loginRequest);
 
-        return await response.DeserializeAsync<Result<TokenHolder>>();
+        return await response.ReadAsAsync<Result<TokenHolder>>();
     }
 
     public async Task<Result<ErrorInfo>> RegisterAsync(UserRegistrationRequest registrationRequest)
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.RegisterEndpoint, registrationRequest);
 
-        var result = await response.DeserializeAsync<Result<ErrorInfo>>();
+        var result = await response.ReadAsAsync<Result<ErrorInfo>>();
 
         return result;
     }
@@ -36,6 +36,6 @@ public class IdentityApiClient : IIdentityApiClient
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.RefreshEndpoint, refreshTokenRequest);
 
-        return await response.DeserializeAsync<Result<TokenHolder>>();
+        return await response.ReadAsAsync<Result<TokenHolder>>();
     }
 }
