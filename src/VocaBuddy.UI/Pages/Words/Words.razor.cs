@@ -7,13 +7,14 @@ namespace VocaBuddy.UI.Pages.Words;
 public class WordsBase : ListComponentBase
 {
     private const string DeleteFailed = "Failed to delete word.";
-    protected List<NativeWordListViewModel> Words;
 
     [Inject]
     public IWordService WordService { get; set; }
 
     [Inject]
     public NotificationService NotificationService { get; set; }
+
+    protected List<NativeWordListViewModel> Words { get; set; }
 
     protected async override Task OnInitializedAsync()
     {

@@ -43,7 +43,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             ValidateTranslations();
             Loading = true;
             var result = await ExecuteOperationAsync();
-            await HandleResultAsync(result);
+            HandleResult(result);
         }
         catch (Exception)
         {
@@ -69,7 +69,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         return await WordService.CreateWord(Model);
     }
 
-    private async Task HandleResultAsync(Result result)
+    private void HandleResult(Result result)
     {
         if (result.IsSuccess)
         {

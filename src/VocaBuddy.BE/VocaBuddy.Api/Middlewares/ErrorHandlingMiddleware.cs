@@ -71,6 +71,7 @@ public class ErrorHandlingMiddleware
         return appException switch
         {
             NotFoundException => (HttpStatusCode.NotFound),
+            UserIdNotMatchException => (HttpStatusCode.Unauthorized),
             _ => throw new UnmappedApplicationException(appException)
         };
     }

@@ -23,6 +23,11 @@ public class UpdateNativeWorldHandler : IRequestHandler<UpdateNativeWordCommand>
             = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWordDto.Id, cancellationToken) 
                 ?? throw new NotFoundException(request.NativeWordDto.Id);
 
+        if (nativeWordToUpdate.UserId != request.UserId)
+        {
+            throw new UserIdNotMatchException();
+        }
+
         _mapper.Map(request.NativeWordDto, nativeWordToUpdate);
         await _unitOfWork.CompleteAsync();
     }

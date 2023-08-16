@@ -7,7 +7,6 @@ namespace VocaBuddy.UI.Pages.Authentication;
 public class RegisterBase : CustomComponentBase
 {
     private const string RegistrationFailed = "Registration failed.";
-    protected UserRegistrationRequestWithPasswordCheck Model = new();
 
     [Inject]
     public IAuthenticationService AuthService { get; set; }
@@ -15,13 +14,15 @@ public class RegisterBase : CustomComponentBase
     [Inject]
     public NotificationService NotificationService { get; set; }
 
-    protected async Task ExecuteLogin()
+    protected UserRegistrationRequestWithPasswordCheck Model { get; set; } = new();
+
+    protected async Task ExecuteRegistrationAsync()
     {
         try
         {
             Loading = true;
             var result = await AuthService.RegisterAsync(Model);
-            await HandleResult(result);
+            await HandleResultAsync(result);
         }
         catch
         {
@@ -33,7 +34,7 @@ public class RegisterBase : CustomComponentBase
         }
     }
 
-    private async Task HandleResult(Result result)
+    private async Task HandleResultAsync(Result result)
     {
         if (result.IsSuccess)
         {

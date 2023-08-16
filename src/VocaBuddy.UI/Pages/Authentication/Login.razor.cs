@@ -6,12 +6,12 @@ namespace VocaBuddy.UI.Pages.Authentication;
 public class LoginBase : CustomComponentBase
 {
     private const string LoginFailed = "Login failed.";
-    protected UserLoginRequest Model = new();
 
     [Inject]
     public IAuthenticationService AuthService { get; set; }
+    protected UserLoginRequest Model { get; set; } = new();
 
-    protected async Task ExecuteLogin()
+    protected async Task ExecuteLoginAsync()
     {
         try
         {

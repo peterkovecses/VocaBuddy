@@ -20,11 +20,13 @@ public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, 
 
     public async Task<NativeWordDto> Handle(GetNativeWordByIdQuery request, CancellationToken cancellationToken)
     {
-        var nativeWord = await _nativeWords.FindByIdAsync(request.Id, cancellationToken);
+        var nativeWord 
+            = await _nativeWords.FindByIdAsync(request.Id, cancellationToken) 
+                ?? throw new NotFoundException(request.Id);
 
-        if (nativeWord is null)
+        if (nativeWord.UserId != request.UserId)
         {
-            throw new NotFoundException(request.Id);
+            throw new UserIdNotMatchException();
         }
 
         return _mapper.Map<NativeWordDto>(nativeWord);

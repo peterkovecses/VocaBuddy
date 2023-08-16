@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Queries;
 using VocaBuddy.Shared.Dtos;
@@ -12,20 +11,17 @@ namespace VocaBuddy.Api.Controllers;
 [Authorize]
 [Route("api/native-words")]
 [ApiController]
-public class NativeWordsController : ControllerBase
+public class NativeWordsController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
 
-    public NativeWordsController(IMediator mediator)
+    public NativeWordsController(IMediator mediator) : base(mediator)
     {
-        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
-        var userId = HttpContext.User.FindFirstValue("Id");
-        var words = await _mediator.Send(new GetNativeWordsQuery(userId), token);
+        var words = await Mediator.Send(new GetNativeWordsQuery(CurrentUserId!), token);
 
         return Ok(Result.Success(words));
     }
@@ -33,7 +29,7 @@ public class NativeWordsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNativeWord(int id, CancellationToken token)
     {
-        var word = await _mediator.Send(new GetNativeWordByIdQuery(id), token);
+        var word = await Mediator.Send(new GetNativeWordByIdQuery(id, CurrentUserId!), token);
 
         return Ok(Result.Success(word));
     }
@@ -46,8 +42,7 @@ public class NativeWordsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var userId = HttpContext.User.FindFirstValue("Id");
-        var createdNativeWordDto = await _mediator.Send(new InsertNativeWordCommand(nativeWord, userId), token);
+        var createdNativeWordDto = await Mediator.Send(new InsertNativeWordCommand(nativeWord, CurrentUserId!), token);
 
         return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result.Success(createdNativeWordDto));
     }
@@ -65,7 +60,7 @@ public class NativeWordsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _mediator.Send(new UpdateNativeWordCommand(nativeWord), token);
+        await Mediator.Send(new UpdateNativeWordCommand(nativeWord, CurrentUserId!), token);
 
         return Ok(Result.Success());
     }
@@ -73,7 +68,7 @@ public class NativeWordsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNativeWord(int id, CancellationToken token)
     {
-        await _mediator.Send(new DeleteNativeWordCommand(id), token);
+        await Mediator.Send(new DeleteNativeWordCommand(id, CurrentUserId!), token);
 
         return Ok(Result.Success());
     }
