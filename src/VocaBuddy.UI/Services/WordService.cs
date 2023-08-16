@@ -41,7 +41,6 @@ public class WordService : IWordService
                 {
                     Id = word.Id,
                     Text = word.Text,
-                    UserId = word.UserId,
                     CreatedUtc = word.CreatedUtc,
                     TranslationsString = string.Join(", ", word.Translations.Select(translation => translation.Text))
                 });
