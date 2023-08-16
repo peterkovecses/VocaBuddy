@@ -122,3 +122,7 @@ a, .btn-link {
     .btn-close:hover {
         color: #000000;
     }
+
+.nowrap {
+    white-space: nowrap;
+}

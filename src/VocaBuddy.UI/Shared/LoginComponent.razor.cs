@@ -1,9 +1,9 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
 
-namespace VocaBuddy.UI.Pages.Authentication;
+namespace VocaBuddy.UI.Shared;
 
-public class LoginBase : CustomComponentBase
+public class LoginComponentBase : CustomComponentBase
 {
     private const string LoginFailed = "Login failed.";
 

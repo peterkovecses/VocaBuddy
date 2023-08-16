@@ -1,5 +1,4 @@
 ﻿using Blazored.LocalStorage;
-using Microsoft.Extensions.Options;
 using VocaBuddy.UI.Exceptions;
 using VocaBuddy.UI.Extensions;
 

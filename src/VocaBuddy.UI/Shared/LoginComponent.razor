@@ -1,0 +1,34 @@
+﻿@inherits LoginComponentBase
+
+<EditForm Model="Model" OnValidSubmit="ExecuteLoginAsync" class="w-100 w-lg-auto">
+    <div class="row d-flex align-items-center">
+        <div class="col-md-auto my-1">
+            <div class="form-group mb-0">
+                <label for="email" class="form-label visually-hidden">Email:</label>
+                <InputText id="email" class="form-control" @bind-Value="Model.Email" placeholder="Email" />
+                <ValidationMessage For="@(() => Model.Email)" />
+            </div>
+        </div>
+        <div class="col-md-auto my-1">
+            <div class="form-group mb-0">
+                <label for="password" class="form-label visually-hidden">Password:</label>
+                <InputText type="password" id="password" class="form-control" @bind-Value="Model.Password" placeholder="Password" />
+                <ValidationMessage For="@(() => Model.Password)" />
+            </div>
+        </div>
+        <div class="col-md-auto my-1">
+            <button type="submit" class="btn btn-success" disabled="@Loading">Login</button>
+            @if (Loading)
+            {
+                <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            }
+        </div>
+    </div>
+</EditForm>
+
+@if (IsStatusMessageSet)
+{
+    <div class="alert alert-danger mt-2">@StatusMessage</div>
+}

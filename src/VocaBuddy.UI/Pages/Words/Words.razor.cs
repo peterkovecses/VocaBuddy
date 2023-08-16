@@ -54,6 +54,10 @@ public class WordsBase : ListComponentBase
             var result = await WordService.DeleteWordAsync(ItemToDeleteId);
             HandleResult(ItemToDeleteId, result);
         }
+        catch (RefreshTokenException)
+        {
+            // TODO: re-login
+        }
         catch (Exception)
         {
             NotificationService.ShowFailure(DeleteFailed);

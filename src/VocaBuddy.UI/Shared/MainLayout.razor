@@ -6,29 +6,39 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a class="me-3" href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-            <AuthorizeView>
-                <Authorized>
-                    <div>@Email</div>
-                    <NavLink class="nav-link d-flex" href="logout" style="padding-left: 0;">
-                        <span class="oi oi-account-logout" aria-hidden="true"></span>
-                        <span class="ms-2">Logout</span>
-                    </NavLink>
-                </Authorized>
-                <NotAuthorized>
-                    <NavLink class="nav-link d-flex" href="login" style="padding-left: 0;">
-                        <span class="oi oi-account-login" aria-hidden="true"></span>
-                        <span class="ms-2">Login</span>
-                    </NavLink>
-
-                    <NavLink class="nav-link d-flex" href="register" style="padding-left: 0;">
-                        <span class="oi oi-person" aria-hidden="true"></span>
-                        <span class="ms-2">Create account</span>
-                    </NavLink>
-                </NotAuthorized>
-            </AuthorizeView>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="nav-link text-dark" href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <div class="container d-flex justify-content-end">                                
+                <AuthorizeView>
+                    <Authorized>
+                        <div>@Email</div>
+                        <a class="nav-link d-none d-lg-inline" href="logout">
+                            <span class="oi oi-account-logout" aria-hidden="true"></span>
+                            <span class="ms-2">Logout</span>
+                        </a>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <div class="d-flex align-items-center">
+                            <LoginComponent />
+                            <a class="nav-link d-flex ms-3" href="register">
+                                <span class="oi oi-person" aria-hidden="true"></span>
+                                <span class="ms-2 text-nowrap">Create account</span>
+                            </a>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+                <AuthorizeView>
+                    <Authorized>
+                        <a class="nav-link d-lg-none d-block" href="logout">
+                            <span class="oi oi-account-logout" aria-hidden="true"></span>
+                            <span class="ms-2">Logout</span>
+                        </a>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </nav>
 
         <article class="content px-4">
             <NotificationContainer />
