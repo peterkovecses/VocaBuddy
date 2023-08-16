@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
 using VocaBuddy.UI.Exceptions;
+using VocaBuddy.UI.Extensions;
 
 namespace VocaBuddy.UI.Authentication;
 
@@ -9,18 +10,15 @@ public class AuthenticationService : IAuthenticationService
     private readonly IIdentityApiClient _client;
     private readonly CustomAuthenticationStateProvider _authStateProvider;
     private readonly ILocalStorageService _localStorage;
-    private readonly IdentityApiConfiguration _identityConfig;
 
     public AuthenticationService(
         IIdentityApiClient client,
         CustomAuthenticationStateProvider authStateProvider,
-        ILocalStorageService localStorage,
-        IOptions<IdentityApiConfiguration> identityOptions)
+        ILocalStorageService localStorage)
     {
         _client = client;
         _authStateProvider = authStateProvider;
         _localStorage = localStorage;
-        _identityConfig = identityOptions.Value;
     }
 
     public async Task<Result> LoginAsync(UserLoginRequest loginRequest)
@@ -55,7 +53,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (result.IsError)
         {
-            throw new RefreshTokenException(result.Error!.Message);
+            throw new RefreshTokenException(result.Error!);
         }
 
         await StoreTokensAsync(result.Data!);
@@ -65,7 +63,7 @@ public class AuthenticationService : IAuthenticationService
             var authToken = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
             var refreshToken = await _localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
 
-            return (authToken, refreshToken);
+            return (authToken.TrimQuotationMarks(), refreshToken.TrimQuotationMarks());
         }
     }
 

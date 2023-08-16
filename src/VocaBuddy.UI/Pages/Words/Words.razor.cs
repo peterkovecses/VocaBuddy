@@ -1,5 +1,6 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
+using VocaBuddy.UI.Exceptions;
 using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Pages.Words;
@@ -22,6 +23,10 @@ public class WordsBase : ListComponentBase
         {
             Loading = true;
             Words = await WordService.GetWordsAsync();
+        }
+        catch(RefreshTokenException)
+        {
+            // TODO: re-login
         }
         catch
         {

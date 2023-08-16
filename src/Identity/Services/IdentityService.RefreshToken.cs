@@ -28,6 +28,7 @@ public partial class IdentityService : IIdentityService
             ClaimsPrincipal? principal;
             SecurityToken validatedToken;
             var tokenValidationParameters = _tokenValidationParameters;
+            tokenValidationParameters.ValidateLifetime = false;
 
             try
             {
