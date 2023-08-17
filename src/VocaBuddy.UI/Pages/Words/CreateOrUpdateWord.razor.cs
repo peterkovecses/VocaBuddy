@@ -18,9 +18,6 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     [Inject]
     public IWordService WordService { get; set; }
 
-    [Inject]
-    public NotificationService NotificationService { get; set; }
-
     public bool Update => WordId.HasValue;
 
     protected override async Task OnInitializedAsync()
@@ -48,7 +45,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         }
         catch (RefreshTokenException)
         {
-            // TODO: re-login
+            HandleExpiredSeason();
         }
         catch (Exception)
         {
