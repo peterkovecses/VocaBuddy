@@ -31,15 +31,13 @@ public class LoginComponentBase : CustomComponentBase
 
     private void HandleResult(Result result)
     {
-        if (result.IsSuccess)
+        if (result.IsError)
         {
-            NavManager.NavigateTo("/");
+            StatusMessage = result.Error!.Code switch
+            {
+                IdentityErrorCode.InvalidCredentials => result.Error.Message,
+                _ => LoginFailed
+            };
         }
-
-        StatusMessage = result.Error!.Code switch
-        {
-            IdentityErrorCode.InvalidCredentials => result.Error.Message,
-            _ => LoginFailed
-        };
     }
 }
