@@ -15,18 +15,27 @@ public class WordsBase : ListComponentBase
     [Inject]
     public NotificationService NotificationService { get; set; }
 
+    [Inject]
+    public IAuthenticationService AuthenticationService { get; set; }
+
     protected List<NativeWordListViewModel> Words { get; set; }
 
     protected async override Task OnInitializedAsync()
+    {
+        await LoadWordsAsync();
+    }
+
+    private async Task LoadWordsAsync()
     {
         try
         {
             Loading = true;
             Words = await WordService.GetWordsAsync();
         }
-        catch(RefreshTokenException)
+        catch (RefreshTokenException)
         {
-            // TODO: re-login
+            await AuthenticationService.LogoutAsync();
+            NotificationService.ShowFailure("The season has expired, please log in again.");
         }
         catch
         {
@@ -56,7 +65,8 @@ public class WordsBase : ListComponentBase
         }
         catch (RefreshTokenException)
         {
-            // TODO: re-login
+            await AuthenticationService.LogoutAsync();
+            NotificationService.ShowFailure("The season has expired, please log in again.");
         }
         catch (Exception)
         {

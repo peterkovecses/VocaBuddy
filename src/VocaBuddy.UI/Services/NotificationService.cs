@@ -3,6 +3,7 @@
 public class NotificationService
 {
     public event Action<Notification> OnNotificationAdded;
+    public event Action OnNotificationsCleared;
 
     public void ShowNotification(string message, bool isSuccess, bool autoHide)
     {
@@ -20,4 +21,7 @@ public class NotificationService
 
     public void ShowFailure(string message)
         => ShowNotification(message, false, false);
+
+    public void ClearNotifications()
+        => OnNotificationsCleared?.Invoke();
 }

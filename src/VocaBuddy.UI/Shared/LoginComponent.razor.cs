@@ -1,5 +1,6 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
+using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Shared;
 
@@ -9,6 +10,10 @@ public class LoginComponentBase : CustomComponentBase
 
     [Inject]
     public IAuthenticationService AuthService { get; set; }
+
+    [Inject]
+    public NotificationService NotificationService { get; set; }
+
     protected UserLoginRequest Model { get; set; } = new();
 
     protected async Task ExecuteLoginAsync()
@@ -38,6 +43,10 @@ public class LoginComponentBase : CustomComponentBase
                 IdentityErrorCode.InvalidCredentials => result.Error.Message,
                 _ => LoginFailed
             };
+        }
+        else
+        {
+            NotificationService.ClearNotifications();
         }
     }
 }

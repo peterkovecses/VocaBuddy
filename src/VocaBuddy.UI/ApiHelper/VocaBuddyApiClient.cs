@@ -36,6 +36,8 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
 
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
+            throw new RefreshTokenException(new ErrorInfo("test code", "test message"));
+
             await _authService.RefreshTokenAsync();
             response = await SendRequest();            
         }

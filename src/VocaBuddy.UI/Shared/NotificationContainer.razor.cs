@@ -12,11 +12,18 @@ public class NotificationContainerBase : ComponentBase
     protected override void OnInitialized()
     {
         NotificationService.OnNotificationAdded += AddNotification;
+        NotificationService.OnNotificationsCleared += ClearNotifications;
     }
 
     protected void RemoveNotification(Notification notification)
     {
         Notifications.Remove(notification);
+        StateHasChanged();
+    }
+
+    protected void ClearNotifications()
+    {
+        Notifications.Clear();
         StateHasChanged();
     }
 
