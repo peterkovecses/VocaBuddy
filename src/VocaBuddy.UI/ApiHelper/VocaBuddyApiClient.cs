@@ -27,109 +27,63 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
         _vocaBuddyApiConfig = vocaBuddyApiOptions.Value;
     }
 
-    public async Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
+    public Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
+        => GetAsync<Result<List<NativeWordDto>>>(_vocaBuddyApiConfig.NativeWordsEndpoints);
+
+    public Task<Result<NativeWordDto>> GetNativeWordAsync(int id)
+        => GetAsync<Result<NativeWordDto>>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
+
+    public Task<Result> CreateNativeWord(NativeWordDto word)
+        => PostAsync<Result>(_vocaBuddyApiConfig.NativeWordsEndpoints, word);
+
+    public Task<Result> UpdateNativeWord(NativeWordDto word)
+        => PutAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{word.Id}", word);
+
+    public Task<Result> DeleteNativeWordAsync(int id)
+        => DeleteAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
+
+    private Task<TResult> GetAsync<TResult>(string endpoint)
+        => SendRequestAsync<TResult>(HttpMethod.Get, endpoint);
+
+    private Task<TResult> PostAsync<TResult>(string endpoint, object? data = default)
+        => SendRequestAsync<TResult>(HttpMethod.Post, endpoint, data);
+
+    private Task<TResult> PutAsync<TResult>(string endpoint, object? data = default)
+       => SendRequestAsync<TResult>(HttpMethod.Put, endpoint, data);
+    
+    private Task<TResult> DeleteAsync<TResult>(string endpoint)
+      => SendRequestAsync<TResult>(HttpMethod.Delete, endpoint);
+
+    private async Task<TResult> SendRequestAsync<TResult>(HttpMethod method, string endpoint, object? data = default)
     {
-        var response = await SendRequest();
+        var response = await ExecuteSendingAsync(method, endpoint, data);
 
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
             await _authService.RefreshTokenAsync();
-            response = await SendRequest();            
+            response = await ExecuteSendingAsync(method, endpoint, data);
         }
-       
-        return await response.ReadAsAsync<Result<List<NativeWordDto>>>();
 
-        async Task<HttpResponseMessage> SendRequest()
+        return await response.ReadAsAsync<TResult>();
+
+        async Task<HttpResponseMessage> ExecuteSendingAsync(HttpMethod method, string endpoint, object? data)
         {
             await SetAuthorizationHeader();
-            
-            return await _client.GetAsync(_vocaBuddyApiConfig.NativeWordsEndpoints);
-        }
-    }
+            var request = new HttpRequestMessage(method, endpoint);
 
-    public async Task<Result<NativeWordDto>> GetNativeWordAsync(int id)
-    {
-        var response = await SendRequest(id);
+            if (data != null)
+            {
+                request.Content = JsonContent.Create(data);
+            }
 
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            await _authService.RefreshTokenAsync();
-            response = await SendRequest(id);
-        }
-
-        return await response.ReadAsAsync<Result<NativeWordDto>>();
-
-        async Task<HttpResponseMessage> SendRequest(int id)
-        {
-            await SetAuthorizationHeader();
-
-            return await _client.GetAsync($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
-        }
-    }
-
-    public async Task<Result> CreateNativeWord(NativeWordDto word)
-    {
-        var response = await SendRequest(word);
-
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            await _authService.RefreshTokenAsync();
-            response = await SendRequest(word);
-        }
-
-        return await response.ReadAsAsync<Result>();
-
-        async Task<HttpResponseMessage> SendRequest(NativeWordDto word)
-        {
-            await SetAuthorizationHeader();
-
-            return await _client.PostAsJsonAsync(_vocaBuddyApiConfig.NativeWordsEndpoints, word);
-        }
-    }
-
-    public async Task<Result> UpdateNativeWord(NativeWordDto word)
-    {
-        var response = await SendRequest(word);
-
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            await _authService.RefreshTokenAsync();
-            response = await SendRequest(word);
-        }
-
-        return await response.ReadAsAsync<Result>();
-
-        async Task<HttpResponseMessage> SendRequest(NativeWordDto word)
-        {
-            await SetAuthorizationHeader();
-
-            return await _client.PutAsJsonAsync($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{word.Id}", word);
-        }
-    }
-
-    public async Task<Result> DeleteNativeWordAsync(int id)
-    {
-        var response = await SendRequest(id);
-
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            await _authService.RefreshTokenAsync();
-            response = await SendRequest(id);
-        }
-
-        return await response.ReadAsAsync<Result>();
-
-        async Task<HttpResponseMessage> SendRequest(int id)
-        {
-            await SetAuthorizationHeader();
-
-            return await _client.DeleteAsync($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
+            return await _client.SendAsync(request);
         }
     }
 
     private async Task SetAuthorizationHeader()
     {
         var token = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.TrimQuotationMarks());
+        _client.DefaultRequestHeaders.Authorization
+            = new AuthenticationHeaderValue("Bearer", token.TrimQuotationMarks());
     }
 }

@@ -45,7 +45,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         }
         catch (RefreshTokenException)
         {
-            HandleExpiredSeason();
+            SessionExpired();
         }
         catch (Exception)
         {

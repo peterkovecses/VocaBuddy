@@ -48,7 +48,8 @@ public class AuthenticationService : IAuthenticationService
     public async Task RefreshTokenAsync()
     {
         var (authToken, refreshToken) = await RetrieveCurrentTokensAsync();
-        var result = await _client.RefreshTokenAsync(new RefreshTokenRequest { AuthToken = authToken, RefreshToken = refreshToken });
+        var result = await _client.RefreshTokenAsync(
+            new RefreshTokenRequest { AuthToken = authToken, RefreshToken = refreshToken });
 
         if (result.IsError)
         {

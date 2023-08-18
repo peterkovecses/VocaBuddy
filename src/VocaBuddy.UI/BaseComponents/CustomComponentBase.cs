@@ -20,9 +20,9 @@ public class CustomComponentBase : ComponentBase
     protected void ClearStatusMessage()
         => StatusMessage = string.Empty;
 
-    protected void HandleExpiredSeason()
+    protected void SessionExpired()
     {
-        NotificationService.ShowFailure("The season has expired, please log in again.");
+        NotificationService.ShowFailure("The session has expired, please log in again.");
         NavManager.NavigateTo("/logout");
     }
 }

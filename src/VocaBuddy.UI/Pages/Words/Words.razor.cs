@@ -28,7 +28,7 @@ public class WordsBase : ListComponentBase
         }
         catch (RefreshTokenException)
         {
-            HandleExpiredSeason();
+            SessionExpired();
         }
         catch
         {
@@ -58,7 +58,7 @@ public class WordsBase : ListComponentBase
         }
         catch (RefreshTokenException)
         {
-            HandleExpiredSeason();
+            SessionExpired();
         }
         catch (Exception)
         {

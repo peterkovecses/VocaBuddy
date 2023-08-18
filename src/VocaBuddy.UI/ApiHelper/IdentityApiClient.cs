@@ -27,9 +27,7 @@ public class IdentityApiClient : IIdentityApiClient
     {
         var response = await _client.PostAsJsonAsync(_identityConfig.RegisterEndpoint, registrationRequest);
 
-        var result = await response.ReadAsAsync<Result<ErrorInfo>>();
-
-        return result;
+        return await response.ReadAsAsync<Result<ErrorInfo>>();
     }
 
     public async Task<Result<TokenHolder>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest)
