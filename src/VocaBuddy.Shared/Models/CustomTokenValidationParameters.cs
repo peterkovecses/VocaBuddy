@@ -12,7 +12,9 @@ public class CustomTokenValidationParameters
     public string ValidIssuer { get; set; } = default!;
     public string ValidAudience { get; set; } = default!;
     public string Secret { get; set; } = default!;
-    public string TokenLifeTime { get; set; } = default!;
+    public string? TokenLifeTime { get; set; }
+    public string? ClockSkew { get; set; }
+
 
     public TokenValidationParameters ToTokenValidationParameters()
     {
@@ -24,7 +26,8 @@ public class CustomTokenValidationParameters
             ValidateIssuerSigningKey = this.ValidateIssuerSigningKey,
             ValidIssuer = this.ValidIssuer,
             ValidAudience = this.ValidAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Secret))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Secret)),            
+            ClockSkew = this.ClockSkew is not null ? TimeSpan.Parse(this.ClockSkew) : default
         };
     }
 }
