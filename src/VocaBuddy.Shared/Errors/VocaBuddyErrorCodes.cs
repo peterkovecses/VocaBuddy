@@ -6,4 +6,5 @@ public static class VocaBuddyErrorCodes
     public const string NotFound = "NotFound";
     public const string Duplicate = "Duplicate";
     public const string UserIdNotMatch = "UserIdNotMatch";
+    public const string ValidationError = "ValidationError";
 }

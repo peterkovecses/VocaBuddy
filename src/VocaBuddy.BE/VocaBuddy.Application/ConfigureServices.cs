@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Application.Mappings;
+using VocaBuddy.Application.PipelineBehaviors;
 
 namespace VocaBuddy.Application;
 
@@ -17,6 +19,12 @@ public static class ConfigureServices
         services.AddSingleton(mapper);
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssemblyMarker.Assembly));
+
+        services.AddValidatorsFromAssembly(ApplicationAssemblyMarker.Assembly);
+
+        services.AddScoped(
+            typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehavior<,>));
 
         return services;
     }

@@ -2,4 +2,4 @@
 
 namespace VocaBuddy.Application.Commands;
 
-public record DeleteNativeWordCommand(int Id, string UserId) : IRequest;
+public record DeleteNativeWordCommand(int Id, string UserId) : IRequest<Unit>;

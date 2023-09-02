@@ -6,18 +6,18 @@ using VocaBuddy.Application.Interfaces;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class UpdateNativeWorldHandler : IRequestHandler<UpdateNativeWordCommand>
+public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, Unit>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public UpdateNativeWorldHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public UpdateNativeWordHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
-    public async Task Handle(UpdateNativeWordCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateNativeWordCommand request, CancellationToken cancellationToken)
     {
         var nativeWordToUpdate 
             = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWordDto.Id, cancellationToken) 
@@ -30,5 +30,7 @@ public class UpdateNativeWorldHandler : IRequestHandler<UpdateNativeWordCommand>
 
         _mapper.Map(request.NativeWordDto, nativeWordToUpdate);
         await _unitOfWork.CompleteAsync();
+
+        return Unit.Value;
     }
 }

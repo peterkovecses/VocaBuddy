@@ -5,7 +5,7 @@ using VocaBuddy.Application.Interfaces;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand>
+public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand, Unit>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -14,7 +14,7 @@ public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
     {
         var nativeWordToDelete = await _unitOfWork.NativeWords.FindByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException(request.Id);
 
@@ -25,5 +25,7 @@ public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand>
 
         _unitOfWork.NativeWords.Remove(nativeWordToDelete);
         await _unitOfWork.CompleteAsync();
+
+        return Unit.Value;
     }
 }

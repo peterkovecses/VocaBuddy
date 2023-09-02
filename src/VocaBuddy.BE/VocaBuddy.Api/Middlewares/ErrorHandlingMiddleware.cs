@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using FluentValidation;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
@@ -51,6 +52,7 @@ public class ErrorHandlingMiddleware
                 {
                     OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.Canceled, "Operation was cancelled."))),
                     DbUpdateException when exception.InnerException is SqlException { Number: 2601 } => (HttpStatusCode.BadRequest, Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.Duplicate, exception.Message))),
+                    ValidationException => (HttpStatusCode.BadRequest, Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.ValidationError, exception.Message))),
                     _ => _baseResponseData
                 };
             }
