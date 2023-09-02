@@ -19,9 +19,7 @@ public static class ConfigureServices
         services.AddSingleton(mapper);
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssemblyMarker.Assembly));
-
         services.AddValidatorsFromAssembly(ApplicationAssemblyMarker.Assembly);
-
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
