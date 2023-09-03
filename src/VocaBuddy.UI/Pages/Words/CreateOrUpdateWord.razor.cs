@@ -24,7 +24,32 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     {
         if (Update)
         {
-            Model = (await WordService.GetWordAsync(WordId!.Value)).Data;
+            try
+            {
+                Loading = true;
+                var result = await WordService.GetWordAsync(WordId!.Value);
+                if (result.IsError) // If the response is not successful
+                {
+                    ShowFailure();
+                    return;
+                }
+
+                Model = result.Data;
+            }
+            catch // If the API is not responding
+            {
+                ShowFailure();
+            }
+            finally
+            {
+                Loading = false;
+            }
+        }
+
+        void ShowFailure()
+        {
+            NotificationService.ShowFailure("The word to update could not be loaded.");
+            NavManager.NavigateTo("/words");
         }
     }
 
@@ -47,7 +72,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         {
             SessionExpired();
         }
-        catch (Exception)
+        catch
         {
             StatusMessage = SaveFailed;
         }
