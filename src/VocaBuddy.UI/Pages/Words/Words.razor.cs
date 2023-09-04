@@ -7,7 +7,7 @@ namespace VocaBuddy.UI.Pages.Words;
 
 public class WordsBase : ListComponentBase
 {
-    private const string DeleteFailed = "Failed to delete word.";
+    public const string DeleteFailed = "Failed to delete word.";
 
     [Inject]
     public IWordService WordService { get; set; }

@@ -8,7 +8,8 @@ namespace VocaBuddy.UI.Pages.Words;
 
 public class CreateOrUpdateWordBase : CustomComponentBase
 {
-    private const string SaveFailed = "Failed to save the word.";
+    public const string WordLoadingFailed = "The word to update could not be loaded.";
+    public const string SaveFailed = "Failed to save the word.";
 
     [Parameter]
     public int? WordId { get; set; }
@@ -28,28 +29,36 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             {
                 Loading = true;
                 var result = await WordService.GetWordAsync(WordId!.Value);
-                if (result.IsError) // If the response is not successful
-                {
-                    ShowFailure();
-                    return;
-                }
-
-                Model = result.Data;
+                HandleResult(result);
             }
             catch // If the API is not responding
             {
-                ShowFailure();
+                NotificationService.ShowFailure(WordLoadingFailed);
+                NavManager.NavigateTo("/words");
             }
             finally
             {
                 Loading = false;
             }
-        }
 
-        void ShowFailure()
-        {
-            NotificationService.ShowFailure("The word to update could not be loaded.");
-            NavManager.NavigateTo("/words");
+            void HandleResult(Result<NativeWordDto> result)
+            {
+                if (result.IsError) // If the response is not successful
+                {
+                    var message = result.Error!.Code switch
+                    {
+                        VocaBuddyErrorCodes.NotFound => "The word to modify was not found.",
+                        _ => WordLoadingFailed
+                    };
+
+                    NotificationService.ShowFailure(message);
+                    NavManager.NavigateTo("/words");
+
+                    return;
+                }
+
+                Model = result.Data;
+            }
         }
     }
 
@@ -65,7 +74,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         {
             ValidateTranslations();
             Loading = true;
-            var result = await ExecuteOperationAsync();
+            var result = await SaveWordAsync();
             HandleResult(result);
         }
         catch (RefreshTokenException)
@@ -80,12 +89,41 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         {
             Loading = false;
         }
+
+        void HandleResult(Result result)
+        {
+            if (result.IsSuccess)
+            {
+                if (Update)
+                {
+                    DisplaySuccesfulSavingMessage();
+                    NavManager.NavigateTo("/words");
+                }
+                else
+                {
+                    DisplaySuccesfulSavingMessage();
+                    ClearModel();
+                    ClearStatusMessage();
+                }
+            }
+            else
+            {
+                StatusMessage = result.Error!.Code switch
+                {
+                    VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
+                    _ => SaveFailed
+                };
+            }
+
+            void DisplaySuccesfulSavingMessage()
+                => NotificationService.ShowSuccess("The word has been successfully saved.");
+        }
     }
 
     private void ValidateTranslations()
         => Model.Translations.RemoveAll(translation => string.IsNullOrWhiteSpace(translation.Text));
 
-    private async Task<Result> ExecuteOperationAsync()
+    private async Task<Result> SaveWordAsync()
     {
         if (WordId.HasValue)
         {
@@ -94,32 +132,6 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         }
 
         return await WordService.CreateWord(Model);
-    }
-
-    private void HandleResult(Result result)
-    {
-        if (result.IsSuccess)
-        {
-            if (Update)
-            {
-                NotificationService.ShowSuccess("The word has been successfully saved.");
-                NavManager.NavigateTo("/words");
-            }
-            else
-            {
-                NotificationService.ShowSuccess("The word has been successfully saved.");
-                ClearModel();
-                ClearStatusMessage();
-            }
-        }
-        else
-        {
-            StatusMessage = result.Error!.Code switch
-            {
-                VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
-                _ => SaveFailed
-            };
-        }
     }
 
     private static NativeWordDto InitializeEmptyModel()
