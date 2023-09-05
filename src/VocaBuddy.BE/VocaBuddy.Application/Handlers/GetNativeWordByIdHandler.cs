@@ -24,10 +24,7 @@ public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, 
             = await _nativeWords.FindByIdAsync(request.Id, cancellationToken) 
                 ?? throw new NotFoundException(request.Id);
 
-        if (nativeWord.UserId != request.UserId)
-        {
-            throw new UserIdNotMatchException();
-        }
+        request.EntityUserId = nativeWord.UserId;
 
         return _mapper.Map<NativeWordDto>(nativeWord);
     }

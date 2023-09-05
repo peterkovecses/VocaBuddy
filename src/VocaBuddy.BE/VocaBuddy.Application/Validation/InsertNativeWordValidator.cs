@@ -3,7 +3,7 @@ using VocaBuddy.Application.Commands;
 
 namespace VocaBuddy.Application.Validation;
 
-public class InsertNativeWordValidator : AbstractValidator<InsertNativeWordCommand>
+public class InsertNativeWordValidator : AbstractValidator<CreateNativeWordCommand>
 {
     public InsertNativeWordValidator()
     {

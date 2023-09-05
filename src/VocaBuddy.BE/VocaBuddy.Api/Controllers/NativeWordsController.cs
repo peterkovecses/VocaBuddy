@@ -21,7 +21,7 @@ public class NativeWordsController : ApiControllerBase
     [HttpGet]
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
-        var words = await Mediator.Send(new GetNativeWordsQuery(CurrentUserId!), token);
+        var words = await Mediator.Send(new GetNativeWordsQuery(), token);
 
         return Ok(Result.Success(words));
     }
@@ -29,7 +29,7 @@ public class NativeWordsController : ApiControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNativeWord(int id, CancellationToken token)
     {
-        var word = await Mediator.Send(new GetNativeWordByIdQuery(id, CurrentUserId!), token);
+        var word = await Mediator.Send(new GetNativeWordByIdQuery(id), token);
 
         return Ok(Result.Success(word));
     }
@@ -37,7 +37,7 @@ public class NativeWordsController : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateNativeWorld(NativeWordDto nativeWord, CancellationToken token)
     {
-        var createdNativeWordDto = await Mediator.Send(new InsertNativeWordCommand(nativeWord, CurrentUserId!), token);
+        var createdNativeWordDto = await Mediator.Send(new CreateNativeWordCommand(nativeWord), token);
 
         return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result.Success(createdNativeWordDto));
     }
@@ -45,7 +45,7 @@ public class NativeWordsController : ApiControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNativeWord(int id, NativeWordDto nativeWord, CancellationToken token)
     {
-        await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id, CurrentUserId!), token);
+        await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id), token);
 
         return Ok(Result.Success());
     }
@@ -53,7 +53,7 @@ public class NativeWordsController : ApiControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNativeWord(int id, CancellationToken token)
     {
-        await Mediator.Send(new DeleteNativeWordCommand(id, CurrentUserId!), token);
+        await Mediator.Send(new DeleteNativeWordCommand(id), token);
 
         return Ok(Result.Success());
     }

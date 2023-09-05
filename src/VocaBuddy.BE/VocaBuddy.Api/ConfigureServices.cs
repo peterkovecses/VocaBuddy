@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using VocaBuddy.Api.Services;
+using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api;
@@ -8,6 +10,10 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+        
+        services.AddScoped<ICurrentUser, CurrentUser>();
+
         services.AddCors(options =>
         {
             options.AddPolicy(name: "_myAllowSpecificOrigins",
