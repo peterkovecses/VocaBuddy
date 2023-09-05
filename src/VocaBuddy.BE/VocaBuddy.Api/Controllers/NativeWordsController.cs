@@ -37,11 +37,6 @@ public class NativeWordsController : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateNativeWorld(NativeWordDto nativeWord, CancellationToken token)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
         var createdNativeWordDto = await Mediator.Send(new InsertNativeWordCommand(nativeWord, CurrentUserId!), token);
 
         return CreatedAtAction(nameof(GetNativeWord), new { id = createdNativeWordDto.Id }, Result.Success(createdNativeWordDto));
@@ -50,17 +45,7 @@ public class NativeWordsController : ApiControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNativeWord(int id, NativeWordDto nativeWord, CancellationToken token)
     {
-        if (id != nativeWord.Id)
-        {
-            ModelState.AddModelError("id", "The specified id does not match the id of the object to be modified.");
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        await Mediator.Send(new UpdateNativeWordCommand(nativeWord, CurrentUserId!), token);
+        await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id, CurrentUserId!), token);
 
         return Ok(Result.Success());
     }
