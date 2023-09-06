@@ -26,7 +26,7 @@ public class GetNativeWordsHandler : IRequestHandler<GetNativeWordsQuery, List<N
         CancellationToken cancellationToken)
     {
         Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId; 
-        var nativeWords = await _nativeWords.GetAsync(predicate, cancellationToken);
+        var nativeWords = await _nativeWords.GetAsync(predicate, cancellationToken, request.ItemCount);
 
         return _mapper.Map<List<NativeWordDto>>(nativeWords);
     }
