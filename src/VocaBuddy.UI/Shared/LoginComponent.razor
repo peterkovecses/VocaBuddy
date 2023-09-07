@@ -25,10 +25,11 @@
                 </div>
             }
         </div>
+        @if (IsStatusMessageSet)
+        {
+            <div class="col-12 col-md-auto my-1">
+                <div class="alert alert-danger mt-2 text-nowrap">@StatusMessage</div>
+            </div>
+        }
     </div>
 </EditForm>
-
-@if (IsStatusMessageSet)
-{
-    <div class="alert alert-danger mt-2">@StatusMessage</div>
-}
