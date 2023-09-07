@@ -22,10 +22,10 @@ public class WordService : IWordService
         => _client.GetNativeWordAsync(id);
 
     public Task<Result> CreateWord(NativeWordDto word)
-        => _client.CreateNativeWord(word);
+        => _client.CreateNativeWordAsync(word);
 
     public Task<Result> UpdateWord(NativeWordDto word)
-        => _client.UpdateNativeWord(word);
+        => _client.UpdateNativeWordAsync(word);
 
     public Task<Result> DeleteWordAsync(int id)
         => _client.DeleteNativeWordAsync(id);
