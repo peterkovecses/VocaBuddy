@@ -1,6 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using VocaBuddy.UI.ApiHelper;
+using VocaBuddy.UI.ApiHelpers;
 using VocaBuddy.UI.Authentication;
 using VocaBuddy.UI.Services;
 

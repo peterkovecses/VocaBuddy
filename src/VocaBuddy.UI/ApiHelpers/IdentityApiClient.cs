@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.Extensions;
 
-namespace VocaBuddy.UI.ApiHelper;
+namespace VocaBuddy.UI.ApiHelpers;
 
 public class IdentityApiClient : IIdentityApiClient
 {

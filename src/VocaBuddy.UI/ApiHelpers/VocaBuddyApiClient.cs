@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 using VocaBuddy.Shared.Dtos;
 using VocaBuddy.UI.Extensions;
 
-namespace VocaBuddy.UI.ApiHelper;
+namespace VocaBuddy.UI.ApiHelpers;
 
 public class VocaBuddyApiClient : IVocaBuddyApiClient
 {
