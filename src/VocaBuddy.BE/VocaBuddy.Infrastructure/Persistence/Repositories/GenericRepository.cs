@@ -14,20 +14,20 @@ public abstract class GenericRepository<TEntity, TId> : IGenericRepository<TEnti
         _context = context;
     }
 
-    public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken token, int? randomItemCount = default)
+    public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, int? randomItemCount = default)
     {
         return await _context
             .Set<TEntity>()
             .Where(predicate)
             .TakeRandom(randomItemCount)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> FindByIdAsync(TId id, CancellationToken token)
-        => await _context.Set<TEntity>().FindAsync(new object?[] { id }, cancellationToken: token);
+    public virtual async Task<TEntity?> FindByIdAsync(TId id, CancellationToken cancellationToken)
+        => await _context.Set<TEntity>().FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
 
-    public async Task AddAsync(TEntity entity, CancellationToken token)
-        => await _context.Set<TEntity>().AddAsync(entity, token);
+    public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
+        => await _context.Set<TEntity>().AddAsync(entity, cancellationToken);
 
     public void Remove(TEntity entity)
         => _context.Set<TEntity>().Remove(entity);
