@@ -1,10 +1,9 @@
-﻿namespace VocaBuddy.Application.Interfaces
-{
-    public interface IUnitOfWork : IDisposable
-    {
-        public INativeWordRepository NativeWords{ get; }
-        public IForeignWordRepository ForeignWords { get; }
+﻿namespace VocaBuddy.Application.Interfaces;
 
-        Task<int> CompleteAsync();
-    }
+public interface IUnitOfWork : IDisposable
+{
+    public INativeWordRepository NativeWords{ get; }
+    public IForeignWordRepository ForeignWords { get; }
+
+    Task<int> CompleteAsync();
 }

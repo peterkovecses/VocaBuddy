@@ -21,8 +21,8 @@ public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, 
     public async Task<NativeWordDto> Handle(GetNativeWordByIdQuery request, CancellationToken cancellationToken)
     {
         var nativeWord 
-            = await _nativeWords.FindByIdAsync(request.Id, cancellationToken) 
-                ?? throw new NotFoundException(request.Id);
+            = await _nativeWords.FindByIdAsync(request.WordId, cancellationToken) 
+                ?? throw new NotFoundException(request.WordId);
 
         request.EntityUserId = nativeWord.UserId;
 

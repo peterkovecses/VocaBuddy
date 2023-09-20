@@ -1,46 +1,45 @@
 ﻿using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Infrastructure.Persistence.Repositories;
 
-namespace VocaBuddy.Infrastructure.Persistence
+namespace VocaBuddy.Infrastructure.Persistence;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly VocaBuddyContext _context;
+    private readonly Lazy<INativeWordRepository> _nativeWords;
+    private readonly Lazy<IForeignWordRepository> _foreignWords;
+
+    public UnitOfWork(VocaBuddyContext context)
     {
-        private readonly VocaBuddyContext _context;
-        private readonly Lazy<INativeWordRepository> _nativeWords;
-        private readonly Lazy<IForeignWordRepository> _foreignWords;
+        _context = context;
+        _nativeWords = new(() => new NativeWordRepository(_context));
+        _foreignWords = new(() => new ForeignWordRepository(_context));
+    }
 
-        public UnitOfWork(VocaBuddyContext context)
+    public INativeWordRepository NativeWords => _nativeWords.Value;
+    public IForeignWordRepository ForeignWords => _foreignWords.Value;
+
+    public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
+
+    private bool _disposed = false;
+
+    ~UnitOfWork() => Dispose(false);
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
         {
-            _context = context;
-            _nativeWords = new(() => new NativeWordRepository(_context));
-            _foreignWords = new(() => new ForeignWordRepository(_context));
-        }
-
-        public INativeWordRepository NativeWords => _nativeWords.Value;
-        public IForeignWordRepository ForeignWords => _foreignWords.Value;
-
-        public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
-
-        private bool _disposed = false;
-
-        ~UnitOfWork() => Dispose(false);
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
+                _context.Dispose();
             }
-            _disposed = true;
         }
+        _disposed = true;
     }
 }

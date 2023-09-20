@@ -3,7 +3,7 @@ using VocaBuddy.Shared.Dtos;
 
 namespace VocaBuddy.Application.Queries;
 
-public record GetNativeWordByIdQuery(int Id) : IRequest<NativeWordDto>
+public record GetNativeWordByIdQuery(int WordId) : IRequest<NativeWordDto>
 {
     public string? EntityUserId { get; set; }
 }
