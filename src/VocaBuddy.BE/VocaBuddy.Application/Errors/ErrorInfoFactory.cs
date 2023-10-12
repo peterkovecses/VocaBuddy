@@ -19,4 +19,7 @@ public static class ErrorInfoFactory
 
     public static ErrorInfo Duplicate(string message)
         => new(VocaBuddyErrorCodes.Duplicate, new ApplicationError(message));
+
+    public static ErrorInfo Canceled()
+        => new("Canceled", new ApplicationError("Operation was cancelled."));
 }

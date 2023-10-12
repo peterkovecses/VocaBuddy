@@ -41,7 +41,7 @@ public class ErrorHandlingMiddleware
     private static (HttpStatusCode, Result) GetResponseData(Exception exception)
         => exception switch
         {
-            OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(new ErrorInfo("Canceled", new ApplicationError("Operation was cancelled.")))),
+            OperationCanceledException => (HttpStatusCode.Accepted, Result.Failure(ErrorInfoFactory.Canceled())),
             DbUpdateException when exception.InnerException is SqlException { Number: 2601 } => (HttpStatusCode.BadRequest, Result.Failure(ErrorInfoFactory.Duplicate(exception.Message))),
             _ => (HttpStatusCode.InternalServerError, Result.ServerError())
         };
