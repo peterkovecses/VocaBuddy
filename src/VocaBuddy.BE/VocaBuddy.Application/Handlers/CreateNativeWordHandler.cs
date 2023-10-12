@@ -4,10 +4,11 @@ using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Domain.Entities;
 using VocaBuddy.Shared.Dtos;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class CreateNativeWordHandler : IRequestHandler<CreateNativeWordCommand, NativeWordDto>
+public class CreateNativeWordHandler : IRequestHandler<CreateNativeWordCommand, Result<NativeWordDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly string _currentUserId;
@@ -20,14 +21,14 @@ public class CreateNativeWordHandler : IRequestHandler<CreateNativeWordCommand, 
         _mapper = mapper;
     }
 
-    public async Task<NativeWordDto> Handle(CreateNativeWordCommand request, CancellationToken cancellationToken)
+    public async Task<Result<NativeWordDto>> Handle(CreateNativeWordCommand request, CancellationToken cancellationToken)
     {
         var nativeWord = _mapper.Map<NativeWord>(request.NativeWordDto);
         SetUserId(nativeWord);
         await SaveWord(nativeWord, cancellationToken);
         MapViewModel(request, nativeWord);
 
-        return request.NativeWordDto;
+        return Result.Success(request.NativeWordDto);
 
         void SetUserId(NativeWord nativeWord)
             => nativeWord.UserId = _currentUserId;

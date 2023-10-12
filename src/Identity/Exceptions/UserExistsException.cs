@@ -1,9 +1,8 @@
 ﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Exceptions;
 
-public class UserExistsException : ApplicationExceptionBase
+public class UserExistsException : IdentityExceptionBase
 {
     public UserExistsException() : base("User with this e-mail address already exists.") 
     {

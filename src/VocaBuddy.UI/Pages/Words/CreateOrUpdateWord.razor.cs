@@ -43,9 +43,9 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
             void HandleResult(Result<NativeWordDto> result)
             {
-                if (result.IsError) // If the response is not successful
+                if (result.IsFailure) // If the response is not successful
                 {
-                    var message = result.Error!.Code switch
+                    var message = result.ErrorInfo!.Code switch
                     {
                         VocaBuddyErrorCodes.NotFound => "The word to modify was not found.",
                         _ => WordLoadingFailed
@@ -57,7 +57,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                     return;
                 }
 
-                Model = result.Data;
+                Model = result.Data!;
             }
         }
     }
@@ -108,7 +108,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             }
             else
             {
-                StatusMessage = result.Error!.Code switch
+                StatusMessage = result.ErrorInfo!.Code switch
                 {
                     VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
                     _ => SaveFailed

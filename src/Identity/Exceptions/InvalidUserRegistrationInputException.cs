@@ -1,9 +1,8 @@
 ﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Exceptions;
 
-public class InvalidUserRegistrationInputException : ApplicationExceptionBase
+public class InvalidUserRegistrationInputException : IdentityExceptionBase
 {
 	public InvalidUserRegistrationInputException(string message) : base(message) 
 	{

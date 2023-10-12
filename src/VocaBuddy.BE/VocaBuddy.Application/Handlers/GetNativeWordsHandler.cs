@@ -5,10 +5,11 @@ using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Application.Queries;
 using VocaBuddy.Domain.Entities;
 using VocaBuddy.Shared.Dtos;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class GetNativeWordsHandler : IRequestHandler<GetNativeWordsQuery, List<NativeWordDto>>
+public class GetNativeWordsHandler : IRequestHandler<GetNativeWordsQuery, Result<List<NativeWordDto>>>
 {
     private readonly INativeWordRepository _nativeWords;
     private readonly string _currentUserId;
@@ -21,13 +22,13 @@ public class GetNativeWordsHandler : IRequestHandler<GetNativeWordsQuery, List<N
         _mapper = mapper;
     }
 
-    public async Task<List<NativeWordDto>> Handle(
+    public async Task<Result<List<NativeWordDto>>> Handle(
         GetNativeWordsQuery request,
         CancellationToken cancellationToken)
     {
         Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId; 
         var nativeWords = await _nativeWords.GetAsync(predicate, cancellationToken, request.RandomItemCount);
 
-        return _mapper.Map<List<NativeWordDto>>(nativeWords);
+        return Result.Success(_mapper.Map<List<NativeWordDto>>(nativeWords));
     }
 }

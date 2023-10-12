@@ -1,18 +1,22 @@
-﻿using VocaBuddy.Shared.Interfaces;
-
-namespace VocaBuddy.Shared.Errors;
+﻿namespace VocaBuddy.Shared.Errors;
 
 public class ErrorInfo
 {
-    private const string BaseMessage = "An error occurred while processing the request.";
-    private const string BaseCode = "BaseError";
+    public string Code { get; }
+    public IEnumerable<ApplicationError> Errors { get; }
 
-    public string Code { get; init; }
-    public string Message { get; init; }
-
-    public ErrorInfo(string code = BaseCode, string message = BaseMessage)
+    public ErrorInfo(string code, ApplicationError error)
     {
         Code = code;
-        Message = message;
+        Errors = new[] { error };
     }
+
+    public ErrorInfo(string code, IEnumerable<ApplicationError> errors)
+    {
+        Code = code;
+        Errors = errors;
+    }
+
+    public static ErrorInfo ServerError()
+        => new("ServerError", new ApplicationError("An error occurred while processing your request."));
 }

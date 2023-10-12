@@ -43,10 +43,10 @@ public class RegisterBase : CustomComponentBase
             NavManager.NavigateTo("/");
         }
 
-        StatusMessage = result.Error!.Code switch
+        StatusMessage = result.ErrorInfo!.Code switch
         {
-            IdentityErrorCode.UserExists => result.Error.Message,
-            IdentityErrorCode.InvalidUserRegistrationInput => result.Error.Message,
+            IdentityErrorCode.UserExists => result.ErrorInfo.Errors.First().Message,
+            IdentityErrorCode.InvalidUserRegistrationInput => result.ErrorInfo.Errors.First().Message,
             _ => RegistrationFailed
         };
     }

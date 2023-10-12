@@ -1,10 +1,10 @@
-﻿namespace VocaBuddy.Shared.Exceptions;
+﻿namespace Identity.Exceptions;
 
-public class UnmappedApplicationException : Exception
+public class UnmappedIdentityException : Exception
 {
-    public UnmappedApplicationException(Exception innerException) 
+    public UnmappedIdentityException(Exception innerException)
         : base($"ApplicationException was thrown with type {innerException.GetType()}, but a corresponding HTTP status code could not be found. Please check the application's exception handling configuration.",
             innerException)
-    {      
+    {
     }
 }

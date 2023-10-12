@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
-using VocaBuddy.Application.Exceptions;
+using VocaBuddy.Application.Errors;
 using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Application.Queries;
 using VocaBuddy.Shared.Dtos;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, NativeWordDto>
+public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, Result<NativeWordDto?>>
 {
     private readonly INativeWordRepository _nativeWords;
     private readonly IMapper _mapper;
@@ -18,14 +19,18 @@ public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, 
         _mapper = mapper;
     }
 
-    public async Task<NativeWordDto> Handle(GetNativeWordByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<NativeWordDto?>> Handle(GetNativeWordByIdQuery request, CancellationToken cancellationToken)
     {
-        var nativeWord 
-            = await _nativeWords.FindByIdAsync(request.WordId, cancellationToken) 
-                ?? throw new NotFoundException(request.WordId);
+        var nativeWord
+            = await _nativeWords.FindByIdAsync(request.WordId, cancellationToken);
+
+        if (nativeWord is null)
+        {
+            return Result.Failure<NativeWordDto?>(ErrorInfoFactory.NotFound(request.WordId));
+        }
 
         request.EntityUserId = nativeWord.UserId;
 
-        return _mapper.Map<NativeWordDto>(nativeWord);
+        return Result.Success(_mapper.Map<NativeWordDto?>(nativeWord));
     }
 }

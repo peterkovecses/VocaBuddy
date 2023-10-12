@@ -1,9 +1,8 @@
 ﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Exceptions;
 
-public class UsedUpRefreshTokenException : ApplicationExceptionBase
+public class UsedUpRefreshTokenException : IdentityExceptionBase
 {
     public UsedUpRefreshTokenException() : base("This refresh token has already been used.") 
     {

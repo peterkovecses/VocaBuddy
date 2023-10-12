@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
 using VocaBuddy.Application.Commands;
-using VocaBuddy.Application.Exceptions;
+using VocaBuddy.Application.Errors;
 using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Domain.Entities;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, Unit>
+public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly string _currentUserId;
@@ -20,25 +21,27 @@ public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, 
         _mapper = mapper;
     }
 
-    public async Task<Unit> Handle(UpdateNativeWordCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateNativeWordCommand request, CancellationToken cancellationToken)
     {
         var nativeWordToUpdate
-            = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWordDto.Id, cancellationToken)
-                ?? throw new NotFoundException(request.NativeWordDto.Id);
+            = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWordDto.Id, cancellationToken);
 
-        ThrowIfUserIdDoesNotMatch(nativeWordToUpdate);
+        if (nativeWordToUpdate is null)
+        {
+            return Result.Failure(ErrorInfoFactory.NotFound(request.NativeWordDto.Id));
+        }
+
+        if (!ValidateUserId(nativeWordToUpdate))
+        {
+            return Result.Failure(ErrorInfoFactory.UserIdNotMatch());
+        }
 
         _mapper.Map(request.NativeWordDto, nativeWordToUpdate);
         await _unitOfWork.CompleteAsync();
 
-        return Unit.Value;
+        return Result.Success();
     }
 
-    private void ThrowIfUserIdDoesNotMatch(NativeWord nativeWordToUpdate)
-    {
-        if (nativeWordToUpdate.UserId != _currentUserId)
-        {
-            throw new UserIdNotMatchException();
-        }
-    }
+    private bool ValidateUserId(NativeWord nativeWordToDelete)
+        => nativeWordToDelete.UserId == _currentUserId;
 }

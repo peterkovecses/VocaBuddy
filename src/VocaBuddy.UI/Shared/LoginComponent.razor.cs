@@ -36,11 +36,11 @@ public class LoginComponentBase : CustomComponentBase
 
     private void HandleResult(Result result)
     {
-        if (result.IsError)
+        if (result.IsFailure)
         {
-            StatusMessage = result.Error!.Code switch
+            StatusMessage = result.ErrorInfo!.Code switch
             {
-                IdentityErrorCode.InvalidCredentials => result.Error.Message,
+                IdentityErrorCode.InvalidCredentials => result.ErrorInfo.Errors.First().Message,
                 _ => LoginFailed
             };
         }

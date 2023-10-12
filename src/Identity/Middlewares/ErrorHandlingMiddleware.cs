@@ -1,7 +1,8 @@
-﻿using Identity.Exceptions;
+﻿using Identity.Errors;
+using Identity.Exceptions;
 using System.Net;
 using System.Text.Json;
-using VocaBuddy.Shared.Exceptions;
+using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Models;
 
 namespace Identity.Middlewares;
@@ -11,7 +12,7 @@ public class ErrorHandlingMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandlingMiddleware> _logger;
     private static readonly (HttpStatusCode, Result) _baseResponseData 
-        = (HttpStatusCode.InternalServerError, Result.Failure());
+        = (HttpStatusCode.InternalServerError, Result.ServerError());
 
     public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
     {
@@ -42,12 +43,12 @@ public class ErrorHandlingMiddleware
     {
         try
         {
-            if (exception is not ApplicationExceptionBase appException)
+            if (exception is not IdentityExceptionBase identityException)
             {
                 return _baseResponseData;
             }
 
-            return (GetStatusCode(appException), Result.Failure(appException));
+            return (GetStatusCode(identityException), Result.Failure(ErrorInfoFactory.IdentityError(identityException)));
         }
         
         catch (Exception ex)
@@ -58,7 +59,7 @@ public class ErrorHandlingMiddleware
         }
     }
 
-    private static HttpStatusCode GetStatusCode(ApplicationExceptionBase appException)
+    private static HttpStatusCode GetStatusCode(IdentityExceptionBase appException)
     {
         return appException switch
         {
@@ -72,7 +73,7 @@ public class ErrorHandlingMiddleware
             InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized),
             ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized),
             InvalidJwtException => (HttpStatusCode.Unauthorized),
-            _ => throw new UnmappedApplicationException(appException)
+            _ => throw new UnmappedIdentityException(appException)
         };
     }
 

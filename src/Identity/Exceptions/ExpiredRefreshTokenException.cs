@@ -1,9 +1,8 @@
 ﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Exceptions;
 
-public class ExpiredRefreshTokenException : ApplicationExceptionBase
+public class ExpiredRefreshTokenException : IdentityExceptionBase
 {
     public ExpiredRefreshTokenException() : base("This refresh token has expired.") 
     {

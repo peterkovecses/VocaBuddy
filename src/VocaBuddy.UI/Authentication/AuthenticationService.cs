@@ -51,9 +51,10 @@ public class AuthenticationService : IAuthenticationService
         var result = await _client.RefreshTokenAsync(
             new RefreshTokenRequest { AuthToken = authToken, RefreshToken = refreshToken });
 
-        if (result.IsError)
+        if (result.IsFailure)
         {
-            throw new RefreshTokenException(result.Error!);
+            var errors = string.Join(';', result.ErrorInfo!.Errors.Select(error => error.Message));
+            throw new RefreshTokenException(errors);
         }
 
         await StoreTokensAsync(result.Data!);

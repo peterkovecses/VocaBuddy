@@ -6,6 +6,7 @@ using VocaBuddy.Application.Mappings;
 using VocaBuddy.Application.PipelineBehaviors;
 using VocaBuddy.Application.Queries;
 using VocaBuddy.Shared.Dtos;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application;
 
@@ -22,7 +23,7 @@ public static class ConfigureServices
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssemblyMarker.Assembly));
         services.AddValidatorsFromAssembly(ApplicationAssemblyMarker.Assembly);
-        services.AddScoped<IPipelineBehavior<GetNativeWordByIdQuery, NativeWordDto>, GetNativeWordUserIdMatchBehavior>();
+        services.AddScoped<IPipelineBehavior<GetNativeWordByIdQuery, Result<NativeWordDto>>, GetNativeWordUserIdMatchBehavior>();
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));        

@@ -100,7 +100,7 @@ public class WordsBase : ListComponentBase
         }
         else
         {
-            var message = result.Error!.Code switch
+            var message = result.ErrorInfo!.Code switch
             {
                 VocaBuddyErrorCodes.NotFound => "The word you want to delete does not exist in your dictionary.",
                 _ => DeleteFailed
@@ -108,7 +108,7 @@ public class WordsBase : ListComponentBase
 
             NotificationService.ShowFailure(message);
 
-            if (result.Error!.Code == VocaBuddyErrorCodes.NotFound)
+            if (result.ErrorInfo!.Code == VocaBuddyErrorCodes.NotFound)
             {
                 RemoveWord(id);
             }

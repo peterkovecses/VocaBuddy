@@ -1,49 +1,42 @@
-﻿using System.Text.Json.Serialization;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
+﻿using VocaBuddy.Shared.Errors;
 
 namespace VocaBuddy.Shared.Models;
 
 public class Result
 {
-    public Result(bool success)
-    {
-        IsSuccess = success;
-        Error = success == false ? new() : default;
-    }
+    //protected Result() { }
 
-    [JsonConstructor]
-    public Result(ErrorInfo error)
-    {
-        Error = error;
-    }
-
-    public ErrorInfo? Error { get; init; }
-    public bool IsSuccess { get; init; }
-    public bool IsError => !IsSuccess;
+    public ErrorInfo? ErrorInfo { get; init; }
+    public bool IsSuccess => ErrorInfo is null;
+    public bool IsFailure => !IsSuccess;
 
     public static Result Success()
-        => new(true);
+        => new();
 
-    public static Result<TValue> Success<TValue>(TValue data)
+    public static Result<TData> Success<TData>(TData data)
         => new(data);
 
-    public static Result Failure()
-        => new(false);
+    public static Result Failure(ErrorInfo error)
+        => new() { ErrorInfo = error };
 
-    public static Result Failure(ApplicationExceptionBase exception)
-        => new(new ErrorInfo(exception.ErrorCode, exception.Message));
+    public static Result<TData> Failure<TData>(ErrorInfo error)
+        => new(error);
 
-    public static Result Failure(ErrorInfo info)
-        => new(info);
+    public static Result ServerError()
+        => Failure(ErrorInfo.ServerError());
 }
 
-public class Result<TValue> : Result
+public class Result<TData> : Result
 {
-    public TValue Data { get; init; }
+    public TData? Data { get; init; }
 
-    public Result(TValue data) : base(true)
+    public Result(TData data)
     {
         Data = data;
+    }
+
+    public Result(ErrorInfo error)
+    {
+        ErrorInfo = error;
     }
 }

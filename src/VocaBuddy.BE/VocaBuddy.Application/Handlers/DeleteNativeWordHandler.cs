@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using VocaBuddy.Application.Commands;
-using VocaBuddy.Application.Exceptions;
+using VocaBuddy.Application.Errors;
 using VocaBuddy.Application.Interfaces;
 using VocaBuddy.Domain.Entities;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 
-public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand, Unit>
+public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly string _currentUserId;
@@ -17,24 +18,26 @@ public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand, 
         _currentUserId = user.Id!;
     }
 
-    public async Task<Unit> Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
     {
-        var nativeWordToDelete = await _unitOfWork.NativeWords.FindByIdAsync(request.WordId, cancellationToken)
-            ?? throw new NotFoundException(request.WordId);
+        var nativeWordToDelete = await _unitOfWork.NativeWords.FindByIdAsync(request.WordId, cancellationToken);
 
-        ThrowIfUserIdDoesNotMatch(nativeWordToDelete);
+        if (nativeWordToDelete is null)
+        {
+            return Result.Failure(ErrorInfoFactory.NotFound(request.WordId));
+        }
+
+        if(!ValidateUserId(nativeWordToDelete))
+        {
+            return Result.Failure(ErrorInfoFactory.UserIdNotMatch());
+        }
 
         _unitOfWork.NativeWords.Remove(nativeWordToDelete);
         await _unitOfWork.CompleteAsync();
 
-        return Unit.Value;
+        return Result.Success();
     }
 
-    private void ThrowIfUserIdDoesNotMatch(NativeWord nativeWordToDelete)
-    {
-        if (nativeWordToDelete.UserId != _currentUserId)
-        {
-            throw new UserIdNotMatchException();
-        }
-    }
+    private bool ValidateUserId(NativeWord nativeWordToDelete)
+        => nativeWordToDelete.UserId == _currentUserId;
 }

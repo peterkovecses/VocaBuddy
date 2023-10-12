@@ -1,9 +1,8 @@
 ﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
 
 namespace Identity.Exceptions;
 
-public class InvalidCredentialsException : ApplicationExceptionBase
+public class InvalidCredentialsException : IdentityExceptionBase
 {
     public InvalidCredentialsException() : base("Incorrect username or password.") 
     {

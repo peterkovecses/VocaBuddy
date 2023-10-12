@@ -1,12 +1,8 @@
-﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Exceptions;
+﻿namespace VocaBuddy.UI.Exceptions;
 
-namespace VocaBuddy.UI.Exceptions;
-
-public class RefreshTokenException : ApplicationExceptionBase
+public class RefreshTokenException : Exception
 {
-	public RefreshTokenException(ErrorInfo error) : base($"Failed to refresh token: Identity API: {error.Message}")
+	public RefreshTokenException(string errors) : base($"Failed to refresh token: Identity API: {errors}")
 	{
-		ErrorCode = error.Code;
 	}
 }
