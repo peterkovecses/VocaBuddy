@@ -2,8 +2,10 @@
 
 public class ErrorInfo
 {
-    public string Code { get; }
-    public IEnumerable<ApplicationError> Errors { get; }
+    public string Code { get; init; }
+    public IEnumerable<ApplicationError> Errors { get; init; }
+
+    public ErrorInfo() {}
 
     public ErrorInfo(string code, ApplicationError error)
     {
