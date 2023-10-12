@@ -1,11 +1,10 @@
-﻿using VocaBuddy.Shared.Errors;
+﻿using System.Text.Json.Serialization;
+using VocaBuddy.Shared.Errors;
 
 namespace VocaBuddy.Shared.Models;
 
 public class Result
 {
-    //protected Result() { }
-
     public ErrorInfo? ErrorInfo { get; init; }
     public bool IsSuccess => ErrorInfo is null;
     public bool IsFailure => !IsSuccess;
@@ -29,6 +28,8 @@ public class Result
 public class Result<TData> : Result
 {
     public TData? Data { get; init; }
+
+    public Result() { }
 
     public Result(TData data)
     {

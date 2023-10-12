@@ -6,7 +6,7 @@ namespace VocaBuddy.UI.Interfaces
     public interface IIdentityApiClient
     {
         Task<Result<TokenHolder>> LoginAsync(UserLoginRequest loginRequest);
-        Task<Result<ErrorInfo>> RegisterAsync(UserRegistrationRequest registrationRequest);
+        Task<Result> RegisterAsync(UserRegistrationRequest registrationRequest);
         Task<Result<TokenHolder>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }
