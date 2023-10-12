@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 using VocaBuddy.Application.Errors;
-using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Middlewares;

@@ -12,14 +12,14 @@ public static class ErrorInfoFactory
                     new KeyValuePair<string, object>(nameof(id), id)));
 
     public static ErrorInfo UserIdNotMatch()
-        => new("UserIdNotMatch", new ApplicationError("The id of the item does not match the id of the current user"));
+        => new(VocaBuddyErrorCodes.UserIdNotMatch, new ApplicationError("The id of the item does not match the id of the current user"));
 
     public static ErrorInfo ValidationError(List<ApplicationError> errors)
-        => new("ValidationError", errors);
+        => new(VocaBuddyErrorCodes.ValidationError, errors);
 
     public static ErrorInfo Duplicate(string message)
         => new(VocaBuddyErrorCodes.Duplicate, new ApplicationError(message));
 
     public static ErrorInfo Canceled()
-        => new("Canceled", new ApplicationError("Operation was cancelled."));
+        => new(VocaBuddyErrorCodes.Canceled, new ApplicationError("Operation was cancelled."));
 }
