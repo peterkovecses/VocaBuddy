@@ -15,7 +15,7 @@ public class UpdateNativeWordValidator : AbstractValidator<UpdateNativeWordComma
         });
 
         RuleFor(command => command.NativeWordDto.Translations)
-            .Must(translations => translations.AllTranslationsAreUnique())
+            .Must(translations => translations.Select(translation => translation.Text).AllUnique())
             .WithMessage("Translations must be unique.");
     }
 }
