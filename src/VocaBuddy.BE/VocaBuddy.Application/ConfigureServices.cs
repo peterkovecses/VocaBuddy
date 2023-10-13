@@ -26,7 +26,10 @@ public static class ConfigureServices
         services.AddScoped<IPipelineBehavior<GetNativeWordByIdQuery, Result<NativeWordDto>>, GetNativeWordUserIdMatchBehavior>();
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
-            typeof(ValidationBehavior<,>));        
+            typeof(ValidationBehavior<,>));
+        services.AddScoped(
+            typeof(IPipelineBehavior<,>),
+            typeof(LoggingBehavior<,>));
 
         return services;
     }
