@@ -110,6 +110,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             {
                 StatusMessage = result.ErrorInfo!.Code switch
                 {
+                    VocaBuddyErrorCodes.ValidationError => string.Join(';', result.ErrorInfo!.Errors.Select(error => error.Message)),
                     VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
                     _ => SaveFailed
                 };
