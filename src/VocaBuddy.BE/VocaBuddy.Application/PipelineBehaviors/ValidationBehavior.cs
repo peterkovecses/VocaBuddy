@@ -13,14 +13,10 @@ public class ValidationBehavior<TRequest, TResponse>
         where TResponse : Result
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
-    private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
 
-    public ValidationBehavior(
-        IEnumerable<IValidator<TRequest>> validators,
-        ILogger<ValidationBehavior<TRequest, TResponse>> logger)
+    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
     {
         _validators = validators;
-        _logger = logger;
     }
 
     public async Task<TResponse> Handle(
@@ -32,15 +28,7 @@ public class ValidationBehavior<TRequest, TResponse>
 
         if (allErrors.Any())
         {
-            var errorInfo = ErrorInfoFactory.ValidationError(allErrors);
-
-            _logger.LogError(
-                "Request failure {RequestName}, {@Error}, {DateTimeUtc}",
-                typeof(TRequest).Name,
-                errorInfo,
-                DateTime.UtcNow);
-
-            return CreateFailureResponse(errorInfo);
+            return CreateFailureResponse(ErrorInfoFactory.ValidationError(allErrors));
         }
 
         return await next();
