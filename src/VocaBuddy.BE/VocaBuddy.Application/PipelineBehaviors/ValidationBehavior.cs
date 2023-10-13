@@ -10,6 +10,7 @@ namespace VocaBuddy.Application.PipelineBehaviors;
 public class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
+        where TResponse : Result
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
     private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
@@ -81,6 +82,6 @@ public class ValidationBehavior<TRequest, TResponse>
             return (TResponse)resultInstance;
         }
 
-        return (TResponse)(object)errorInfo;
+        return (TResponse)Result.Failure(errorInfo);
     }
 }

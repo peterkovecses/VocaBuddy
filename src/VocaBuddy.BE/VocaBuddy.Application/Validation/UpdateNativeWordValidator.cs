@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using VocaBuddy.Application.Commands;
+using VocaBuddy.Shared.Dtos;
 
 namespace VocaBuddy.Application.Validation;
 
@@ -12,5 +13,14 @@ public class UpdateNativeWordValidator : AbstractValidator<UpdateNativeWordComma
         {
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).NotEmpty();
         });
+
+        RuleFor(command => command.NativeWordDto.Translations)
+            .Must(HaveAllUniqueTranslations)
+            .WithMessage("Translations must be unique.");
     }
+
+    private bool HaveAllUniqueTranslations(List<ForeignWordDto> translations)
+        => translations
+            .GroupBy(translation => translation.Text)
+            .All(group => group.Count() == 1);
 }

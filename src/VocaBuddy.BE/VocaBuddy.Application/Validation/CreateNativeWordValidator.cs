@@ -20,7 +20,7 @@ public class CreateNativeWordValidator : AbstractValidator<CreateNativeWordComma
     }
 
     private bool HaveAllUniqueTranslations(List<ForeignWordDto> translations)
-    {
-        return translations.GroupBy(t => t.Text).All(g => g.Count() == 1);
-    }
+        => translations
+            .GroupBy(translation => translation.Text)
+            .All(group => group.Count() == 1);
 }
