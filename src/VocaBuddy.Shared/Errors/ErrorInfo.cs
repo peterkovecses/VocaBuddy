@@ -1,11 +1,11 @@
-﻿namespace VocaBuddy.Shared.Errors;
+﻿using System.Text.Json.Serialization;
+
+namespace VocaBuddy.Shared.Errors;
 
 public class ErrorInfo
 {
     public string Code { get; init; }
     public IEnumerable<ApplicationError> Errors { get; init; }
-
-    public ErrorInfo() {}
 
     public ErrorInfo(string code, ApplicationError error)
     {
@@ -13,6 +13,7 @@ public class ErrorInfo
         Errors = new[] { error };
     }
 
+    [JsonConstructor]
     public ErrorInfo(string code, IEnumerable<ApplicationError> errors)
     {
         Code = code;

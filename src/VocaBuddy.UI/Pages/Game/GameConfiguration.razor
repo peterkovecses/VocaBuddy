@@ -3,4 +3,28 @@
 @attribute [Authorize]
 @inherits GameConfigurationBase
 
-<h3>GameConfiguration</h3>
+<h3>Game Configuration</h3>
+
+    @if (Loading)
+{
+    <tr>
+        <td colspan="4">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+else
+{
+    <form @onsubmit="StartGame" class="mt-3">
+        <div class="form-group mb-3">
+            <label for="wordCount">The number of words you want to practice</label>
+            <input id="wordCount" class="form-control" type="number" @bind="WordCount" required />
+        </div>
+        <button type="submit" class="btn btn-success me-2">Start</button>
+    </form>
+}
+
