@@ -16,7 +16,7 @@ public class CreateNativeWordValidator : AbstractValidator<CreateNativeWordComma
 
         RuleFor(command => command.NativeWordDto.Translations)
             .Must(HaveAllUniqueTranslations)
-            .WithMessage("Translations must be unique");
+            .WithMessage("Translations must be unique.");
     }
 
     private bool HaveAllUniqueTranslations(List<ForeignWordDto> translations)

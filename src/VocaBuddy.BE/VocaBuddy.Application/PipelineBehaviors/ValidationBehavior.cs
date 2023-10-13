@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using VocaBuddy.Application.Errors;
 using VocaBuddy.Shared.Errors;
+using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.PipelineBehaviors;
 
@@ -10,10 +12,14 @@ public class ValidationBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
+    private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
 
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public ValidationBehavior(
+        IEnumerable<IValidator<TRequest>> validators,
+        ILogger<ValidationBehavior<TRequest, TResponse>> logger)
     {
         _validators = validators;
+        _logger = logger;
     }
 
     public async Task<TResponse> Handle(
@@ -25,7 +31,15 @@ public class ValidationBehavior<TRequest, TResponse>
 
         if (allErrors.Any())
         {
-            return CreateFailureResponse(ErrorInfoFactory.ValidationError(allErrors));
+            var errorInfo = ErrorInfoFactory.ValidationError(allErrors);
+
+            _logger.LogError(
+                "Request failure {RequestName}, {@Error}, {DateTimeUtc}",
+                typeof(TRequest).Name,
+                errorInfo,
+                DateTime.UtcNow);
+
+            return CreateFailureResponse(errorInfo);
         }
 
         return await next();
