@@ -21,6 +21,9 @@ public class WordService : IWordService
     public Task<Result<NativeWordDto>> GetWordAsync(int id)
         => _client.GetNativeWordAsync(id);
 
+    public Task<Result<int>> GetWordCountAsync()
+        => _client.GetNativeWordCountAsync();
+
     public Task<Result> CreateWord(NativeWordDto word)
         => _client.CreateNativeWordAsync(word);
 

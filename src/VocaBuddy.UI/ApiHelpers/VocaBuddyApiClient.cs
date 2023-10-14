@@ -33,6 +33,9 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     public Task<Result<NativeWordDto>> GetNativeWordAsync(int id)
         => GetAsync<Result<NativeWordDto>>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
 
+    public Task<Result<int>> GetNativeWordCountAsync()
+        => GetAsync<Result<int>>(_vocaBuddyApiConfig.NativeWordsCountEndpoint);
+
     public Task<Result> CreateNativeWordAsync(NativeWordDto word)
         => PostAsync<Result>(_vocaBuddyApiConfig.NativeWordsEndpoints, word);
 
