@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using VocaBuddy.Application.Errors;
 using VocaBuddy.Shared.Errors;
 using VocaBuddy.Shared.Models;

@@ -36,6 +36,14 @@ public class NativeWordsController : ApiControllerBase
         return result.ToApiResponse();
     }
 
+    [HttpGet("count")]
+    public async Task<IActionResult> GetNativeWordCount(CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new GetNativeWordCountQuery(), cancellationToken);
+
+        return result.ToApiResponse();
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateNativeWorld(NativeWordDto nativeWord, CancellationToken token)
     {
