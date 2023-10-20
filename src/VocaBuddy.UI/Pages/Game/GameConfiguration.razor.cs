@@ -17,16 +17,14 @@ public class GameConfigurationBase : CustomComponentBase
             var result = await WordService.GetWordCountAsync();
             if (result.IsFailure)
             {
-                NotificationService.ShowFailure();
-                NavManager.NavigateTo("/");
+                NavManager.NavigateTo("/error");
             }
 
             MaxWordCount = result.Data;
         }
         catch
         {
-            NotificationService.ShowFailure();
-            NavManager.NavigateTo("/");
+            NavManager.NavigateTo("/error");
         }
 
     }
