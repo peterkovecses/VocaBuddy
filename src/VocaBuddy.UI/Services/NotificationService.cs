@@ -19,7 +19,7 @@ public class NotificationService
     public void ShowSuccess(string message)
         => ShowNotification(message, true, true);
 
-    public void ShowFailure(string message)
+    public void ShowFailure(string message = "Something went wrong, please try again later.")
         => ShowNotification(message, false, false);
 
     public void ClearNotifications()

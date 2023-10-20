@@ -17,24 +17,20 @@ public class GameConfigurationBase : CustomComponentBase
             var result = await WordService.GetWordCountAsync();
             if (result.IsFailure)
             {
-                FailurePath();
+                NotificationService.ShowFailure();
+                NavManager.NavigateTo("/");
             }
 
             MaxWordCount = result.Data;
         }
         catch
         {
-            FailurePath();            
+            NotificationService.ShowFailure();
+            NavManager.NavigateTo("/");
         }
 
     }
 
     public void StartGame()
         => NavManager.NavigateTo($"/gameplay/{WordCount}");
-
-    private void FailurePath()
-    {
-        NotificationService.ShowFailure("Something went wrong, please try again later.");
-        NavManager.NavigateTo("/");
-    }
 }
