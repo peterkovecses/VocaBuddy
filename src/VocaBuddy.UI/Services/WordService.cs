@@ -11,9 +11,9 @@ public class WordService : IWordService
         _client = client;
     }
 
-    public async Task<List<NativeWordListViewModel>> GetWordsAsync()
+    public async Task<List<NativeWordListViewModel>> GetWordsAsync(int? wordCount = default)
     {
-        var words = (await _client.GetNativeWordsAsync()).Data;
+        var words = (await _client.GetNativeWordsAsync(wordCount)).Data;
 
         return ConvertToWordsWithTranslations(words);
     }
