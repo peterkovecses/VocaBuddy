@@ -8,4 +8,5 @@ public static class VocaBuddyErrorCodes
     public const string ValidationError = "ValidationError";
     public const string Canceled = "Canceled";
     public const string ModelError = "ModelError";
+    public const string ItemCount = "ItemCount";
 }

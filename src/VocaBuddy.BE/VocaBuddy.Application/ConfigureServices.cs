@@ -23,13 +23,14 @@ public static class ConfigureServices
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssemblyMarker.Assembly));
         services.AddValidatorsFromAssembly(ApplicationAssemblyMarker.Assembly);
-        services.AddScoped<IPipelineBehavior<GetNativeWordByIdQuery, Result<NativeWordDto>>, GetNativeWordUserIdMatchBehavior>();
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(LoggingBehavior<,>));
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
+        services.AddScoped<IPipelineBehavior<GetNativeWordByIdQuery, Result<NativeWordDto>>, GetNativeWordUserIdMatchBehavior>();
+        services.AddScoped<IPipelineBehavior<GetNativeWordsQuery, Result<List<NativeWordDto>>>, GetNativeWordsItemCountCheckBehavior>();
 
         return services;
     }

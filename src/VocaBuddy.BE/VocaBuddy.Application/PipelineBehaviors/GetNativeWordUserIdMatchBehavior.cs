@@ -20,7 +20,7 @@ public class GetNativeWordUserIdMatchBehavior : IPipelineBehavior<GetNativeWordB
     {
         var result = await next();
 
-        if (request.EntityUserId != _currentUserId)
+        if (result.IsSuccess && request.EntityUserId != _currentUserId)
         {
             return Result.Failure<NativeWordDto>(ErrorInfoFactory.UserIdNotMatch());
         }

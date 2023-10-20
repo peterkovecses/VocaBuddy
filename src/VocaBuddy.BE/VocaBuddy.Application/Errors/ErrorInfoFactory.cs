@@ -22,4 +22,7 @@ public static class ErrorInfoFactory
 
     public static ErrorInfo Canceled()
         => new(VocaBuddyErrorCodes.Canceled, new ApplicationError("Operation was cancelled."));
+
+    public static ErrorInfo ItemCount()
+        => new(VocaBuddyErrorCodes.ItemCount, new ApplicationError("There are fewer elements in the db than requested."));
 }
