@@ -11,8 +11,30 @@ public class GameConfigurationBase : CustomComponentBase
     protected int WordCount { set; get; }
 
     protected override async Task OnInitializedAsync()
-        => MaxWordCount = (await WordService.GetWordCountAsync()).Data;
+    {
+        try
+        {
+            var result = await WordService.GetWordCountAsync();
+            if (result.IsFailure)
+            {
+                FailurePath();
+            }
+
+            MaxWordCount = result.Data;
+        }
+        catch
+        {
+            FailurePath();            
+        }
+
+    }
 
     public void StartGame()
         => NavManager.NavigateTo($"/gameplay/{WordCount}");
+
+    private void FailurePath()
+    {
+        NotificationService.ShowFailure("Something went wrong, please try again later.");
+        NavManager.NavigateTo("/");
+    }
 }
