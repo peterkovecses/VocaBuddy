@@ -56,7 +56,8 @@
 
                             @if (!IsSubmitted)
                             {
-                                <button type="submit" class="btn btn-primary mt-1 mb-1">Submit</button>
+                                <button type="submit" class="btn btn-primary mt-1 mb-1 me-1">Submit</button>
+                                <button type="button" class="btn btn-secondary mt-1 mb-1" @onclick="() => IsSubmitted = true">Reveal</button>
                             }
                             else
                             {
