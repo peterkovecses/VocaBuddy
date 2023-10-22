@@ -64,7 +64,7 @@
                             <td>@word.Text</td>
                             <td>@word.TranslationsString</td>
                             <td><a href="@updateLink"><span class="oi oi-pencil"></span></a></td>
-                            <td><span class="oi oi-delete" style="color: red; cursor: pointer;" @onclick="()=> ConfirmDeleteWordAsync(word.Id)"></span></td>
+                            <td><i class="bi bi-trash text-danger" style="cursor: pointer;" @onclick="()=> ConfirmDeleteWordAsync(word.Id)"></i></td>
                         </tr>
                     }
                 }
