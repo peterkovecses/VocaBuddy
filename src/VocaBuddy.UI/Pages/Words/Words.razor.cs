@@ -24,7 +24,7 @@ public class WordsBase : ListComponentBase
         try
         {
             Loading = true;
-            Words = await WordService.GetWordsAsync();
+            Words = await WordService.GetWordListViewModelsAsync();
         }
         catch (RefreshTokenException)
         {

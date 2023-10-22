@@ -1,4 +1,5 @@
 ﻿using VocaBuddy.Shared.Dtos;
+using VocaBuddy.UI.Extensions;
 
 namespace VocaBuddy.UI.Services;
 
@@ -11,11 +12,22 @@ public class WordService : IWordService
         _client = client;
     }
 
-    public async Task<List<NativeWordListViewModel>> GetWordsAsync(int? wordCount = default)
+    public async Task<List<NativeWordDto>> GetWordsAsync(int? wordCount = default)
     {
-        var words = (await _client.GetNativeWordsAsync(wordCount)).Data;
+        var result = await _client.GetNativeWordsAsync(wordCount);
+        if (result.IsFailure)
+        {
+            throw new Exception("Failed to retrieve the words");
+        }
 
-        return ConvertToWordsWithTranslations(words);
+        return result.Data!;
+    }
+
+    public async Task<List<NativeWordListViewModel>> GetWordListViewModelsAsync()
+    {
+        var words = await GetWordsAsync();
+
+        return words.MapToListViewModels();
     }
 
     public Task<Result<NativeWordDto>> GetWordAsync(int id)
@@ -31,24 +43,5 @@ public class WordService : IWordService
         => _client.UpdateNativeWordAsync(word);
 
     public Task<Result> DeleteWordAsync(int id)
-        => _client.DeleteNativeWordAsync(id);
-
-    private static List<NativeWordListViewModel> ConvertToWordsWithTranslations(List<NativeWordDto> words)
-    {
-        var result = new List<NativeWordListViewModel>();
-
-        foreach (var word in words)
-        {
-            result.Add(
-                new NativeWordListViewModel
-                {
-                    Id = word.Id,
-                    Text = word.Text,
-                    CreatedUtc = word.CreatedUtc,
-                    TranslationsString = string.Join(", ", word.Translations.Select(translation => translation.Text))
-                });
-        }
-
-        return result;
-    }
+        => _client.DeleteNativeWordAsync(id);  
 }

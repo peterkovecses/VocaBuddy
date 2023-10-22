@@ -1,4 +1,5 @@
-﻿using VocaBuddy.UI.BaseComponents;
+﻿using VocaBuddy.Shared.Dtos;
+using VocaBuddy.UI.BaseComponents;
 
 namespace VocaBuddy.UI.Pages.Game;
 
@@ -10,7 +11,7 @@ public class GameplayBase : CustomComponentBase
     [Inject]
     public IWordService WordService { get; set; }
 
-    protected List<NativeWordListViewModel> Words { get; set; }
+    protected List<NativeWordDto> Words { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
