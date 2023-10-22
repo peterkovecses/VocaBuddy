@@ -14,7 +14,7 @@ public class GameplayBase : CustomComponentBase
     protected List<NativeWordDto> Words { get; set; }
     protected NativeWordDto ActualWord { get; set; }
     protected List<NativeWordDto> Mistakes { get; set; } = new();
-    protected string UserInput { get; set; } = string.Empty;
+    protected string UserInput { get; set; }
     protected bool IsSubmitted { get; set; }
     protected bool CorrectAnswer { get; set; }
 
@@ -28,7 +28,14 @@ public class GameplayBase : CustomComponentBase
     protected void EvaluateAnswer()
     {
         IsSubmitted = true;
-        SetAnswerCorrectness();
+        if (IsCorrectAnswer())
+        {
+            CorrectAnswer = true;
+        }
+        else
+        {
+            CorrectAnswer = false;
+        }
     }
 
     protected void NextRound()
@@ -36,46 +43,23 @@ public class GameplayBase : CustomComponentBase
         IsSubmitted = false;
         UserInput = string.Empty;
 
-        if (CorrectAnswer)
-        {
-            if (Words.Any())
-            {
-                SetNextWord();
-            }
-            else if (Mistakes.Any())
-            {
-                ContinueWithMistakes();
-                SetNextWord();
-            }
-            else
-            {
-                EndGame();
-            }
-        }
-        else
+        if (!CorrectAnswer)
         {
             Mistakes.Add(ActualWord);
-            if (Words.Any())
-            {
-                SetNextWord();
-            }
-            else
-            {
-                ContinueWithMistakes();
-                SetNextWord();
-            }
         }
-    }
 
-    private void SetAnswerCorrectness()
-    {
-        if (ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower()))
+        if (Words.Any())
         {
-            CorrectAnswer = true;
+            SetNextWord();
+        }
+        else if (Mistakes.Any())
+        {
+            ContinueWithMistakes();
+            SetNextWord();
         }
         else
         {
-            CorrectAnswer = false;
+            EndGame();
         }
     }
 
@@ -86,6 +70,9 @@ public class GameplayBase : CustomComponentBase
             throw new Exception("The number of words must be greater than zero");
         }
     }
+
+    private bool IsCorrectAnswer()
+        => ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower());
 
     private void SetNextWord()
     {
