@@ -44,7 +44,7 @@ public class GameplayBase : CustomComponentBase
             }
             else if (Mistakes.Any())
             {
-                CountinueWithMistakes();
+                ContinueWithMistakes();
                 SetNextWord();
             }
             else
@@ -61,7 +61,7 @@ public class GameplayBase : CustomComponentBase
             }
             else
             {
-                CountinueWithMistakes();
+                ContinueWithMistakes();
                 SetNextWord();
             }
         }
@@ -93,7 +93,7 @@ public class GameplayBase : CustomComponentBase
         Words.Remove(ActualWord);
     }
 
-    private void CountinueWithMistakes()
+    private void ContinueWithMistakes()
     {
         Words = Mistakes;
         Mistakes = new();
