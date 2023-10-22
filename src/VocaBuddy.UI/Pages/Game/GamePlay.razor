@@ -25,7 +25,7 @@
                             <div class="mb-3">
                                 <label for="translation" class="form-label">@ActualWord.Text</label>
                                 <div class="input-group">
-                                    <input id="translation" class="form-control @(IsSubmitted ? (CorrectAnswer ? "border-success" : "border-danger") : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" />
+                                    <input id="translation" class="form-control @(IsSubmitted ? (CorrectAnswer ? "border-success" : "border-danger") : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" spellcheck="false" />
 
                                     @if (IsSubmitted)
                                     {
