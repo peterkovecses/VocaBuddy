@@ -5,3 +5,37 @@
 <PageTitle>Game</PageTitle>
 
 <h3>GamePlay</h3>
+
+@if (Words is null)
+{
+    <div class="d-flex justify-content-center mt-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <form @onsubmit="EvaluateAnswer">
+        <div>
+            <label for="translation" class="form-label">@ActualWord.Text</label>
+            <input id="translation" class="form-control" @bind="UserInput" required style="width: 200px;" />
+        </div>
+        @if (!IsSubmitted)
+        {
+            <button type="submit" class="btn btn-primary">Submit</button>
+        }
+        else
+        {
+            <button class="btn btn-primary" @onclick="NextRound">Next</button>
+            if (CorrectAnswer)
+            {
+                <p>Correct answer</p>
+            }
+            else
+            {
+                <p>Wrong answer. The correct answer options are: @string.Join(';', ActualWord.Translations.Select(translation => translation.Text))</p>
+            }
+        }
+    </form>
+}

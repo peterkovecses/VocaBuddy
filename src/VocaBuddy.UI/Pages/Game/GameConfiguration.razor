@@ -18,29 +18,26 @@
                     </div>
                 </div>
             }
+            else if (MaxWordCount == 0)
+            {
+                <div class="alert alert-warning mt-3">
+                    There are no words in your vocabulary, to play, first
+                    <a href="/create-or-update-word" class="alert-link">record words</a>.
+                </div>
+            }
             else
             {
-                if (MaxWordCount == 0)
-                {
-                    <div class="alert alert-warning mt-3">
-                        There are no words in your vocabulary, to play, first
-                        <a href="/create-or-update-word" class="alert-link">record words</a>.
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <form @onsubmit="StartGame">
+                            <div class="mb-3">
+                                <label for="wordCount" class="form-label">The number of words you want to practice (there is @MaxWordCount words in your vocabulary)</label>
+                                <input id="wordCount" class="form-control" type="number" min="1" max="@MaxWordCount" @bind="WordCount" required style="width: 80px;" />
+                            </div>
+                            <button type="submit" class="btn btn-success">Start</button>
+                        </form>
                     </div>
-                }
-                else
-                {
-                    <div class="card mt-5">
-                        <div class="card-body">
-                            <form @onsubmit="StartGame">
-                                <div class="mb-3">
-                                    <label for="wordCount" class="form-label">The number of words you want to practice (there is @MaxWordCount words in your vocabulary)</label>
-                                    <input id="wordCount" class="form-control" type="number" min="1" max="@MaxWordCount" @bind="WordCount" required style="width: 80px;" />
-                                </div>
-                                <button type="submit" class="btn btn-success">Start</button>
-                            </form>
-                        </div>
-                    </div>
-                }
+                </div>
             }
         </div>
     </div>
