@@ -40,8 +40,22 @@
         </nav>
 
         <article class="content px-4">
-            <NotificationContainer />
-            @Body
+            <ErrorBoundary @ref="ErrorBoundary">
+                <ChildContent>
+                    <NotificationContainer />
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <div class="row" style="height: 85vh">
+                        <div class="my-auto text-center">
+                            <h1 class="display-1">Oops...</h1>
+                            <p class="lead">Something went wrong, please try again later.</p>
+                            <a class="btn btn-primary mt-3" href="/">Back to Home</a>
+                        </div>
+                    </div>
+                </ErrorContent>
+            </ErrorBoundary>
         </article>
+
     </main>
 </div>

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace VocaBuddy.UI.Shared;
 
 public class MainLayoutBase : LayoutComponentBase, IDisposable
 {
+    protected ErrorBoundary? ErrorBoundary;
     protected bool IsAuthenticated;
     protected string Email;        
 
@@ -18,6 +20,11 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
         (AuthStateProvider as AuthenticationStateProvider).AuthenticationStateChanged += OnAuthenticationStateChanged;
         await base.OnInitializedAsync();
         await UpdateAuthenticationState();
+    }
+
+    protected override void OnParametersSet()
+    {
+       ErrorBoundary?.Recover();
     }
 
     private async void OnAuthenticationStateChanged(Task<AuthenticationState> task)

@@ -12,21 +12,13 @@ public class GameConfigurationBase : CustomComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            var result = await WordService.GetWordCountAsync();
-            if (result.IsFailure)
-            {
-                NavManager.NavigateTo("/error");
-            }
-
-            MaxWordCount = result.Data;
-        }
-        catch
+        var result = await WordService.GetWordCountAsync();
+        if (result.IsFailure)
         {
             NavManager.NavigateTo("/error");
         }
 
+        MaxWordCount = result.Data;
     }
 
     public void StartGame()
