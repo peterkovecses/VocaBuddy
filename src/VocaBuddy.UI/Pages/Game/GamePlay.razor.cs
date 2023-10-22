@@ -14,9 +14,10 @@ public class GameplayBase : CustomComponentBase
     protected List<NativeWordDto> Words { get; set; }
     protected NativeWordDto ActualWord { get; set; }
     protected List<NativeWordDto> Mistakes { get; set; } = new();
-    protected string UserInput { get; set; }
+    protected string UserInput { get; set; } = string.Empty;
     protected bool IsSubmitted { get; set; }
-    protected bool CorrectAnswer { get; set; }
+    protected bool CorrectAnswer
+        => ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower());
 
     protected override async Task OnInitializedAsync()
     {
@@ -25,42 +26,11 @@ public class GameplayBase : CustomComponentBase
         SetNextWord();
     }
 
-    protected void EvaluateAnswer()
-    {
-        IsSubmitted = true;
-        if (IsCorrectAnswer())
-        {
-            CorrectAnswer = true;
-        }
-        else
-        {
-            CorrectAnswer = false;
-        }
-    }
-
     protected void NextRound()
     {
-        IsSubmitted = false;
-        UserInput = string.Empty;
-
-        if (!CorrectAnswer)
-        {
-            Mistakes.Add(ActualWord);
-        }
-
-        if (Words.Any())
-        {
-            SetNextWord();
-        }
-        else if (Mistakes.Any())
-        {
-            ContinueWithMistakes();
-            SetNextWord();
-        }
-        else
-        {
-            EndGame();
-        }
+        AddToMistakesIfIncorrect();
+        SetNextWordIfAny();
+        ResetForm();
     }
 
     private void ValidateWordCount()
@@ -71,8 +41,36 @@ public class GameplayBase : CustomComponentBase
         }
     }
 
-    private bool IsCorrectAnswer()
-        => ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower());
+    private void AddToMistakesIfIncorrect()
+    {
+        if (!CorrectAnswer)
+        {
+            Mistakes.Add(ActualWord);
+        }
+    }
+
+    private void SetNextWordIfAny()
+    {
+        if (Words.Any())
+        {
+            SetNextWord();
+        }
+        else if (Mistakes.Any())
+        {
+            LoadMistakes();
+            SetNextWord();
+        }
+        else
+        {
+            EndGame();
+        }
+    }
+
+    private void ResetForm()
+    {
+        IsSubmitted = false;
+        UserInput = string.Empty;
+    }
 
     private void SetNextWord()
     {
@@ -80,7 +78,7 @@ public class GameplayBase : CustomComponentBase
         Words.Remove(ActualWord);
     }
 
-    private void ContinueWithMistakes()
+    private void LoadMistakes()
     {
         Words = Mistakes;
         Mistakes = new();

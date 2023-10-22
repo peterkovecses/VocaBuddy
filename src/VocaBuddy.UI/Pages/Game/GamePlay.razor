@@ -16,7 +16,7 @@
 }
 else
 {
-    <form @onsubmit="EvaluateAnswer">
+    <form @onsubmit="() => IsSubmitted = true">
         <div>
             <label for="translation" class="form-label">@ActualWord.Text</label>
             <input id="translation" class="form-control" @bind="UserInput" required style="width: 200px;" />
@@ -34,7 +34,7 @@ else
             }
             else
             {
-                <p>Wrong answer. The correct answer options are: @string.Join(';', ActualWord.Translations.Select(translation => translation.Text))</p>
+                <p>Wrong answer. The correct answer options are: @string.Join("; ", ActualWord.Translations.Select(translation => translation.Text))</p>
             }
         }
     </form>
