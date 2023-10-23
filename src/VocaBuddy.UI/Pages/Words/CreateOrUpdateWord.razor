@@ -17,15 +17,17 @@
 
     @if (Loading)
     {
-        <tr>
-            <td colspan="4">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
-                        <span class="visually-hidden">Loading...</span>
+        <table>
+            <tr>
+                <td colspan="4">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border ms-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            </td>
-        </tr>
+                </td>
+            </tr>
+        </table>
     }
     else
     {
@@ -34,7 +36,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="wordText">Word in your native language</label>
-                        <input id="wordText" class="form-control" type="text" @bind="Model.Text" required />
+                        <input id="wordText" class="form-control" type="text" @bind="Model.Text" required autocomplete="off" spellcheck="false" />
                     </div>
                 </div>
             </div>
