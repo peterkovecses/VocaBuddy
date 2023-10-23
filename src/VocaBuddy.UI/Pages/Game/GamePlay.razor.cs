@@ -16,8 +16,7 @@ public class GameplayBase : CustomComponentBase
     protected List<NativeWordDto> Mistakes { get; set; } = new();
     protected string UserInput { get; set; } = string.Empty;
     protected bool IsSubmitted { get; set; }
-    protected bool CorrectAnswer
-        => ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower());
+    protected bool IsCorrectAnswer { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -26,30 +25,26 @@ public class GameplayBase : CustomComponentBase
         SetNextWord();
     }
 
-    protected void NextRound()
+    protected void OnSubmit()
     {
-        AddToMistakesIfIncorrect();
-        SetNextWordIfAny();
-        ResetForm();
-    }
+        IsSubmitted = true;
+        IsCorrectAnswer = 
+            ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower());
 
-    private void ValidateWordCount()
-    {
-        if (WordCount <= 0)
-        {
-            throw new Exception("The number of words must be greater than zero");
-        }
-    }
-
-    private void AddToMistakesIfIncorrect()
-    {
-        if (!CorrectAnswer)
+        if (!IsCorrectAnswer)
         {
             Mistakes.Add(ActualWord);
         }
     }
 
-    private void SetNextWordIfAny()
+    protected void OnReveal()
+    {
+        IsSubmitted = true;
+        IsCorrectAnswer = false;
+        Mistakes.Add(ActualWord);
+    }
+
+    protected void NextRound()
     {
         if (Words.Any())
         {
@@ -64,12 +59,16 @@ public class GameplayBase : CustomComponentBase
         {
             EndGame();
         }
+
+        ResetForm();
     }
 
-    private void ResetForm()
+    private void ValidateWordCount()
     {
-        IsSubmitted = false;
-        UserInput = string.Empty;
+        if (WordCount <= 0)
+        {
+            throw new Exception("The number of words must be greater than zero");
+        }
     }
 
     private void SetNextWord()
@@ -82,6 +81,12 @@ public class GameplayBase : CustomComponentBase
     {
         Words = Mistakes;
         Mistakes = new();
+    }
+
+    private void ResetForm()
+    {
+        IsSubmitted = false;
+        UserInput = string.Empty;
     }
 
     private void EndGame()

@@ -21,15 +21,15 @@
             {
                 <div class="card mt-5">
                     <div class="card-body">
-                        <form @onsubmit="() => IsSubmitted = true">
+                        <form @onsubmit="OnSubmit">
                             <div class="mb-3">
                                 <label for="translation" class="form-label">@ActualWord.Text</label>
                                 <div class="input-group">
-                                    <input id="translation" class="form-control @(IsSubmitted ? (CorrectAnswer ? "border-success" : "border-danger") : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" spellcheck="false" />
+                                    <input id="translation" class="form-control @(IsSubmitted ? (IsCorrectAnswer ? "border-success" : "border-danger") : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" spellcheck="false" />
 
                                     @if (IsSubmitted)
                                     {
-                                        @if (CorrectAnswer)
+                                        @if (IsCorrectAnswer)
                                         {
                                             <span class="input-group-text bg-success text-white">
                                                 <i class="bi bi-check-lg"></i>
@@ -44,7 +44,7 @@
                                     }
                                 </div>
 
-                                @if (IsSubmitted && !CorrectAnswer)
+                                @if (IsSubmitted && !IsCorrectAnswer)
                                 {
                                     <p class="mt-3">The correct answer options are:</p>
                                     @foreach (var translation in ActualWord.Translations)
@@ -57,7 +57,7 @@
                             @if (!IsSubmitted)
                             {
                                 <button type="submit" class="btn btn-primary mt-1 mb-1 me-1">Submit</button>
-                                <button type="button" class="btn btn-secondary mt-1 mb-1" @onclick="() => IsSubmitted = true">Reveal</button>
+                                <button type="button" class="btn btn-secondary mt-1 mb-1" @onclick="OnReveal">Reveal</button>
                             }
                             else
                             {
