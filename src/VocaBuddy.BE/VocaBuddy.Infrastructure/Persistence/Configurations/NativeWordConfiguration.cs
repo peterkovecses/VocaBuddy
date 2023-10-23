@@ -11,14 +11,14 @@ public class NativeWordConfiguration : IEntityTypeConfiguration<NativeWord>
         // Primary key
         builder.HasKey(newWord => newWord.Id);
 
-        // Name property configuration
+        // Text property configuration
         builder.Property(newWord => newWord.Text)
             .IsRequired()
             .HasMaxLength(30)
             .IsUnicode(true);
 
         // Unique constraint on Name property
-        builder.HasIndex(nw => nw.Text)
+        builder.HasIndex(nw => new { nw.UserId, nw.Text })
             .IsUnique()
             .IsClustered(false);
 
