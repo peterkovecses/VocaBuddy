@@ -12,7 +12,7 @@ public class GetNativeWordsItemCountCheckBehavior : IPipelineBehavior<GetNativeW
     {
         var result = await next();
 
-        if (result.IsSuccess && result.Data!.Count < request.RandomItemCount)
+        if (result.IsSuccess && result.Data!.Count < request.ItemCount)
         {
             return Result.Failure<List<NativeWordDto>>(ErrorInfoFactory.ItemCount());
         }

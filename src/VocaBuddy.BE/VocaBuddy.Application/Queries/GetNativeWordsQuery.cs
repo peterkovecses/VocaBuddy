@@ -4,4 +4,4 @@ using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Queries;
 
-public record GetNativeWordsQuery(int? RandomItemCount) : IRequest<Result<List<NativeWordDto>>>;
+public record GetNativeWordsQuery(int? ItemCount, bool LatestWords) : IRequest<Result<List<NativeWordDto>>>;

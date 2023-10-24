@@ -4,7 +4,7 @@ namespace VocaBuddy.Application.Interfaces;
 
 public interface IGenericRepository<TEntity, TId> where TEntity : class
 {
-    Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, int? randomItemCount = default);
+    Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
 
     Task<TEntity?> FindByIdAsync(TId id, CancellationToken cancellationToken);
 

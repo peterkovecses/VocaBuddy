@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Infrastructure.Persistence.Extensions;
 
 namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
@@ -14,16 +13,15 @@ public abstract class GenericRepository<TEntity, TId> : IGenericRepository<TEnti
         _context = context;
     }
 
-    public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, int? randomItemCount = default)
+    public virtual async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _context
             .Set<TEntity>()
             .Where(predicate)
-            .TakeRandom(randomItemCount)
             .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> FindByIdAsync(TId id, CancellationToken cancellationToken)
+    public async Task<TEntity?> FindByIdAsync(TId id, CancellationToken cancellationToken)
         => await _context.Set<TEntity>().FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
 
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)

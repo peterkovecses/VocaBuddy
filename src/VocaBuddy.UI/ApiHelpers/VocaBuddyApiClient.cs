@@ -32,7 +32,7 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
         string endpoint;
         if (wordCount is not null)
         {
-            endpoint = $"{_vocaBuddyApiConfig.NativeWordsEndpoints}?randomItemCount={wordCount}";
+            endpoint = $"{_vocaBuddyApiConfig.NativeWordsEndpoints}?itemCount={wordCount}";
         }
         else
         {
