@@ -14,8 +14,9 @@
         <div class="col-lg-6 col-md-12">
             <div class="form-group mb-3 mb-lg-0">
                 <input class="form-control" type="text" placeholder="Filter..."
-                @bind="Filter"
-                @bind:event="oninput">
+                       @bind="Filter"
+                       @bind:event="oninput"
+                       required autocomplete="off" spellcheck="false">
             </div>
         </div>
 
@@ -72,10 +73,9 @@
         </table>
     </div>
 
-<DeleteConfirmation
-    IsModalVisible="ConfirmDeleteVisible"
-    CloseModal="EventCallback.Factory.Create(this, CloseConfirmDelete)"
-    OnConfirm="EventCallback.Factory.Create(this, async () => await DeleteWordAsync())" />
+    <DeleteConfirmation IsModalVisible="ConfirmDeleteVisible"
+                        CloseModal="EventCallback.Factory.Create(this, CloseConfirmDelete)"
+                        OnConfirm="EventCallback.Factory.Create(this, async () => await DeleteWordAsync())" />
 
     @if (!Loading)
     {
