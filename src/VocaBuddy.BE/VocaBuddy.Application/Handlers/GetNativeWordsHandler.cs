@@ -26,25 +26,9 @@ public class GetNativeWordsHandler : IRequestHandler<GetNativeWordsQuery, Result
         GetNativeWordsQuery request,
         CancellationToken cancellationToken)
     {
-        List<NativeWord> nativeWords;
-        
-        if (request.ItemCount.HasValue)
-        {
-            if (request.LatestWords)
-            {
-                nativeWords = await _nativeWords.GetLatestAsync(request.ItemCount.Value, _currentUserId, cancellationToken);
-            }
-            else
-            {
-                nativeWords = await _nativeWords.GetRandomAsync(request.ItemCount.Value, _currentUserId, cancellationToken);
-            }
-        }
-        else
-        {
-            Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId;
-            nativeWords = await _nativeWords.GetAsync(predicate, cancellationToken);
-        }
+        Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId;
+        var words = await _nativeWords.GetAsync(predicate, cancellationToken);
 
-        return Result.Success(_mapper.Map<List<NativeWordDto>>(nativeWords));
+        return Result.Success(_mapper.Map<List<NativeWordDto>>(words));
     }
 }

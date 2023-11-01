@@ -12,22 +12,27 @@ public class WordService : IWordService
         _client = client;
     }
 
-    public async Task<List<NativeWordDto>> GetWordsAsync(int? wordCount = default)
+    public async Task<List<NativeWordListViewModel>> GetWordListViewModelsAsync()
     {
-        var result = await _client.GetNativeWordsAsync(wordCount);
-        if (result.IsFailure)
-        {
-            throw new Exception("Failed to retrieve the words");
-        }
+        var words = (await _client.GetNativeWordsAsync()).Data;
+
+        return words.MapToListViewModels();
+    }
+
+    public async Task<List<NativeWordDto>> GetRandomWordsAsync(int count)
+    {
+        var result = await _client.GetRandomNativeWordsAsync(count);
+        ThrowIfFailure(result);
 
         return result.Data!;
     }
 
-    public async Task<List<NativeWordListViewModel>> GetWordListViewModelsAsync()
+    public async Task<List<NativeWordDto>> GetLatestWordsAsync(int count)
     {
-        var words = await GetWordsAsync();
+        var result = await _client.GetLatestNativeWordsAsync(count);
+        ThrowIfFailure(result);
 
-        return words.MapToListViewModels();
+        return result.Data!;
     }
 
     public Task<Result<NativeWordDto>> GetWordAsync(int id)
@@ -43,5 +48,13 @@ public class WordService : IWordService
         => _client.UpdateNativeWordAsync(word);
 
     public Task<Result> DeleteWordAsync(int id)
-        => _client.DeleteNativeWordAsync(id);  
+        => _client.DeleteNativeWordAsync(id);
+
+    private static void ThrowIfFailure(Result<List<NativeWordDto>> result)
+    {
+        if (result.IsFailure)
+        {
+            throw new Exception("Failed to retrieve the words");
+        }
+    }
 }

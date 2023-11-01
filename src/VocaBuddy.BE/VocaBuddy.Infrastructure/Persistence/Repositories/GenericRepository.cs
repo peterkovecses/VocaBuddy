@@ -13,7 +13,7 @@ public abstract class GenericRepository<TEntity, TId> : IGenericRepository<TEnti
         _context = context;
     }
 
-    public virtual async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
+    public async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
     {
         return await _context
             .Set<TEntity>()

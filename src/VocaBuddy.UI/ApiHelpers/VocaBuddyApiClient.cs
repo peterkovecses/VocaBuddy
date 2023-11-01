@@ -27,20 +27,14 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
         _vocaBuddyApiConfig = vocaBuddyApiOptions.Value;
     }
 
-    public Task<Result<List<NativeWordDto>>> GetNativeWordsAsync(int? wordCount = default)
-    {
-        string endpoint;
-        if (wordCount is not null)
-        {
-            endpoint = $"{_vocaBuddyApiConfig.NativeWordsEndpoints}?itemCount={wordCount}";
-        }
-        else
-        {
-            endpoint = _vocaBuddyApiConfig.NativeWordsEndpoints;
-        }
+    public Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
+        => GetAsync<Result<List<NativeWordDto>>>(_vocaBuddyApiConfig.NativeWordsEndpoints);
 
-        return GetAsync<Result<List<NativeWordDto>>>(endpoint);
-    }
+    public Task<Result<List<NativeWordDto>>> GetRandomNativeWordsAsync(int count)
+        => GetAsync<Result<List<NativeWordDto>>>($"{_vocaBuddyApiConfig.RandomNativeWordsEndpoints}?count={count}");
+
+    public Task<Result<List<NativeWordDto>>> GetLatestNativeWordsAsync(int count)
+        => GetAsync<Result<List<NativeWordDto>>>($"{_vocaBuddyApiConfig.LatestNativeWordsEndpoints}?count={count}");
 
     public Task<Result<NativeWordDto>> GetNativeWordAsync(int id)
         => GetAsync<Result<NativeWordDto>>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");

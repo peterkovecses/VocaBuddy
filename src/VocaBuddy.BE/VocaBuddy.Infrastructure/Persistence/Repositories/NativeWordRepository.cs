@@ -28,6 +28,7 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
             .Where(word => word.UserId == userId)
             .OrderByDescending(word => word.CreatedUtc)
             .Take(count)
+            .OrderBy(item => Guid.NewGuid())
             .ToListAsync(cancellationToken);
     }
 

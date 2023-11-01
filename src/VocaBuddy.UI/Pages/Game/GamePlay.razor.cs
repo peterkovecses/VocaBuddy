@@ -21,7 +21,7 @@ public class GameplayBase : CustomComponentBase
     protected override async Task OnInitializedAsync()
     {
         ValidateWordCount();
-        Words = await WordService.GetWordsAsync(WordCount);
+        Words = await WordService.GetRandomWordsAsync(WordCount);
         SetNextWord();
     }
 

@@ -30,7 +30,8 @@ public static class ConfigureServices
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
         services.AddScoped<IPipelineBehavior<GetNativeWordByIdQuery, Result<NativeWordDto>>, GetNativeWordUserIdMatchBehavior>();
-        services.AddScoped<IPipelineBehavior<GetNativeWordsQuery, Result<List<NativeWordDto>>>, GetNativeWordsItemCountCheckBehavior>();
+        services.AddScoped<IPipelineBehavior<GetRandomNativeWordsQuery, Result<List<NativeWordDto>>>, GetRandomNativeWordsWordCountCheckBehavior>();
+        services.AddScoped<IPipelineBehavior<GetLatestNativeWordsQuery, Result<List<NativeWordDto>>>, GetLatestNativeWordsWordCountCheckBehavior>();
 
         return services;
     }

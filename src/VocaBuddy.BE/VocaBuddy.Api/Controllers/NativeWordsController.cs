@@ -21,9 +21,25 @@ public class NativeWordsController : ApiControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetNativeWords(int? itemCount, bool latestWords, CancellationToken token)
+    public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {
-        var result = await Mediator.Send(new GetNativeWordsQuery(itemCount, latestWords), token);
+        var result = await Mediator.Send(new GetNativeWordsQuery(), token);
+
+        return result.ToApiResponse();
+    }
+
+    [HttpGet("random")]
+    public async Task<IActionResult> GetRandomNativeWords(int count, CancellationToken token)
+    {
+        var result = await Mediator.Send(new GetRandomNativeWordsQuery(count), token);
+
+        return result.ToApiResponse();
+    }
+
+    [HttpGet("latest")]
+    public async Task<IActionResult> GetLatestNativeWords(int count, CancellationToken token)
+    {
+        var result = await Mediator.Send(new GetLatestNativeWordsQuery(count), token);
 
         return result.ToApiResponse();
     }

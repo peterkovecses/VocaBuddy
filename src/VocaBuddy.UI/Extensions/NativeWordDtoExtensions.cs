@@ -4,8 +4,9 @@ namespace VocaBuddy.UI.Extensions;
 
 public static class NativeWordDtoExtensions
 {
-    public static List<NativeWordListViewModel> MapToListViewModels(this List<NativeWordDto> words)
+    public static List<NativeWordListViewModel> MapToListViewModels(this List<NativeWordDto>? words)
     {
+        ArgumentNullException.ThrowIfNull(words, nameof(words));
         var result = new List<NativeWordListViewModel>();
 
         foreach (var word in words)

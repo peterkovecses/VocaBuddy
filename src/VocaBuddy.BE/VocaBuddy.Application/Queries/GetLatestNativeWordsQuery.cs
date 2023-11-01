@@ -4,4 +4,4 @@ using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Queries;
 
-public record GetNativeWordsQuery() : IRequest<Result<List<NativeWordDto>>>;
+public record GetLatestNativeWordsQuery(int WordCount) : IRequest<Result<List<NativeWordDto>>>;
