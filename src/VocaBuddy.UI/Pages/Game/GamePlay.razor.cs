@@ -6,7 +6,12 @@ namespace VocaBuddy.UI.Pages.Game;
 public class GameplayBase : CustomComponentBase
 {
     [Parameter]
+    [SupplyParameterFromQuery]
     public int WordCount { set; get; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public bool LatestWords { set; get; }
 
     [Inject]
     public IWordService WordService { get; set; }
@@ -21,7 +26,7 @@ public class GameplayBase : CustomComponentBase
     protected override async Task OnInitializedAsync()
     {
         ValidateWordCount();
-        Words = await WordService.GetRandomWordsAsync(WordCount);
+        await SetWordsAsync();
         SetNextWord();
     }
 
@@ -61,6 +66,18 @@ public class GameplayBase : CustomComponentBase
         }
 
         ResetForm();
+    }
+
+    private async Task SetWordsAsync()
+    {
+        if (LatestWords)
+        {
+            Words = await WordService.GetLatestWordsAsync(WordCount);
+        }
+        else
+        {
+            Words = await WordService.GetRandomWordsAsync(WordCount);
+        }
     }
 
     private void ValidateWordCount()
