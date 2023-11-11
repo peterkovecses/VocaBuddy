@@ -26,7 +26,7 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
     {
         return await VocaBuddyContext.NativeWords
             .Where(word => word.UserId == userId)
-            .OrderByDescending(word => word.CreatedUtc)
+            .OrderByDescending(word => word.UpdatedUtc)
             .Take(count)
             .OrderBy(item => Guid.NewGuid())
             .ToListAsync(cancellationToken);
