@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VocaBuddy.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using VocaBuddy.Infrastructure.Persistence;
 namespace VocaBuddy.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(VocaBuddyContext))]
-    partial class VocaBuddyContextModelSnapshot : ModelSnapshot
+    [Migration("20231111110338_AddUpdatedUtc")]
+    partial class AddUpdatedUtc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
