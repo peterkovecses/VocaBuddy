@@ -6,6 +6,7 @@ public class NativeWord
     public required string Text { get; set; }
     public required string UserId { get; set; }
     public DateTime CreatedUtc { get; set; }
+    public DateTime UpdatedUtc { get; set; }
 
     public required virtual ICollection<ForeignWord> Translations { get; set; }
 }

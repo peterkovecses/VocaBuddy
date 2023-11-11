@@ -36,5 +36,14 @@ public class NativeWordConfiguration : IEntityTypeConfiguration<NativeWord>
         // CreatedUtc property configuration
         builder.Property(newWord => newWord.CreatedUtc)
             .IsRequired();
+
+        // Non-clustered index on UpdatedUtc property
+        builder.HasIndex(newWord => newWord.UpdatedUtc)
+            .IsUnique(false)
+            .IsClustered(false);
+
+        // UpdatedUtc property configuration
+        builder.Property(newWord => newWord.UpdatedUtc)
+            .IsRequired();
     }
 }
