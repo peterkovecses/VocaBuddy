@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using VocaBuddy.Domain.Entities;
 using VocaBuddy.Infrastructure.Interfaces;
 using static Microsoft.EntityFrameworkCore.EntityState;
@@ -14,28 +15,59 @@ public class AuditInterceptor : SaveChangesInterceptor
         _dateTimeProvider = dateTimeProvider;
     }
 
-    private void SetWordCreationTime(DbContextEventData eventData)
+    private void UpdateNativeWordTimestamps(DbContextEventData eventData)
     {
-        foreach (var wordEntityEntry in eventData.Context.ChangeTracker.Entries<NativeWord>())
+        foreach (var wordEntityEntry in eventData.Context!.ChangeTracker.Entries<NativeWord>())
         {
-            if (wordEntityEntry.State == Added)
+            if (wordEntityEntry.State is Added)
             {
                 wordEntityEntry.Entity.CreatedUtc = _dateTimeProvider.UtcNow;
+            }
+
+            if (wordEntityEntry.State is Added or Modified)
+            {
+                wordEntityEntry.Entity.UpdatedUtc = _dateTimeProvider.UtcNow;
+            }
+        }
+    }
+
+    public void UpdateNativeWordTimestampsOnTranslationUpdate(DbContextEventData eventData)
+    {
+        foreach (var wordEntityEntry in eventData.Context!.ChangeTracker.Entries<ForeignWord>())
+        {
+            if (wordEntityEntry.State is Modified)
+            {
+                var nativeWord = eventData.Context.Set<NativeWord>().Single(nativeWord => nativeWord.Id == wordEntityEntry.Entity.NativeWordId);
+                nativeWord.UpdatedUtc = _dateTimeProvider.UtcNow;
+            }
+        }
+    }
+
+    public async Task UpdateNativeWordTimestampsOnTranslationUpdateAsync(DbContextEventData eventData)
+    {
+        foreach (var wordEntityEntry in eventData.Context!.ChangeTracker.Entries<ForeignWord>())
+        {
+            if (wordEntityEntry.State is Modified)
+            {
+                var nativeWord = await eventData.Context.Set<NativeWord>().SingleAsync(nativeWord => nativeWord.Id == wordEntityEntry.Entity.NativeWordId);
+                nativeWord.UpdatedUtc = _dateTimeProvider.UtcNow;
             }
         }
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
-        SetWordCreationTime(eventData);
+        UpdateNativeWordTimestamps(eventData);
+        UpdateNativeWordTimestampsOnTranslationUpdate(eventData);
 
         return result;
     }
 
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        SetWordCreationTime(eventData);
+        UpdateNativeWordTimestamps(eventData);
+        await UpdateNativeWordTimestampsOnTranslationUpdateAsync(eventData);        
 
-        return base.SavingChangesAsync(eventData, result, cancellationToken);
+        return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }
