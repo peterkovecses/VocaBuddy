@@ -64,6 +64,7 @@ public class ListComponentBase : CustomComponentBase
     protected enum SortBy
     {
         Alphabetical,
-        CreatedUtc
+        CreatedUtc,
+        UpdatedUtc
     }
 }

@@ -25,6 +25,7 @@
             <select id="sortType" class="form-control-inline me-2" @oninput="e => SetSortBy(e.Value.ToString())">
                 <option value="Alphabetical" selected>Alphabetical</option>
                 <option value="CreatedUtc">Created</option>
+                <option value="UpdatedUtc">Updated</option>
             </select>
             <button @onclick="ToggleSortOrder"
                     class="btn btn-link p-0">

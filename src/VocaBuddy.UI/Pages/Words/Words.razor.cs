@@ -76,20 +76,12 @@ public class WordsBase : ListComponentBase
                 || word.TranslationsString.Contains(Filter, StringComparison.OrdinalIgnoreCase);
 
     private IOrderedEnumerable<NativeWordListViewModel> SortWords(ICollection<NativeWordListViewModel> words)
-    {
-        if (CurrentSortBy == SortBy.Alphabetical)
+        => CurrentSortBy switch
         {
-            return CurrentSortOrder == SortOrder.Ascending
-                ? words.OrderBy(w => w.Text)
-                : words.OrderByDescending(w => w.Text);
-        }
-        else
-        {
-            return CurrentSortOrder == SortOrder.Ascending
-                ? words.OrderBy(w => w.CreatedUtc)
-                : words.OrderByDescending(w => w.CreatedUtc);
-        }
-    }
+            SortBy.Alphabetical => CurrentSortOrder == SortOrder.Ascending ? words.OrderBy(word => word.Text) : words.OrderByDescending(word => word.Text),
+            SortBy.CreatedUtc => CurrentSortOrder == SortOrder.Ascending ? words.OrderBy(word => word.CreatedUtc) : words.OrderByDescending(word => word.CreatedUtc),
+            _ => CurrentSortOrder == SortOrder.Ascending ? words.OrderBy(word => word.UpdatedUtc) : words.OrderByDescending(word => word.UpdatedUtc),
+        };
 
     private void HandleResult(int id, Result result)
     {

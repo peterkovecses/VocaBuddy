@@ -17,6 +17,7 @@ public static class NativeWordDtoExtensions
                     Id = word.Id,
                     Text = word.Text,
                     CreatedUtc = word.CreatedUtc,
+                    UpdatedUtc = word.UpdatedUtc,
                     TranslationsString = string.Join(", ", word.Translations.Select(translation => translation.Text))
                 });
         }
