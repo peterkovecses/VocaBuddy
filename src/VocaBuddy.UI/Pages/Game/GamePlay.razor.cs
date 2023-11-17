@@ -3,7 +3,7 @@ using VocaBuddy.UI.BaseComponents;
 
 namespace VocaBuddy.UI.Pages.Game;
 
-public class GameplayBase : CustomComponentBase
+public class GamePlayBase : CustomComponentBase
 {
     [Parameter]
     [SupplyParameterFromQuery]
@@ -22,6 +22,7 @@ public class GameplayBase : CustomComponentBase
     protected string UserInput { get; set; } = string.Empty;
     protected bool IsSubmitted { get; set; }
     protected bool IsCorrectAnswer { get; set; }
+    protected bool ISRevealed { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,6 +46,7 @@ public class GameplayBase : CustomComponentBase
     protected void OnReveal()
     {
         IsSubmitted = true;
+        ISRevealed = true;
         IsCorrectAnswer = false;
         Mistakes.Add(ActualWord);
     }
@@ -103,6 +105,7 @@ public class GameplayBase : CustomComponentBase
     private void ResetForm()
     {
         IsSubmitted = false;
+        ISRevealed = false;
         UserInput = string.Empty;
     }
 
