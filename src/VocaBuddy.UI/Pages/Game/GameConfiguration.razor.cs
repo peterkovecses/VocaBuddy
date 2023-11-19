@@ -22,6 +22,12 @@ public class GameConfigurationBase : CustomComponentBase
         MaxWordCount = result.Data;
     }
 
+    protected void SetWordCount(ChangeEventArgs e)
+    {
+        WordCount = !string.IsNullOrEmpty((string)e.Value!) ? Convert.ToInt32(e.Value) : 0;
+        StateHasChanged();
+    }
+
     public void StartGame()
         => NavManager.NavigateTo($"/gameplay?WordCount={WordCount}&LatestWords={LatestWords}");
 }
