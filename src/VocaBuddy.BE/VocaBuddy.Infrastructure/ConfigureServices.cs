@@ -14,9 +14,7 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<VocaBuddyContext>(options =>
-            options
-            .UseLazyLoadingProxies()
-                .UseSqlServer(configuration.GetConnectionString("VocaBuddyDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("VocaBuddyDatabase")));
 
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<AuditInterceptor>();

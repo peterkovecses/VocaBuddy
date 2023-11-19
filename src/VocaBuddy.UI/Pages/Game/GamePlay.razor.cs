@@ -22,7 +22,7 @@ public class GamePlayBase : CustomComponentBase
     protected string UserInput { get; set; } = string.Empty;
     protected bool IsSubmitted { get; set; }
     protected bool IsCorrectAnswer { get; set; }
-    protected bool ISRevealed { get; set; }
+    protected bool IsRevealed { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,7 +46,7 @@ public class GamePlayBase : CustomComponentBase
     protected void OnReveal()
     {
         IsSubmitted = true;
-        ISRevealed = true;
+        IsRevealed = true;
         IsCorrectAnswer = false;
         Mistakes.Add(ActualWord);
     }
@@ -105,7 +105,7 @@ public class GamePlayBase : CustomComponentBase
     private void ResetForm()
     {
         IsSubmitted = false;
-        ISRevealed = false;
+        IsRevealed = false;
         UserInput = string.Empty;
     }
 
