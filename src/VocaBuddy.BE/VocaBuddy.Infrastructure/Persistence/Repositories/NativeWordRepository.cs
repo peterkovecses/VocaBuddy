@@ -33,13 +33,13 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
             .ToListAsync(cancellationToken);
 
     public async Task<List<NativeWord>> GetLatestAsync(int count, string userId, CancellationToken cancellationToken)
-        => await VocaBuddyContext.NativeWords
-            .Include(word => word.Translations)
-            .Where(word => word.UserId == userId)
-            .OrderByDescending(word => word.UpdatedUtc)
-            .Take(count)
-            .OrderBy(item => Guid.NewGuid())
-            .ToListAsync(cancellationToken);
+        => (await VocaBuddyContext.NativeWords
+                .Include(word => word.Translations)
+                .Where(word => word.UserId == userId)
+                .OrderByDescending(word => word.UpdatedUtc)
+                .Take(count)
+                .ToListAsync(cancellationToken))
+            .RandomOrder();
 
     public Task<int> GetCountAsync(string userId, CancellationToken cancellationToken)
         => VocaBuddyContext.NativeWords
