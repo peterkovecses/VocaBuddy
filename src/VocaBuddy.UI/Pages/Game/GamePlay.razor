@@ -23,7 +23,10 @@
                     <div class="card-body">
                         <form @onsubmit="OnSubmit">
                             <div class="mb-3">
-                                <label for="translation" class="form-label">@ActualWord.Text</label>
+                                <div class="d-flex justify-content-between align-items-center"> 
+                                    <label for="translation" class="form-label">@ActualWord.Text</label> 
+                                    <p>Remaining words: @RemainingWordCount</p>
+                                </div>
                                 <div class="input-group">
                                     <input id="translation" class="form-control @(IsSubmitted ? (IsCorrectAnswer ? "border-success" : "border-danger") : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" spellcheck="false" />
 

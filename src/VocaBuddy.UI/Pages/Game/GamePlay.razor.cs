@@ -17,6 +17,7 @@ public class GamePlayBase : CustomComponentBase
     public IWordService WordService { get; set; }
 
     protected List<NativeWordDto> Words { get; set; }
+    protected int RemainingWordCount { get; set; }
     protected NativeWordDto ActualWord { get; set; }
     protected List<NativeWordDto> Mistakes { get; set; } = new();
     protected string UserInput { get; set; } = string.Empty;
@@ -28,6 +29,7 @@ public class GamePlayBase : CustomComponentBase
     {
         ValidateWordCount();
         await SetWordsAsync();
+        SetRemainingWordCount();
         SetNextWord();
     }
 
@@ -35,9 +37,13 @@ public class GamePlayBase : CustomComponentBase
     {
         IsSubmitted = true;
         IsCorrectAnswer = 
-            ActualWord.Translations.Any(translation => translation.Text.ToLower() == UserInput.ToLower());
+            ActualWord.Translations.Any(translation => string.Equals(translation.Text, UserInput, StringComparison.CurrentCultureIgnoreCase));
 
-        if (!IsCorrectAnswer)
+        if (IsCorrectAnswer)
+        {
+            RemainingWordCount--;
+        }
+        else
         {
             Mistakes.Add(ActualWord);
         }
@@ -81,6 +87,9 @@ public class GamePlayBase : CustomComponentBase
             Words = await WordService.GetRandomWordsAsync(WordCount);
         }
     }
+
+    private void SetRemainingWordCount()
+        => RemainingWordCount = WordCount;
 
     private void ValidateWordCount()
     {

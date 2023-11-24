@@ -19,12 +19,6 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
             .Where(predicate)
             .ToListAsync(cancellationToken);
 
-    public override Task<NativeWord?> FindByIdAsync(int id, CancellationToken cancellationToken)
-        => VocaBuddyContext.NativeWords
-            .Include(word => word.Translations)
-            .Where(word => word.Id == id)
-            .SingleOrDefaultAsync(cancellationToken);
-
     public async Task<List<NativeWord>> GetRandomAsync(int count, string userId, CancellationToken cancellationToken)
         => await VocaBuddyContext.NativeWords
             .Include(word => word.Translations)
@@ -40,6 +34,12 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
                 .Take(count)
                 .ToListAsync(cancellationToken))
             .RandomOrder();
+
+    public override Task<NativeWord?> FindByIdAsync(int id, CancellationToken cancellationToken)
+        => VocaBuddyContext.NativeWords
+            .Include(word => word.Translations)
+            .Where(word => word.Id == id)
+            .SingleOrDefaultAsync(cancellationToken);
 
     public Task<int> GetCountAsync(string userId, CancellationToken cancellationToken)
         => VocaBuddyContext.NativeWords
