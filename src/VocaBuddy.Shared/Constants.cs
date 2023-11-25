@@ -2,5 +2,5 @@
 
 public class Constants
 {
-    public const int MaxWordLenth = 30;
+    public const int MaxWordLength = 30;
 }

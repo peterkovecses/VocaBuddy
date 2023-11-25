@@ -7,5 +7,5 @@ public class NativeWordDto
     public DateTime CreatedUtc { get; set; }
     public DateTime UpdatedUtc { get; set; }
     
-    public virtual List<ForeignWordDto> Translations { get; set; }
+    public List<ForeignWordDto> Translations { get; set; }
 }

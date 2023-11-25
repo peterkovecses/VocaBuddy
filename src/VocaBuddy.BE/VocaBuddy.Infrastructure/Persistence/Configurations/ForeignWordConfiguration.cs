@@ -15,7 +15,7 @@ public class ForeignWordConfiguration : IEntityTypeConfiguration<ForeignWord>
         // Word Name property configuration
         builder.Property(foreignWord => foreignWord.Text)
             .IsRequired()
-            .HasMaxLength(Constants.MaxWordLenth)
+            .HasMaxLength(Constants.MaxWordLength)
             .IsUnicode(true);
 
         // NativeWordId property configuration

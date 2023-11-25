@@ -10,11 +10,11 @@ public class CreateNativeWordValidator : AbstractValidator<CreateNativeWordComma
     public CreateNativeWordValidator()
     {
         RuleFor(command => command.NativeWordDto.Text).NotEmpty();
-        RuleFor(command => command.NativeWordDto.Text).MaximumLength(Constants.MaxWordLenth);
+        RuleFor(command => command.NativeWordDto.Text).MaximumLength(Constants.MaxWordLength);
         RuleForEach(command => command.NativeWordDto.Translations).ChildRules(translationRule =>
         {
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).NotEmpty();
-            translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).MaximumLength(Constants.MaxWordLenth);
+            translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).MaximumLength(Constants.MaxWordLength);
         });
 
         RuleFor(command => command.NativeWordDto.Translations)
