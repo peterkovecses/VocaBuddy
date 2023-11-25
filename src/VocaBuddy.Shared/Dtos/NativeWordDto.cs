@@ -6,6 +6,6 @@ public class NativeWordDto
     public string Text { get; set; }
     public DateTime CreatedUtc { get; set; }
     public DateTime UpdatedUtc { get; set; }
-
+    
     public virtual List<ForeignWordDto> Translations { get; set; }
 }

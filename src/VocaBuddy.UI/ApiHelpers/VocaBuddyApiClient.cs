@@ -42,10 +42,10 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     public Task<Result<int>> GetNativeWordCountAsync()
         => GetAsync<Result<int>>(_vocaBuddyApiConfig.NativeWordsCountEndpoint);
 
-    public Task<Result> CreateNativeWordAsync(NativeWordDto word)
+    public Task<Result> CreateNativeWordAsync(NativeWordCreateUpdateModel word)
         => PostAsync<Result>(_vocaBuddyApiConfig.NativeWordsEndpoints, word);
 
-    public Task<Result> UpdateNativeWordAsync(NativeWordDto word)
+    public Task<Result> UpdateNativeWordAsync(NativeWordCreateUpdateModel word)
         => PutAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{word.Id}", word);
 
     public Task<Result> DeleteNativeWordAsync(int id)

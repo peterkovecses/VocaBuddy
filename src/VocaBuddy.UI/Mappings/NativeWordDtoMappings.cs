@@ -1,8 +1,8 @@
 ﻿using VocaBuddy.Shared.Dtos;
 
-namespace VocaBuddy.UI.Extensions;
+namespace VocaBuddy.UI.Mappings;
 
-public static class NativeWordDtoExtensions
+public static class NativeWordDtoMappings
 {
     public static List<NativeWordListViewModel> MapToListViewModels(this List<NativeWordDto>? words)
     {
@@ -23,5 +23,19 @@ public static class NativeWordDtoExtensions
         }
 
         return result;
+    }
+
+    public static NativeWordCreateUpdateModel MapToCreateUpdateModel(this NativeWordDto? word)
+    {
+        ArgumentNullException.ThrowIfNull(word, nameof(word));
+
+        return new NativeWordCreateUpdateModel
+        {
+            Id = word.Id,
+            Text = word.Text,
+            Translations = word.Translations
+                    .Select(translation => new ForeignWordCreateUpdateModel { Id = translation.Id, Text = translation.Text })
+                    .ToList()
+        };
     }
 }

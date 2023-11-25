@@ -1,5 +1,5 @@
 ﻿using VocaBuddy.Shared.Dtos;
-using VocaBuddy.UI.Extensions;
+using VocaBuddy.UI.Mappings;
 
 namespace VocaBuddy.UI.Services;
 
@@ -41,10 +41,10 @@ public class WordService : IWordService
     public Task<Result<int>> GetWordCountAsync()
         => _client.GetNativeWordCountAsync();
 
-    public Task<Result> CreateWord(NativeWordDto word)
+    public Task<Result> CreateWord(NativeWordCreateUpdateModel word)
         => _client.CreateNativeWordAsync(word);
 
-    public Task<Result> UpdateWord(NativeWordDto word)
+    public Task<Result> UpdateWord(NativeWordCreateUpdateModel word)
         => _client.UpdateNativeWordAsync(word);
 
     public Task<Result> DeleteWordAsync(int id)

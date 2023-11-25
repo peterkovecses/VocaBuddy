@@ -2,7 +2,7 @@
 using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
 using VocaBuddy.UI.Exceptions;
-using VocaBuddy.UI.Services;
+using VocaBuddy.UI.Mappings;
 
 namespace VocaBuddy.UI.Pages.Words;
 
@@ -14,7 +14,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     [Parameter]
     public int? WordId { get; set; }
 
-    protected NativeWordDto Model { get; set; } = InitializeEmptyModel();
+    protected NativeWordCreateUpdateModel Model { get; set; } = InitializeEmptyModel();
 
     [Inject]
     public IWordService WordService { get; set; }
@@ -57,13 +57,13 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                     return;
                 }
 
-                Model = result.Data!;
+                Model = result.Data.MapToCreateUpdateModel();
             }
         }
     }
 
     protected void AddTranslation()
-        => Model.Translations.Add(new ForeignWordDto());
+        => Model.Translations.Add(new ForeignWordCreateUpdateModel());
 
     protected void RemoveTranslation(int index)
         => Model.Translations.RemoveAt(index);
@@ -134,10 +134,10 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         return await WordService.CreateWord(Model);
     }
 
-    private static NativeWordDto InitializeEmptyModel()
+    private static NativeWordCreateUpdateModel InitializeEmptyModel()
         => new()
         {
-            Translations = new List<ForeignWordDto> { new ForeignWordDto() }
+            Translations = new List<ForeignWordCreateUpdateModel> { new ForeignWordCreateUpdateModel() }
         };
 
     private void ClearModel()

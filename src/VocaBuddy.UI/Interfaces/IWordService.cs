@@ -9,7 +9,7 @@ public interface IWordService
     Task<List<NativeWordDto>> GetLatestWordsAsync(int count);
     Task<Result<NativeWordDto>> GetWordAsync(int id);
     Task<Result<int>> GetWordCountAsync();
-    Task<Result> CreateWord(NativeWordDto word);
-    Task<Result> UpdateWord(NativeWordDto word);
+    Task<Result> CreateWord(NativeWordCreateUpdateModel word);
+    Task<Result> UpdateWord(NativeWordCreateUpdateModel word);
     Task<Result> DeleteWordAsync(int id);
 }

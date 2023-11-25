@@ -9,7 +9,7 @@ public interface IVocaBuddyApiClient
     Task<Result<List<NativeWordDto>>> GetLatestNativeWordsAsync(int count);
     Task<Result<NativeWordDto>> GetNativeWordAsync(int id);
     Task<Result<int>> GetNativeWordCountAsync();
-    Task<Result> CreateNativeWordAsync(NativeWordDto word);
-    Task<Result> UpdateNativeWordAsync(NativeWordDto word);
+    Task<Result> CreateNativeWordAsync(NativeWordCreateUpdateModel word);
+    Task<Result> UpdateNativeWordAsync(NativeWordCreateUpdateModel word);
     Task<Result> DeleteNativeWordAsync(int id);
 }
