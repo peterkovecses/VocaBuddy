@@ -1,6 +1,6 @@
-﻿namespace VocaBuddy.Application.Extensions;
+﻿namespace VocaBuddy.Shared.Extensions;
 
-public static class IEnumerableExtensions
+public static class EnumerableExtensions
 {
     public static bool AllUnique<T>(this IEnumerable<T> items)
         => items

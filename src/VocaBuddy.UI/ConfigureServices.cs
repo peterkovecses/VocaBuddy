@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using FluentValidation;
 using VocaBuddy.UI.ApiHelpers;
 using VocaBuddy.UI.Authentication;
 using VocaBuddy.UI.Services;
@@ -28,6 +29,8 @@ public static class ConfigureServices
               CustomAuthenticationStateProvider>();
                   services.AddScoped<AuthenticationStateProvider>(
                     provider => provider.GetService<CustomAuthenticationStateProvider>());
+
+        services.AddValidatorsFromAssembly(UiAssemblyMarker.Assembly);
 
         services.AddScoped<IJwtParser, JwtParser>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();

@@ -18,7 +18,7 @@ public static class ConfigureServices
         {
             mc.AddProfile(new MappingProfile());
         });
-        IMapper mapper = mapperConfig.CreateMapper();
+        var mapper = mapperConfig.CreateMapper();
         services.AddSingleton(mapper);
 
         services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssemblyMarker.Assembly));

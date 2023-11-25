@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using VocaBuddy.UI.Validators;
+using VocaBuddy.UI.Validation;
 
 namespace VocaBuddy.UI.Models;
 
@@ -10,7 +10,6 @@ public class UserRegistrationRequestWithPasswordCheck
     public string Email { get; set; } = default!;
 
     [Required]
-    [PasswordValidation]
     public string Password { get; set; } = default!;
 
     [Required]
