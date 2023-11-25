@@ -9,9 +9,15 @@ public class UpdateNativeWordValidator : AbstractValidator<UpdateNativeWordComma
     public UpdateNativeWordValidator()
     {
         RuleFor(command => command.NativeWordDto.Text).NotEmpty();
+        RuleFor(command => command.NativeWordDto.Text)
+            .MaximumLength(Constants.MaxWordLenth)
+            .WithMessage(Constants.AboveMaxWordLengthMessage);
         RuleForEach(command => command.NativeWordDto.Translations).ChildRules(translationRule =>
         {
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).NotEmpty();
+            translationRule.RuleFor(foreignWordDto => foreignWordDto.Text)
+                .MaximumLength(Constants.MaxWordLenth)
+                .WithMessage(Constants.AboveMaxWordLengthMessage);
         });
 
         RuleFor(command => command.NativeWordDto.Translations)
