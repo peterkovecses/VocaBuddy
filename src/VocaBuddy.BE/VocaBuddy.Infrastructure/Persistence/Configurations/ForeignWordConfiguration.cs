@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using VocaBuddy.Domain.Entities;
+using VocaBuddy.Shared;
 
 namespace VocaBuddy.Infrastructure.Persistence.Configurations;
 
@@ -14,7 +15,7 @@ public class ForeignWordConfiguration : IEntityTypeConfiguration<ForeignWord>
         // Word Name property configuration
         builder.Property(foreignWord => foreignWord.Text)
             .IsRequired()
-            .HasMaxLength(30)
+            .HasMaxLength(Constants.MaxWordLenth)
             .IsUnicode(true);
 
         // NativeWordId property configuration

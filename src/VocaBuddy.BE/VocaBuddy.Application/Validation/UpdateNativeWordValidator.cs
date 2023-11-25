@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using VocaBuddy.Application.Commands;
 using VocaBuddy.Application.Extensions;
+using VocaBuddy.Shared;
 
 namespace VocaBuddy.Application.Validation;
 
@@ -9,15 +10,11 @@ public class UpdateNativeWordValidator : AbstractValidator<UpdateNativeWordComma
     public UpdateNativeWordValidator()
     {
         RuleFor(command => command.NativeWordDto.Text).NotEmpty();
-        RuleFor(command => command.NativeWordDto.Text)
-            .MaximumLength(Constants.MaxWordLenth)
-            .WithMessage(Constants.AboveMaxWordLengthMessage);
+        RuleFor(command => command.NativeWordDto.Text).MaximumLength(Constants.MaxWordLenth);
         RuleForEach(command => command.NativeWordDto.Translations).ChildRules(translationRule =>
         {
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).NotEmpty();
-            translationRule.RuleFor(foreignWordDto => foreignWordDto.Text)
-                .MaximumLength(Constants.MaxWordLenth)
-                .WithMessage(Constants.AboveMaxWordLengthMessage);
+            translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).MaximumLength(Constants.MaxWordLenth);
         });
 
         RuleFor(command => command.NativeWordDto.Translations)
