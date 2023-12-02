@@ -5,6 +5,8 @@ namespace VocaBuddy.UI.Pages.Game;
 
 public class GamePlayBase : CustomComponentBase
 {
+    private int? _mistakeCount;
+
     [Parameter]
     [SupplyParameterFromQuery]
     public int WordCount { set; get; }
@@ -65,6 +67,7 @@ public class GamePlayBase : CustomComponentBase
         }
         else if (Mistakes.Any())
         {
+            SetMistakeCount();
             LoadMistakes();
             SetNextWord();
         }
@@ -105,6 +108,9 @@ public class GamePlayBase : CustomComponentBase
         Words.Remove(ActualWord);
     }
 
+    private void SetMistakeCount()
+        => _mistakeCount ??= Mistakes.Count;
+
     private void LoadMistakes()
     {
         Words = Mistakes;
@@ -119,5 +125,5 @@ public class GamePlayBase : CustomComponentBase
     }
 
     private void EndGame()
-        => NavManager.NavigateTo("/game-results");
+        => NavManager.NavigateTo($"/game-results/{_mistakeCount}");
 }

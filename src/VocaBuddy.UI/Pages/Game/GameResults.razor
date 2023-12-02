@@ -1,4 +1,4 @@
-﻿@page "/game-results"
+﻿@page "/game-results/{mistakecount:int?}"
 @attribute [Authorize]
 @inherits GameResultsBase
 
@@ -6,4 +6,16 @@
 
 <h3>GameResults</h3>
 
-<p>Congratulations, you managed to translate all the words.</p>
+@if (!MistakeCount.HasValue)
+{
+    <div class="d-flex align-items-center justify-content-center mt-5">
+        <div class="text-center">
+            <img src="Images/fireworks.gif" style="max-width: 90%" alt="fireworks" />
+            <h5 class="mt-3">Congratulations, you completed the game flawlessly!</h5>
+        </div>
+    </div>
+}
+else
+{
+    <p class="mt-3">Congratulations, there were a total of @MistakeCount mistakes, but in the end you solved all the words successfully.</p>
+}
