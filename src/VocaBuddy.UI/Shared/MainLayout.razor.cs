@@ -7,17 +7,17 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 {
     protected ErrorBoundary? ErrorBoundary;
     protected bool IsAuthenticated;
-    protected string Email;        
+    protected string? Email;        
 
     [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; }
+    protected Task<AuthenticationState>? AuthState { get; set; }
 
     [Inject]
-    protected AuthenticationStateProvider AuthStateProvider { get; set; }
+    protected AuthenticationStateProvider? AuthStateProvider { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        (AuthStateProvider as AuthenticationStateProvider).AuthenticationStateChanged += OnAuthenticationStateChanged;
+        (AuthStateProvider! as AuthenticationStateProvider).AuthenticationStateChanged += OnAuthenticationStateChanged;
         await base.OnInitializedAsync();
         await UpdateAuthenticationState();
     }
@@ -32,9 +32,9 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 
     private async Task UpdateAuthenticationState()
     {
-        var authState = await AuthState;
+        var authState = await AuthState!;
 
-        if (authState.User.Identity.IsAuthenticated)
+        if (authState.User.Identity!.IsAuthenticated)
         {
             IsAuthenticated = true;
             Email = authState.User.Claims.Single(claim => claim.Type == "email").Value;
@@ -49,5 +49,5 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     }
 
     public void Dispose()
-        => (AuthStateProvider as AuthenticationStateProvider).AuthenticationStateChanged -= OnAuthenticationStateChanged;
+        => (AuthStateProvider! as AuthenticationStateProvider).AuthenticationStateChanged -= OnAuthenticationStateChanged;
 }

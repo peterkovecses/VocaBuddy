@@ -6,5 +6,5 @@ public class ForeignWord
     public required string Text { get; set; }
 
     public required int NativeWordId { get; set; }
-    public virtual NativeWord NativeWord { get; set; }
+    public virtual NativeWord NativeWord { get; set; } = default!;
 }

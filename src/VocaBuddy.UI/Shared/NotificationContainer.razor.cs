@@ -5,13 +5,13 @@ namespace VocaBuddy.UI.Shared;
 public class NotificationContainerBase : ComponentBase
 {
     [Inject]
-    public NotificationService NotificationService { get; set; }
+    public NotificationService? NotificationService { get; set; }
 
     protected List<Notification> Notifications = new();
 
     protected override void OnInitialized()
     {
-        NotificationService.OnNotificationAdded += AddNotification;
+        NotificationService!.OnNotificationAdded += AddNotification;
         NotificationService.OnNotificationsCleared += ClearNotifications;
     }
 

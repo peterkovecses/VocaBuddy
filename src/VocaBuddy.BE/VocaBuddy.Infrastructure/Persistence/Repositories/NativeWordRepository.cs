@@ -11,7 +11,7 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
     public NativeWordRepository(VocaBuddyContext context) : base(context) { }
 
     public VocaBuddyContext VocaBuddyContext
-        => Context as VocaBuddyContext;
+        => (Context as VocaBuddyContext)!;
 
     public override Task<List<NativeWord>> GetAsync(Expression<Func<NativeWord, bool>> predicate, CancellationToken cancellationToken)
         => VocaBuddyContext.NativeWords

@@ -1,16 +1,17 @@
 ﻿using Identity.Exceptions;
-using Identity.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Services;
 
-public partial class IdentityService : IIdentityService
+public partial class IdentityService
 {
     public async Task RegisterAsync(string email, string password)
     {
         await ValidateUserAsync(email);
         var user = CreateUser(email);
         await SaveUserAsync(user, password);
+        
+        return;
 
         async Task ValidateUserAsync(string email)
         {

@@ -16,11 +16,11 @@ public class GamePlayBase : CustomComponentBase
     public bool LatestWords { set; get; }
 
     [Inject]
-    public IWordService WordService { get; set; }
+    public IWordService? WordService { get; set; }
 
-    protected List<NativeWordDto> Words { get; set; }
+    protected List<NativeWordDto>? Words { get; set; }
     protected int RemainingWordCount { get; set; }
-    protected NativeWordDto ActualWord { get; set; }
+    protected NativeWordDto? ActualWord { get; set; }
     protected List<NativeWordDto> Mistakes { get; set; } = new();
     protected string UserInput { get; set; } = string.Empty;
     protected bool IsSubmitted { get; set; }
@@ -39,7 +39,7 @@ public class GamePlayBase : CustomComponentBase
     {
         IsSubmitted = true;
         IsCorrectAnswer = 
-            ActualWord.Translations.Any(translation => string.Equals(translation.Text, UserInput, StringComparison.CurrentCultureIgnoreCase));
+            ActualWord!.Translations.Any(translation => string.Equals(translation.Text, UserInput, StringComparison.CurrentCultureIgnoreCase));
 
         if (IsCorrectAnswer)
         {
@@ -56,12 +56,12 @@ public class GamePlayBase : CustomComponentBase
         IsSubmitted = true;
         IsRevealed = true;
         IsCorrectAnswer = false;
-        Mistakes.Add(ActualWord);
+        Mistakes.Add(ActualWord!);
     }
 
     protected void NextRound()
     {
-        if (Words.Any())
+        if (Words!.Any())
         {
             SetNextWord();
         }
@@ -83,11 +83,11 @@ public class GamePlayBase : CustomComponentBase
     {
         if (LatestWords)
         {
-            Words = await WordService.GetLatestWordsAsync(WordCount);
+            Words = await WordService!.GetLatestWordsAsync(WordCount);
         }
         else
         {
-            Words = await WordService.GetRandomWordsAsync(WordCount);
+            Words = await WordService!.GetRandomWordsAsync(WordCount);
         }
     }
 
@@ -104,8 +104,8 @@ public class GamePlayBase : CustomComponentBase
 
     private void SetNextWord()
     {
-        ActualWord = Words.First();
-        Words.Remove(ActualWord);
+        ActualWord = Words!.First();
+        Words!.Remove(ActualWord);
     }
 
     private void SetMistakeCount()
@@ -125,5 +125,5 @@ public class GamePlayBase : CustomComponentBase
     }
 
     private void EndGame()
-        => NavManager.NavigateTo($"/game-results/{_mistakeCount}");
+        => NavManager!.NavigateTo($"/game-results/{_mistakeCount}");
 }

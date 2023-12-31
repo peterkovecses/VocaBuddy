@@ -8,5 +8,5 @@ public class ForeignWordRepository : GenericRepository<ForeignWord, int>, IForei
 	public ForeignWordRepository(VocaBuddyContext context) : base(context) { }
 
 	public VocaBuddyContext VocaBuddyContext
-		=> Context as VocaBuddyContext;
+		=> (Context as VocaBuddyContext)!;
 }

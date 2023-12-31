@@ -40,7 +40,7 @@ public class ListComponentBase : CustomComponentBase
         CurrentPage = 1;
     }
 
-    protected void SetSortBy(string sortType)
+    protected void SetSortBy(string? sortType)
     {
         if (Enum.TryParse<SortBy>(sortType, out var result))
         {

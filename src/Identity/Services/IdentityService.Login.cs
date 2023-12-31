@@ -1,11 +1,10 @@
 ﻿using Identity.Exceptions;
-using Identity.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using VocaBuddy.Shared.Models;
 
 namespace Identity.Services;
 
-public partial class IdentityService : IIdentityService
+public partial class IdentityService
 {
     public async Task<TokenHolder> LoginAsync(string email, string password)
     {

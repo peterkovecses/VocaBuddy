@@ -1,10 +1,10 @@
 ﻿namespace VocaBuddy.UI.Models;
 
-public class VocabuddyApiConfiguration
+public class VocaBuddyApiConfiguration
 {
-    public string BaseUrl { get; set; }
-    public string NativeWordsEndpoints { get; set; }
-    public string RandomNativeWordsEndpoints { get; set; }
-    public string LatestNativeWordsEndpoints { get; set; }
-    public string NativeWordsCountEndpoint { get; set; }
+    public string BaseUrl { get; set; } = default!;
+    public string NativeWordsEndpoints { get; set; } = default!;
+    public string RandomNativeWordsEndpoints { get; set; } = default!;
+    public string LatestNativeWordsEndpoints { get; set; } = default!;
+    public string NativeWordsCountEndpoint { get; set; } = default!;
 }

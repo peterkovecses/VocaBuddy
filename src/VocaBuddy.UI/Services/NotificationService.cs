@@ -2,8 +2,8 @@
 
 public class NotificationService
 {
-    public event Action<Notification> OnNotificationAdded;
-    public event Action OnNotificationsCleared;
+    public event Action<Notification>? OnNotificationAdded;
+    public event Action? OnNotificationsCleared;
 
     public void ShowNotification(string message, bool isSuccess, bool autoHide)
     {

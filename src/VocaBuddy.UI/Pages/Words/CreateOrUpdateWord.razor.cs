@@ -17,7 +17,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     protected NativeWordCreateUpdateModel Model { get; set; } = InitializeEmptyModel();
 
     [Inject]
-    public IWordService WordService { get; set; }
+    public IWordService? WordService { get; set; }
 
     public bool Update => WordId.HasValue;
 
@@ -28,13 +28,13 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             try
             {
                 Loading = true;
-                var result = await WordService.GetWordAsync(WordId!.Value);
+                var result = await WordService!.GetWordAsync(WordId!.Value);
                 HandleResult(result);
             }
             catch // If the API is not responding
             {
-                NotificationService.ShowFailure(WordLoadingFailed);
-                NavManager.NavigateTo("/words");
+                NotificationService!.ShowFailure(WordLoadingFailed);
+                NavManager!.NavigateTo("/words");
             }
             finally
             {
@@ -51,8 +51,8 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                         _ => WordLoadingFailed
                     };
 
-                    NotificationService.ShowFailure(message);
-                    NavManager.NavigateTo("/words");
+                    NotificationService!.ShowFailure(message);
+                    NavManager!.NavigateTo("/words");
 
                     return;
                 }
@@ -90,6 +90,8 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             Loading = false;
         }
 
+        return;
+
         void HandleResult(Result result)
         {
             if (result.IsSuccess)
@@ -97,7 +99,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                 if (Update)
                 {
                     DisplaySuccesfulSavingMessage();
-                    NavManager.NavigateTo("/words");
+                    NavManager!.NavigateTo("/words");
                 }
                 else
                 {
@@ -115,8 +117,10 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                 };
             }
 
+            return;
+
             void DisplaySuccesfulSavingMessage()
-                => NotificationService.ShowSuccess("The word has been successfully saved.");
+                => NotificationService!.ShowSuccess("The word has been successfully saved.");
         }
     }
 
@@ -128,16 +132,16 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         if (WordId.HasValue)
         {
             Model.Id = WordId.Value;
-            return await WordService.UpdateWord(Model);
+            return await WordService!.UpdateWord(Model);
         }
 
-        return await WordService.CreateWord(Model);
+        return await WordService!.CreateWord(Model);
     }
 
     private static NativeWordCreateUpdateModel InitializeEmptyModel()
         => new()
         {
-            Translations = new List<ForeignWordCreateUpdateModel> { new ForeignWordCreateUpdateModel() }
+            Translations = new List<ForeignWordCreateUpdateModel> { new() }
         };
 
     private void ClearModel()

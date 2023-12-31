@@ -1,18 +1,14 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
-using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Pages.Authentication;
 
 public class RegisterBase : CustomComponentBase
 {
-    private const string RegistrationFailed = "Registration failed.";
+    public const string RegistrationFailed = "Registration failed.";
 
     [Inject]
-    public IAuthenticationService AuthService { get; set; }
-
-    [Inject]
-    public NotificationService NotificationService { get; set; }
+    public IAuthenticationService? AuthService { get; set; }
 
     protected UserRegistrationRequestWithPasswordCheck Model { get; set; } = new();
 
@@ -21,7 +17,7 @@ public class RegisterBase : CustomComponentBase
         try
         {
             Loading = true;
-            var result = await AuthService.RegisterAsync(Model);
+            var result = await AuthService!.RegisterAsync(Model);
             await HandleResultAsync(result);
         }
         catch
@@ -38,9 +34,9 @@ public class RegisterBase : CustomComponentBase
     {
         if (result.IsSuccess)
         {
-            NotificationService.ShowSuccess("Successful registration.");
+            NotificationService!.ShowSuccess("Successful registration.");
             await SignInUserAsync();
-            NavManager.NavigateTo("/");
+            NavManager!.NavigateTo("/");
         }
 
         StatusMessage = result.ErrorInfo!.Code switch
@@ -59,6 +55,6 @@ public class RegisterBase : CustomComponentBase
             Password = Model.Password
         };
 
-        await AuthService.LoginAsync(loginRequest);
+        await AuthService!.LoginAsync(loginRequest);
     }
 }

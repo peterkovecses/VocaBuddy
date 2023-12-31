@@ -1,7 +1,6 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
 using VocaBuddy.UI.Exceptions;
-using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Pages.Words;
 
@@ -10,11 +9,11 @@ public class WordsBase : ListComponentBase
     public const string DeleteFailed = "Failed to delete word.";
 
     [Inject]
-    public IWordService WordService { get; set; }
+    public IWordService? WordService { get; set; }
 
-    protected List<NativeWordListViewModel> Words { get; set; }
+    protected List<NativeWordListViewModel>? Words { get; set; }
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         await LoadWordsAsync();
     }
@@ -24,7 +23,7 @@ public class WordsBase : ListComponentBase
         try
         {
             Loading = true;
-            Words = await WordService.GetWordListViewModelsAsync();
+            Words = await WordService!.GetWordListViewModelsAsync();
         }
         catch (RefreshTokenException)
         {
@@ -32,7 +31,7 @@ public class WordsBase : ListComponentBase
         }
         catch
         {
-            NotificationService.ShowFailure("Failed to load words.");
+            NotificationService!.ShowFailure("Failed to load words.");
         }
         finally
         {
@@ -41,7 +40,7 @@ public class WordsBase : ListComponentBase
     }
 
     protected List<NativeWordListViewModel> FilteredWords
-        => Words?.Where(word => ContainsTerm(word)).ToList() ?? new List<NativeWordListViewModel>();
+        => Words?.Where(ContainsTerm).ToList() ?? new List<NativeWordListViewModel>();
 
     protected IEnumerable<NativeWordListViewModel> SortedWords
         => SortWords(FilteredWords);
@@ -53,7 +52,7 @@ public class WordsBase : ListComponentBase
     {
         try
         {
-            var result = await WordService.DeleteWordAsync(ItemToDeleteId);
+            var result = await WordService!.DeleteWordAsync(ItemToDeleteId);
             HandleResult(ItemToDeleteId, result);
         }
         catch (RefreshTokenException)
@@ -62,7 +61,7 @@ public class WordsBase : ListComponentBase
         }
         catch (Exception)
         {
-            NotificationService.ShowFailure(DeleteFailed);
+            NotificationService!.ShowFailure(DeleteFailed);
         }
         finally
         {
@@ -88,7 +87,7 @@ public class WordsBase : ListComponentBase
         if (result.IsSuccess)
         {
             RemoveWord(id);
-            NotificationService.ShowSuccess("The word was successfully deleted.");
+            NotificationService!.ShowSuccess("The word was successfully deleted.");
         }
         else
         {
@@ -98,7 +97,7 @@ public class WordsBase : ListComponentBase
                 _ => DeleteFailed
             };
 
-            NotificationService.ShowFailure(message);
+            NotificationService!.ShowFailure(message);
 
             if (result.ErrorInfo!.Code == VocaBuddyErrorCodes.NotFound)
             {
@@ -109,7 +108,7 @@ public class WordsBase : ListComponentBase
 
     private void RemoveWord(int id)
     {
-        var deletedWord = Words.Where(word => word.Id == id).Single();
-        Words.Remove(deletedWord);
+        var deletedWord = Words!.Single(word => word.Id == id);
+        Words!.Remove(deletedWord);
     }
 }

@@ -1,12 +1,8 @@
-﻿namespace VocaBuddy.UI.Authentication;
-
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Json;
-using VocaBuddy.UI.Interfaces;
+
+namespace VocaBuddy.UI.Authentication;
 
 public class JwtParser : IJwtParser
 {
@@ -14,11 +10,16 @@ public class JwtParser : IJwtParser
 
     public JwtParser(IOptions<IdentityApiConfiguration> identityOptions)
     {
-        _identityConfiguration = identityOptions.Value;
+        _identityConfiguration = identityOptions?.Value ?? throw new ArgumentNullException(nameof(identityOptions));
     }
 
     public IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
+        if (string.IsNullOrEmpty(jwt))
+        {
+            throw new ArgumentException("JWT token must not be null or empty.", nameof(jwt));
+        }
+
         var payload = GetPayload(jwt);
         var jsonBytes = DecodeBase64UrlToByteArray(payload);
         var claimsDictionary = DeserializeToDictionary(jsonBytes);
@@ -26,10 +27,9 @@ public class JwtParser : IJwtParser
         return GetClaims(claimsDictionary);
     }
 
-    private IEnumerable<Claim> GetClaims(Dictionary<string, object>? claimsDictionary)
+    private IEnumerable<Claim> GetClaims(Dictionary<string, object> claimsDictionary)
     {
         var claims = new List<Claim>();
-        // Roles must be handled differently than plain claims
         AddRolesToClaims(claims, claimsDictionary);
         RemoveExtractedRoles(claimsDictionary);
         AddRemainingClaims(claims, claimsDictionary);
@@ -37,46 +37,41 @@ public class JwtParser : IJwtParser
         return claims;
     }
 
-    private void AddRolesToClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
+    private void AddRolesToClaims(List<Claim> claims, IReadOnlyDictionary<string, object> claimsDictionary)
     {
-        if (claimsDictionary.TryGetValue(_identityConfiguration.RoleKey, out object? roles) && roles != null)
+        if (claimsDictionary.TryGetValue(_identityConfiguration.RoleKey, out var roles))
         {
-            var parsedRoles = ParseRoles(roles.ToString());
+            var parsedRoles = ParseRoles(roles.ToString()!);
             AddParsedRolesToClaims(claims, parsedRoles);
         }
     }
 
-    private static IEnumerable<string> ParseRoles(string rolesStr)
-    {
-        if (IsArray(rolesStr))
-        {
-            return JsonSerializer.Deserialize<IEnumerable<string>>(rolesStr);
-        }
+    private static IEnumerable<string> ParseRoles(string rolesStr) 
+        => IsArray(rolesStr)
+            ? JsonSerializer.Deserialize<IEnumerable<string>>(rolesStr)!
+            : new List<string> { rolesStr };
 
-        return new List<string>() { rolesStr };
-    }
-
-    private static bool IsArray(string rolesStr)
+    private static bool IsArray(string rolesStr) 
         => rolesStr.StartsWith("[") && rolesStr.EndsWith("]");
 
     private static void AddParsedRolesToClaims(List<Claim> claims, IEnumerable<string> parsedRoles)
         => claims.AddRange(parsedRoles.Select(parsedRole => new Claim(ClaimTypes.Role, parsedRole)));
 
-    private void RemoveExtractedRoles(Dictionary<string, object> claimsDictionary)
+    private void RemoveExtractedRoles(IDictionary<string, object> claimsDictionary)
         => claimsDictionary.Remove(_identityConfiguration.RoleKey);
 
     private static void AddRemainingClaims(List<Claim> claims, Dictionary<string, object> claimsDictionary)
-        => claims.AddRange(claimsDictionary.Select(keyValuePair => new Claim(keyValuePair.Key, keyValuePair.Value.ToString())));
+        => claims.AddRange(claimsDictionary.Select(keyValuePair => new Claim(keyValuePair.Key, keyValuePair.Value.ToString()!)));
 
     private static Dictionary<string, object> DeserializeToDictionary(byte[] jsonBytes)
-        => JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+        => JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes)!;
 
     private static string GetPayload(string jwt)
     {
         var jwtParts = jwt.Split('.');
         if (jwtParts.Length != 3)
         {
-            throw new ArgumentException("Invalid JWT token format.");
+            throw new ArgumentException("Invalid JWT token format.", nameof(jwt));
         }
 
         return jwtParts[1];
@@ -91,7 +86,6 @@ public class JwtParser : IJwtParser
 
     private static string AddPaddingToBase64Url(string base64Url)
     {
-        // Add missing padding characters to the end of the Base64Url encoded string
         base64Url += (base64Url.Length % 4) switch
         {
             0 => "",

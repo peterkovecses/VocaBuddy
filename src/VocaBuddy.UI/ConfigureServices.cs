@@ -16,8 +16,8 @@ public static class ConfigureServices
         var identityConfig = identityConfigSection.Get<IdentityApiConfiguration>();
 
         var vocaBuddyConfigSection = configuration.GetSection(ConfigKeys.VocaBuddyApiConfiguration);
-        services.Configure<VocabuddyApiConfiguration>(vocaBuddyConfigSection);
-        var vocaBuddyApiConfig = vocaBuddyConfigSection.Get<VocabuddyApiConfiguration>();
+        services.Configure<VocaBuddyApiConfiguration>(vocaBuddyConfigSection);
+        var vocaBuddyApiConfig = vocaBuddyConfigSection.Get<VocaBuddyApiConfiguration>();
 
         services.Configure<PasswordConfiguration>(configuration.GetSection(ConfigKeys.PasswordConfiguration));
 
@@ -28,7 +28,7 @@ public static class ConfigureServices
             CustomAuthenticationStateProvider,
               CustomAuthenticationStateProvider>();
                   services.AddScoped<AuthenticationStateProvider>(
-                    provider => provider.GetService<CustomAuthenticationStateProvider>());
+                    provider => provider.GetService<CustomAuthenticationStateProvider>()!);
 
         services.AddValidatorsFromAssembly(UiAssemblyMarker.Assembly);
 
@@ -39,12 +39,12 @@ public static class ConfigureServices
 
         services.AddHttpClient<IIdentityApiClient, IdentityApiClient>(client =>
         {
-            client.BaseAddress = new Uri(identityConfig.BaseUrl);
+            client.BaseAddress = new Uri(identityConfig!.BaseUrl);
         });
 
         services.AddHttpClient<IVocaBuddyApiClient, VocaBuddyApiClient>(client =>
         {
-            client.BaseAddress = new Uri(vocaBuddyApiConfig.BaseUrl);
+            client.BaseAddress = new Uri(vocaBuddyApiConfig!.BaseUrl);
         });
 
         return services;

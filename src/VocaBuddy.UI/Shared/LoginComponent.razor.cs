@@ -1,18 +1,14 @@
 ﻿using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
-using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI.Shared;
 
 public class LoginComponentBase : CustomComponentBase
 {
-    private const string LoginFailed = "Login failed.";
+    public const string LoginFailed = "Login failed.";
 
     [Inject]
-    public IAuthenticationService AuthService { get; set; }
-
-    [Inject]
-    public NotificationService NotificationService { get; set; }
+    public IAuthenticationService? AuthService { get; set; }
 
     protected UserLoginRequest Model { get; set; } = new();
 
@@ -21,7 +17,7 @@ public class LoginComponentBase : CustomComponentBase
         try
         {
             Loading = true;
-            var result = await AuthService.LoginAsync(Model);
+            var result = await AuthService!.LoginAsync(Model);
             HandleResult(result);
         }
         catch
@@ -46,7 +42,7 @@ public class LoginComponentBase : CustomComponentBase
         }
         else
         {
-            NotificationService.ClearNotifications();
+            NotificationService!.ClearNotifications();
         }
     }
 }

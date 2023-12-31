@@ -1,5 +1,4 @@
 ﻿using Identity.Exceptions;
-using Identity.Interfaces;
 using Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ using VocaBuddy.Shared.Models;
 
 namespace Identity.Services;
 
-public partial class IdentityService : IIdentityService
+public partial class IdentityService
 {
     public async Task<TokenHolder> RefreshTokenAsync(string token, string refreshToken)
     {

@@ -4,12 +4,13 @@ namespace VocaBuddy.UI.Extensions;
 
 public static class HttpResponseExtensions
 {
-    private static readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
     public static async Task<T> ReadAsAsync<T>(this HttpResponseMessage response)
     {
-        using var responseStream = await response.Content.ReadAsStreamAsync();
+        await using var responseStream = await response.Content.ReadAsStreamAsync();
+        var result = await JsonSerializer.DeserializeAsync<T>(responseStream, Options);
 
-        return await JsonSerializer.DeserializeAsync<T>(responseStream, _options);
+        return result is not null ? result : throw new JsonException("Deserialization resulted in null.");
     }
 }

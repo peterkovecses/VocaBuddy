@@ -2,9 +2,9 @@
 
 public class IdentityApiConfiguration
 {
-    public string BaseUrl { get; set; }
-    public string LoginEndpoint { get; set; }
-    public string RegisterEndpoint { get; set; }
-    public string RefreshEndpoint { get; set; }
-    public string RoleKey { get; set; }
+    public string BaseUrl { get; set; } = default!;
+    public string LoginEndpoint { get; set; } = default!;
+    public string RegisterEndpoint { get; set; } = default!;
+    public string RefreshEndpoint { get; set; } = default!;
+    public string RoleKey { get; set; } = default!;
 }

@@ -13,11 +13,11 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     private readonly HttpClient _client;
     private readonly ILocalStorageService _localStorage;
     private readonly IAuthenticationService _authService;
-    private readonly VocabuddyApiConfiguration _vocaBuddyApiConfig;
+    private readonly VocaBuddyApiConfiguration _vocaBuddyApiConfig;
 
     public VocaBuddyApiClient(
         HttpClient client,
-        IOptions<VocabuddyApiConfiguration> vocaBuddyApiOptions,
+        IOptions<VocaBuddyApiConfiguration> vocaBuddyApiOptions,
         ILocalStorageService localStorage,
         IAuthenticationService authService)
     {

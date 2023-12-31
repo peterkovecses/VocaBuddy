@@ -5,7 +5,7 @@ namespace VocaBuddy.UI.Pages.Game;
 public class GameConfigurationBase : CustomComponentBase
 {
     [Inject]
-    public IWordService WordService { get; set; }
+    public IWordService? WordService { get; set; }
 
     protected int? MaxWordCount { set; get; }
     protected int WordCount { set; get; }
@@ -13,10 +13,10 @@ public class GameConfigurationBase : CustomComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await WordService.GetWordCountAsync();
+        var result = await WordService!.GetWordCountAsync();
         if (result.IsFailure)
         {
-            NavManager.NavigateTo("/error");
+            NavManager!.NavigateTo("/error");
         }
 
         MaxWordCount = result.Data;
@@ -29,5 +29,5 @@ public class GameConfigurationBase : CustomComponentBase
     }
 
     public void StartGame()
-        => NavManager.NavigateTo($"/gameplay?WordCount={WordCount}&LatestWords={LatestWords}");
+        => NavManager!.NavigateTo($"/gameplay?WordCount={WordCount}&LatestWords={LatestWords}");
 }

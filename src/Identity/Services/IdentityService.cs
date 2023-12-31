@@ -68,15 +68,14 @@ public partial class IdentityService : IIdentityService
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("id", user.Id)
+                new(JwtRegisteredClaimNames.Sub, user.Email!),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Email, user.Email!),
+                new("id", user.Id)
             };
 
             var userClaims = await _userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
-
             var userRoles = (await _userManager.GetRolesAsync(user))
                                 .Select(role => new Claim(ClaimTypes.Role, role));
             claims.AddRange(userRoles);

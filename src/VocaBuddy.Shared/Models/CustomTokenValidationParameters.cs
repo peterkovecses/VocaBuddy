@@ -12,7 +12,7 @@ public class CustomTokenValidationParameters
     public string ValidIssuer { get; set; } = default!;
     public string ValidAudience { get; set; } = default!;
     public string Secret { get; set; } = default!;
-    public string? TokenLifeTime { get; set; }
+    public string TokenLifeTime { get; set; } = default!;
     public string? ClockSkew { get; set; }
 
 
