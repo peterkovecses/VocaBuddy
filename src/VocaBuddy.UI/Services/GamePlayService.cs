@@ -1,0 +1,100 @@
+﻿using VocaBuddy.Shared.Dtos;
+
+namespace VocaBuddy.UI.Services;
+
+public class GamePlayService : IGamePlayService
+{
+    private readonly IWordService _wordService;
+    private List<NativeWordDto>? _words;
+    private List<NativeWordDto> _mistakes = new();
+
+    public GamePlayService(IWordService wordService)
+    {
+        _wordService = wordService;
+    }
+
+    public NativeWordDto? ActualWord { get; private set; }
+    public int RemainingWordCount { get; private set; }
+    public int? MistakeCount { get; private set; }
+    public bool WordsNotLoaded => _words is null;
+
+    public bool IsCorrectAnswer(string userInput)
+    {
+        var isCorrectAnswer =
+            ActualWord!.Translations.Any(translation => string.Equals(translation.Text, userInput, StringComparison.CurrentCultureIgnoreCase));
+
+        if (isCorrectAnswer)
+        {
+            RemainingWordCount--;
+        }
+        else
+        {
+            _mistakes.Add(ActualWord);
+        }
+
+        return isCorrectAnswer;
+    }
+
+    public async Task InitializeGame(bool latestWords, int wordCount)
+    {
+        await LoadWordsAsync();
+        SetInitialRemainingWordCount();
+        SetNextWord();
+        
+        return;
+
+        async Task LoadWordsAsync()
+        {
+            if (latestWords)
+            {
+                _words = await _wordService!.GetLatestWordsAsync(wordCount);
+            }
+            else
+            {
+                _words = await _wordService!.GetRandomWordsAsync(wordCount);
+            }
+        }
+
+        void SetInitialRemainingWordCount()
+            => RemainingWordCount = wordCount;
+    }
+
+    public void MarkActualWordAsAMistake()
+        => _mistakes.Add(ActualWord!);
+
+    public void SetNextWord()
+    {
+        ActualWord = _words!.First();
+        _words!.Remove(ActualWord);
+    }
+
+    public void LoadMistakes()
+    {
+        _words = _mistakes;
+        _mistakes = new();
+    }
+
+    public bool TryMoveToNextRound()
+    {
+        if (_words!.Any())
+        {
+            SetNextWord();
+
+            return true;
+        }
+
+        if (_mistakes!.Any())
+        {
+            SetInitialMistakeCount();
+            LoadMistakes();
+            SetNextWord();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void SetInitialMistakeCount()
+        => MistakeCount ??= _mistakes.Count;
+}

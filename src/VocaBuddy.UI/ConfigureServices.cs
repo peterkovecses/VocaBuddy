@@ -35,6 +35,7 @@ public static class ConfigureServices
         services.AddScoped<IJwtParser, JwtParser>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IWordService, WordService>();
+        services.AddTransient<IGamePlayService, GamePlayService>();
         services.AddSingleton<NotificationService>();
 
         services.AddHttpClient<IIdentityApiClient, IdentityApiClient>(client =>
