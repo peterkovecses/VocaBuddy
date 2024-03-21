@@ -60,7 +60,7 @@ public class JwtParserTests
     {
         // Arrange
         var invalidJwt = "invalid-jwt-token-string";
-        var expectedExceptionMessage = "Invalid JWT token format.";
+        var expectedExceptionMessage = "Invalid JWT token format. (Parameter 'jwt')";
 
         // Act
         Action act = () => _sut.ParseClaimsFromJwt(invalidJwt);

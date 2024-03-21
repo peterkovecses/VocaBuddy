@@ -20,15 +20,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
-
 app.UseMiddleware<ErrorHandlingMiddleware>();
-
 app.UseHttpsRedirection();
-
 app.UseCors("_myAllowSpecificOrigins");
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
