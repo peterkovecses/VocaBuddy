@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using VocaBuddy.UI.Validation;
 
 namespace VocaBuddy.UI.Models;
 

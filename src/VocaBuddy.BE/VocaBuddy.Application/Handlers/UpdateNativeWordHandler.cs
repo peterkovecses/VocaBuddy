@@ -24,11 +24,11 @@ public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, 
     public async Task<Result> Handle(UpdateNativeWordCommand request, CancellationToken cancellationToken)
     {
         var nativeWordToUpdate
-            = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWordDto.Id, cancellationToken);
+            = await _unitOfWork.NativeWords.FindByIdAsync(request.NativeWord.Id, cancellationToken);
 
         if (nativeWordToUpdate is null)
         {
-            return Result.Failure(ErrorInfoFactory.NotFound(request.NativeWordDto.Id));
+            return Result.Failure(ErrorInfoFactory.NotFound(request.NativeWord.Id));
         }
 
         if (!ValidateUserId(nativeWordToUpdate))
@@ -36,12 +36,17 @@ public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, 
             return Result.Failure(ErrorInfoFactory.UserIdNotMatch());
         }
 
-        _mapper.Map(request.NativeWordDto, nativeWordToUpdate);
-        await _unitOfWork.CompleteAsync();
+        await UpdateWordAsync();
 
         return Result.Success();
-    }
 
-    private bool ValidateUserId(NativeWord nativeWordToDelete)
-        => nativeWordToDelete.UserId == _currentUserId;
+        bool ValidateUserId(NativeWord nativeWordToDelete)
+            => nativeWordToDelete.UserId == _currentUserId;
+
+        async Task UpdateWordAsync()
+        {
+            _mapper.Map(request.NativeWord, nativeWordToUpdate);
+            await _unitOfWork.CompleteAsync();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using VocaBuddy.Shared;
+using VocaBuddy.Shared.Dtos;
 using VocaBuddy.Shared.Extensions;
 
 namespace VocaBuddy.UI.Validation;

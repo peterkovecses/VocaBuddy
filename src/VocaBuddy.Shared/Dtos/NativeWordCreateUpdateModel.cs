@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.Models;
+﻿namespace VocaBuddy.Shared.Dtos;
 
 public class NativeWordCreateUpdateModel
 {

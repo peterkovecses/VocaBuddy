@@ -4,4 +4,4 @@ using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Commands;
 
-public record UpdateNativeWordCommand(NativeWordDto NativeWordDto, int RouteId) : IRequest<Result>;
+public record UpdateNativeWordCommand(NativeWordCreateUpdateModel NativeWord, int RouteId) : IRequest<Result>;

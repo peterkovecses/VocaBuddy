@@ -9,8 +9,8 @@ public class MappingProfile : Profile
 	public MappingProfile()
 	{
 		CreateMap<NativeWord, NativeWordDto>();
-        CreateMap<NativeWordDto, NativeWord>();
         CreateMap<ForeignWord, ForeignWordDto>();
-        CreateMap<ForeignWordDto, ForeignWord>();
+        CreateMap<NativeWordCreateUpdateModel, NativeWord>();
+        CreateMap<ForeignWordCreateUpdateModel, ForeignWord>();
     }
 }

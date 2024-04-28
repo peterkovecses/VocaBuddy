@@ -23,32 +23,19 @@ public class CreateNativeWordHandler : IRequestHandler<CreateNativeWordCommand, 
 
     public async Task<Result<NativeWordDto>> Handle(CreateNativeWordCommand request, CancellationToken cancellationToken)
     {
-        var nativeWord = _mapper.Map<NativeWord>(request.NativeWordDto);
-        SetUserId(nativeWord);
-        await SaveWord(nativeWord, cancellationToken);
-        MapViewModel(request, nativeWord);
+        var nativeWord = _mapper.Map<NativeWord>(request.NativeWorld);
+        SetUserId();
+        await SaveWordAsync();
 
-        return Result.Success(request.NativeWordDto);
+        return Result.Success(_mapper.Map<NativeWordDto>(nativeWord));
 
-        void SetUserId(NativeWord nativeWord)
+        void SetUserId()
             => nativeWord.UserId = _currentUserId;
 
-        async Task SaveWord(NativeWord nativeWord, CancellationToken cancellationToken)
+        async Task SaveWordAsync()
         {
             await _unitOfWork.NativeWords.AddAsync(nativeWord, cancellationToken);
             await _unitOfWork.CompleteAsync();
         }
-
-        void MapViewModel(CreateNativeWordCommand request, NativeWord nativeWord)
-        {
-            MapWordId(request, nativeWord);
-            MapTranslations(request, nativeWord);
-        }
-
-        static void MapWordId(CreateNativeWordCommand request, NativeWord nativeWord)
-            => request.NativeWordDto.Id = nativeWord.Id;
-
-        void MapTranslations(CreateNativeWordCommand request, NativeWord nativeWord)
-            => request.NativeWordDto.Translations = _mapper.Map<List<ForeignWordDto>>(nativeWord.Translations);
     }
 }
