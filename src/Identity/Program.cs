@@ -8,7 +8,7 @@ builder.Host.UseSerilog((context, configuration)
     => configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
-builder.Services.AddServices(builder.Configuration);
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 

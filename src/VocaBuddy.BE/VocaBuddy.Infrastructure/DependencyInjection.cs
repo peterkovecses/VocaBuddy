@@ -9,7 +9,7 @@ using VocaBuddy.Infrastructure.Services;
 
 namespace VocaBuddy.Infrastructure;
 
-public static class ConfigureServices
+public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {

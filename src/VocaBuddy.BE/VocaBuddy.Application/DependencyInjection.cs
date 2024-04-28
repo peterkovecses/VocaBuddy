@@ -10,7 +10,7 @@ using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application;
 
-public static class ConfigureServices
+public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {

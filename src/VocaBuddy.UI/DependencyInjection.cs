@@ -7,9 +7,9 @@ using VocaBuddy.UI.Services;
 
 namespace VocaBuddy.UI;
 
-public static class ConfigureServices
+public static class DependencyInjection
 {
-    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var identityConfigSection = configuration.GetSection(ConfigKeys.IdentityConfiguration);
         services.Configure<IdentityApiConfiguration>(identityConfigSection);

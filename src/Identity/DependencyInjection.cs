@@ -7,9 +7,9 @@ using VocaBuddy.Shared.Models;
 
 namespace Identity;
 
-public static class ConfigureServices
+public static class DependencyInjection
 {
-    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDataProtection();
 

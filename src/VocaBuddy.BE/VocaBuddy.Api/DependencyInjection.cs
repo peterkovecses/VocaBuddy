@@ -6,7 +6,7 @@ using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api;
 
-public static class ConfigureServices
+public static class DependencyInjection
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {

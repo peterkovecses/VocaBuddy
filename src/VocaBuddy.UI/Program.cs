@@ -10,6 +10,6 @@ builder.Logging.AddConfiguration(
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddServices(builder.Configuration);
+builder.Services.ConfigureServices(builder.Configuration);
 
 await builder.Build().RunAsync();
