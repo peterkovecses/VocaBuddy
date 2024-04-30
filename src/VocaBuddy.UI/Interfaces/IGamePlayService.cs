@@ -4,7 +4,7 @@ namespace VocaBuddy.UI.Interfaces;
 
 public interface IGamePlayService
 {
-    NativeWordDto? ActualWord { get; }
+    CompactNativeWordDto? ActualWord { get; }
     int RemainingWordCount { get; }
     int? MistakeCount { get; }
     bool WordsNotLoaded { get; }

@@ -2,7 +2,7 @@
 
 namespace VocaBuddy.Shared.Dtos;
 
-public class ForeignWordCreateUpdateModel
+public class CompactForeignWordDto
 {
     public int Id { get; set; }
 

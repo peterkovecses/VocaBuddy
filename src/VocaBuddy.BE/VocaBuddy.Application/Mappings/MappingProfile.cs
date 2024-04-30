@@ -10,7 +10,9 @@ public class MappingProfile : Profile
 	{
 		CreateMap<NativeWord, NativeWordDto>();
         CreateMap<ForeignWord, ForeignWordDto>();
-        CreateMap<NativeWordCreateUpdateModel, NativeWord>();
-        CreateMap<ForeignWordCreateUpdateModel, ForeignWord>();
+        CreateMap<NativeWord, CompactNativeWordDto>();
+        CreateMap<ForeignWord, CompactForeignWordDto>();
+        CreateMap<CompactNativeWordDto, NativeWord>();
+        CreateMap<CompactForeignWordDto, ForeignWord>();
     }
 }

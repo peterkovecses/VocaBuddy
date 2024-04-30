@@ -30,11 +30,11 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     public Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
         => GetAsync<Result<List<NativeWordDto>>>(_vocaBuddyApiConfig.NativeWordsEndpoints);
 
-    public Task<Result<List<NativeWordDto>>> GetRandomNativeWordsAsync(int count)
-        => GetAsync<Result<List<NativeWordDto>>>($"{_vocaBuddyApiConfig.RandomNativeWordsEndpoints}?count={count}");
+    public Task<Result<List<CompactNativeWordDto>>> GetRandomNativeWordsAsync(int count)
+        => GetAsync<Result<List<CompactNativeWordDto>>>($"{_vocaBuddyApiConfig.RandomNativeWordsEndpoints}?count={count}");
 
-    public Task<Result<List<NativeWordDto>>> GetLatestNativeWordsAsync(int count)
-        => GetAsync<Result<List<NativeWordDto>>>($"{_vocaBuddyApiConfig.LatestNativeWordsEndpoints}?count={count}");
+    public Task<Result<List<CompactNativeWordDto>>> GetLatestNativeWordsAsync(int count)
+        => GetAsync<Result<List<CompactNativeWordDto>>>($"{_vocaBuddyApiConfig.LatestNativeWordsEndpoints}?count={count}");
 
     public Task<Result<NativeWordDto>> GetNativeWordAsync(int id)
         => GetAsync<Result<NativeWordDto>>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
@@ -42,10 +42,10 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     public Task<Result<int>> GetNativeWordCountAsync()
         => GetAsync<Result<int>>(_vocaBuddyApiConfig.NativeWordsCountEndpoint);
 
-    public Task<Result> CreateNativeWordAsync(NativeWordCreateUpdateModel word)
+    public Task<Result> CreateNativeWordAsync(CompactNativeWordDto word)
         => PostAsync<Result>(_vocaBuddyApiConfig.NativeWordsEndpoints, word);
 
-    public Task<Result> UpdateNativeWordAsync(NativeWordCreateUpdateModel word)
+    public Task<Result> UpdateNativeWordAsync(CompactNativeWordDto word)
         => PutAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{word.Id}", word);
 
     public Task<Result> DeleteNativeWordAsync(int id)

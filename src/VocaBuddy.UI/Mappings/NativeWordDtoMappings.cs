@@ -25,16 +25,16 @@ public static class NativeWordDtoMappings
         return result;
     }
 
-    public static NativeWordCreateUpdateModel MapToCreateUpdateModel(this NativeWordDto? word)
+    public static CompactNativeWordDto MapToCreateUpdateModel(this NativeWordDto? word)
     {
         ArgumentNullException.ThrowIfNull(word, nameof(word));
 
-        return new NativeWordCreateUpdateModel
+        return new CompactNativeWordDto
         {
             Id = word.Id,
             Text = word.Text,
             Translations = word.Translations
-                    .Select(translation => new ForeignWordCreateUpdateModel { Id = translation.Id, Text = translation.Text })
+                    .Select(translation => new CompactForeignWordDto { Id = translation.Id, Text = translation.Text })
                     .ToList()
         };
     }

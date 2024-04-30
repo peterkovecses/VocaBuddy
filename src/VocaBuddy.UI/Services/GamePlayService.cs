@@ -5,15 +5,15 @@ namespace VocaBuddy.UI.Services;
 public class GamePlayService : IGamePlayService
 {
     private readonly IWordService _wordService;
-    private List<NativeWordDto>? _words;
-    private List<NativeWordDto> _mistakes = new();
+    private List<CompactNativeWordDto>? _words;
+    private List<CompactNativeWordDto> _mistakes = new();
 
     public GamePlayService(IWordService wordService)
     {
         _wordService = wordService;
     }
 
-    public NativeWordDto? ActualWord { get; private set; }
+    public CompactNativeWordDto? ActualWord { get; private set; }
     public int RemainingWordCount { get; private set; }
     public int? MistakeCount { get; private set; }
     public bool WordsNotLoaded => _words is null;

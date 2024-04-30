@@ -19,7 +19,7 @@ public class WordService : IWordService
         return words.MapToListViewModels();
     }
 
-    public async Task<List<NativeWordDto>> GetRandomWordsAsync(int count)
+    public async Task<List<CompactNativeWordDto>> GetRandomWordsAsync(int count)
     {
         var result = await _client.GetRandomNativeWordsAsync(count);
         ThrowIfFailure(result);
@@ -27,7 +27,7 @@ public class WordService : IWordService
         return result.Data!;
     }
 
-    public async Task<List<NativeWordDto>> GetLatestWordsAsync(int count)
+    public async Task<List<CompactNativeWordDto>> GetLatestWordsAsync(int count)
     {
         var result = await _client.GetLatestNativeWordsAsync(count);
         ThrowIfFailure(result);
@@ -41,16 +41,16 @@ public class WordService : IWordService
     public Task<Result<int>> GetWordCountAsync()
         => _client.GetNativeWordCountAsync();
 
-    public Task<Result> CreateWord(NativeWordCreateUpdateModel word)
+    public Task<Result> CreateWord(CompactNativeWordDto word)
         => _client.CreateNativeWordAsync(word);
 
-    public Task<Result> UpdateWord(NativeWordCreateUpdateModel word)
+    public Task<Result> UpdateWord(CompactNativeWordDto word)
         => _client.UpdateNativeWordAsync(word);
 
     public Task<Result> DeleteWordAsync(int id)
         => _client.DeleteNativeWordAsync(id);
 
-    private static void ThrowIfFailure(Result<List<NativeWordDto>> result)
+    private static void ThrowIfFailure<T>(Result<List<T>> result)
     {
         if (result.IsFailure)
         {

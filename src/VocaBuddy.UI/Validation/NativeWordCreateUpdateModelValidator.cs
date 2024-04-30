@@ -5,7 +5,7 @@ using VocaBuddy.Shared.Extensions;
 
 namespace VocaBuddy.UI.Validation;
 
-public class NativeWordCreateUpdateModelValidator : AbstractValidator<NativeWordCreateUpdateModel>
+public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNativeWordDto>
 {
     private readonly string AboveMaxLengthMessage = $"The number of characters in the word must not exceed {Constants.MaxWordLength}";
 

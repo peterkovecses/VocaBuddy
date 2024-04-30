@@ -14,7 +14,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     [Parameter]
     public int? WordId { get; set; }
 
-    protected NativeWordCreateUpdateModel Model { get; set; } = InitializeEmptyModel();
+    protected CompactNativeWordDto Model { get; set; } = InitializeEmptyModel();
 
     [Inject]
     public IWordService? WordService { get; set; }
@@ -63,7 +63,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     }
 
     protected void AddTranslation()
-        => Model.Translations.Add(new ForeignWordCreateUpdateModel());
+        => Model.Translations.Add(new CompactForeignWordDto());
 
     protected void RemoveTranslation(int index)
         => Model.Translations.RemoveAt(index);
@@ -138,10 +138,10 @@ public class CreateOrUpdateWordBase : CustomComponentBase
         return await WordService!.CreateWord(Model);
     }
 
-    private static NativeWordCreateUpdateModel InitializeEmptyModel()
+    private static CompactNativeWordDto InitializeEmptyModel()
         => new()
         {
-            Translations = new List<ForeignWordCreateUpdateModel> { new() }
+            Translations = new List<CompactForeignWordDto> { new() }
         };
 
     private void ClearModel()
