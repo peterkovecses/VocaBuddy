@@ -2,7 +2,6 @@
 using VocaBuddy.Shared.Errors;
 using VocaBuddy.UI.BaseComponents;
 using VocaBuddy.UI.Exceptions;
-using VocaBuddy.UI.Mappings;
 
 namespace VocaBuddy.UI.Pages.Words;
 
@@ -41,7 +40,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                 Loading = false;
             }
 
-            void HandleResult(Result<NativeWordDto> result)
+            void HandleResult(Result<CompactNativeWordDto> result)
             {
                 if (result.IsFailure) // If the response is not successful
                 {
@@ -57,7 +56,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                     return;
                 }
 
-                Model = result.Data.MapToCreateUpdateModel();
+                Model = result.Data!;
             }
         }
     }
