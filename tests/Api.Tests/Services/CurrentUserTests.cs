@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using VocaBuddy.Api.Services;
 
 namespace Api.Tests.Services;
 

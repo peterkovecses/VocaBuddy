@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using VocaBuddy.Shared.Errors;
-
-namespace VocaBuddy.Shared.Models;
+﻿namespace VocaBuddy.Shared.Models;
 
 public class Result
 {

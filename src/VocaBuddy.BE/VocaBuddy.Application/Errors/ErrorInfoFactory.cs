@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Errors;
-
-namespace VocaBuddy.Application.Errors;
+﻿namespace VocaBuddy.Application.Errors;
 
 public static class ErrorInfoFactory
 {

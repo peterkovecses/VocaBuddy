@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using VocaBuddy.Domain.Entities;
-using VocaBuddy.Infrastructure.Persistence.Interceptors;
 
 namespace VocaBuddy.Infrastructure.Persistence;
 

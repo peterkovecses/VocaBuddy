@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.PipelineBehaviors;
 

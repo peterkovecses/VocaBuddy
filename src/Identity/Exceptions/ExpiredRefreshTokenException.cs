@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Errors;
-
-namespace Identity.Exceptions;
+﻿namespace Identity.Exceptions;
 
 public class ExpiredRefreshTokenException : IdentityExceptionBase
 {

@@ -1,7 +1,4 @@
-﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.UI.BaseComponents;
-
-namespace VocaBuddy.UI.Shared;
+﻿namespace VocaBuddy.UI.Shared;
 
 public class LoginComponentBase : CustomComponentBase
 {

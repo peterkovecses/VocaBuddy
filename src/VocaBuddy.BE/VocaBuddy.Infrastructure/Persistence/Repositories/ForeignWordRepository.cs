@@ -1,7 +1,4 @@
-﻿using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Domain.Entities;
-
-namespace VocaBuddy.Infrastructure.Persistence.Repositories;
+﻿namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
 public class ForeignWordRepository : GenericRepository<ForeignWord, int>, IForeignWordRepository
 {

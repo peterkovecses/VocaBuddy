@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using VocaBuddy.Application.Commands;
-using VocaBuddy.Application.Errors;
-using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Domain.Entities;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 

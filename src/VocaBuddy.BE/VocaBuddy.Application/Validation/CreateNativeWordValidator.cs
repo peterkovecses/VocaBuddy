@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using VocaBuddy.Application.Commands;
-using VocaBuddy.Shared;
-using VocaBuddy.Shared.Extensions;
 
 namespace VocaBuddy.Application.Validation;
 

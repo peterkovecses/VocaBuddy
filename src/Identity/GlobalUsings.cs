@@ -1,0 +1,10 @@
+﻿global using VocaBuddy.Shared.Models;
+global using VocaBuddy.Shared.Errors;
+global using Identity.Exceptions;
+global using Identity;
+global using Identity.Errors;
+global using Identity.Middlewares;
+global using Identity.Data;
+global using Identity.Interfaces;
+global using Identity.Models;
+global using Identity.Services;

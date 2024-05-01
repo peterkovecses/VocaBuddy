@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Dtos;
-
-namespace VocaBuddy.UI.Interfaces;
+﻿namespace VocaBuddy.UI.Interfaces;
 
 public interface IVocaBuddyApiClient
 {

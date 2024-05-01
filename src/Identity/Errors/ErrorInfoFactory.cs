@@ -1,7 +1,4 @@
-﻿using Identity.Exceptions;
-using VocaBuddy.Shared.Errors;
-
-namespace Identity.Errors;
+﻿namespace Identity.Errors;
 
 public static class ErrorInfoFactory
 {

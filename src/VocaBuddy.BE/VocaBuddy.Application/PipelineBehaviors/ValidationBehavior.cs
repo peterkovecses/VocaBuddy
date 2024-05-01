@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using VocaBuddy.Application.Errors;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.PipelineBehaviors;
 

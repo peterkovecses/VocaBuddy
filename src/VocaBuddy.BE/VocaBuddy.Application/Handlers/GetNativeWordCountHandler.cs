@@ -1,7 +1,4 @@
 ﻿using MediatR;
-using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Application.Queries;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 

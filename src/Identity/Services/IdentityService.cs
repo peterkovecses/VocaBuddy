@@ -1,13 +1,9 @@
-﻿using Identity.Data;
-using Identity.Interfaces;
-using Identity.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using VocaBuddy.Shared.Models;
 
 namespace Identity.Services;
 

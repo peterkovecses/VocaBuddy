@@ -1,8 +1,5 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Domain.Entities;
-using VocaBuddy.Infrastructure.Persistence.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 

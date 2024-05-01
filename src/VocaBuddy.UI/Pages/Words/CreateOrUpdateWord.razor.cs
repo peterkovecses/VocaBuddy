@@ -1,9 +1,4 @@
-﻿using VocaBuddy.Shared.Dtos;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.UI.BaseComponents;
-using VocaBuddy.UI.Exceptions;
-
-namespace VocaBuddy.UI.Pages.Words;
+﻿namespace VocaBuddy.UI.Pages.Words;
 
 public class CreateOrUpdateWordBase : CustomComponentBase
 {

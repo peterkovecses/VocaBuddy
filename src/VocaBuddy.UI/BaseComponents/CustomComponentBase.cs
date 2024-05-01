@@ -1,6 +1,4 @@
-﻿using VocaBuddy.UI.Services;
-
-namespace VocaBuddy.UI.BaseComponents;
+﻿namespace VocaBuddy.UI.BaseComponents;
 
 public class CustomComponentBase : ComponentBase
 {

@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using System.Linq.Expressions;
-using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Application.Queries;
-using VocaBuddy.Domain.Entities;
-using VocaBuddy.Shared.Dtos;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application.Handlers;
 

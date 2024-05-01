@@ -1,6 +1,4 @@
 ﻿using Blazored.LocalStorage;
-using VocaBuddy.UI.Exceptions;
-using VocaBuddy.UI.Extensions;
 
 namespace VocaBuddy.UI.Authentication;
 

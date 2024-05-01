@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Extensions;
 

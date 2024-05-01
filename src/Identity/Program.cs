@@ -1,5 +1,3 @@
-using Identity;
-using Identity.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

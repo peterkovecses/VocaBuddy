@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using VocaBuddy.Api.Services;
-using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api;
 

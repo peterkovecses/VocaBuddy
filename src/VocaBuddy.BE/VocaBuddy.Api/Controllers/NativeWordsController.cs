@@ -1,12 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VocaBuddy.Api.Extensions;
-using VocaBuddy.Application.Commands;
-using VocaBuddy.Application.Queries;
-using VocaBuddy.Shared.Dtos;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Controllers;
 

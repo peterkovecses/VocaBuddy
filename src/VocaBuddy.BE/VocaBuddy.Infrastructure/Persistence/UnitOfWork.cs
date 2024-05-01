@@ -1,7 +1,4 @@
-﻿using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Infrastructure.Persistence.Repositories;
-
-namespace VocaBuddy.Infrastructure.Persistence;
+﻿namespace VocaBuddy.Infrastructure.Persistence;
 
 public class UnitOfWork : IUnitOfWork
 {

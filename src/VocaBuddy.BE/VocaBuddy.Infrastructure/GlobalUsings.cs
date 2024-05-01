@@ -1,0 +1,9 @@
+﻿global using VocaBuddy.Shared;
+global using VocaBuddy.Application.Interfaces;
+global using VocaBuddy.Domain.Entities;
+global using VocaBuddy.Infrastructure.Interfaces;
+global using VocaBuddy.Infrastructure.Persistence;
+global using VocaBuddy.Infrastructure.Persistence.Interceptors;
+global using VocaBuddy.Infrastructure.Services;
+global using VocaBuddy.Infrastructure.Persistence.Extensions;
+global using VocaBuddy.Infrastructure.Persistence.Repositories;

@@ -1,9 +1,5 @@
-﻿using Identity.Errors;
-using Identity.Exceptions;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.Shared.Models;
 
 namespace Identity.Middlewares;
 

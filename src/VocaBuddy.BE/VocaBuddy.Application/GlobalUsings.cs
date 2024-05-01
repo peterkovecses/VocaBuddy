@@ -1,0 +1,12 @@
+﻿global using VocaBuddy.Shared;
+global using VocaBuddy.Shared.Extensions;
+global using VocaBuddy.Shared.Dtos;
+global using VocaBuddy.Shared.Models;
+global using VocaBuddy.Shared.Errors;
+global using VocaBuddy.Application.Mappings;
+global using VocaBuddy.Application.PipelineBehaviors;
+global using VocaBuddy.Application.Queries;
+global using VocaBuddy.Application.Commands;
+global using VocaBuddy.Application.Errors;
+global using VocaBuddy.Application.Interfaces;
+global using VocaBuddy.Domain.Entities;

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
-using VocaBuddy.Shared.Errors;
-using VocaBuddy.UI.Extensions;
 
 namespace VocaBuddy.UI.ApiHelpers;
 

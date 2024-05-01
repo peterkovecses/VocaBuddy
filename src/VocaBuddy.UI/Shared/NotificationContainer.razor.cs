@@ -1,6 +1,4 @@
-﻿using VocaBuddy.UI.Services;
-
-namespace VocaBuddy.UI.Shared;
+﻿namespace VocaBuddy.UI.Shared;
 
 public class NotificationContainerBase : ComponentBase
 {

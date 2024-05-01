@@ -1,7 +1,4 @@
-﻿using VocaBuddy.Shared.Errors;
-using VocaBuddy.UI.BaseComponents;
-
-namespace VocaBuddy.UI.Pages.Authentication;
+﻿namespace VocaBuddy.UI.Pages.Authentication;
 
 public class RegisterBase : CustomComponentBase
 {

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using VocaBuddy.Domain.Entities;
-using VocaBuddy.Shared.Dtos;
 
 namespace VocaBuddy.Application.Mappings;
 

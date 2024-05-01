@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Models;
-
-namespace Identity.Interfaces;
+﻿namespace Identity.Interfaces;
 
 public interface IIdentityService
 {

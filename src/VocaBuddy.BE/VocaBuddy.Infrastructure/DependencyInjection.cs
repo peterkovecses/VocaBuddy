@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using VocaBuddy.Application.Interfaces;
-using VocaBuddy.Infrastructure.Interfaces;
-using VocaBuddy.Infrastructure.Persistence;
-using VocaBuddy.Infrastructure.Persistence.Interceptors;
-using VocaBuddy.Infrastructure.Services;
 
 namespace VocaBuddy.Infrastructure;
 

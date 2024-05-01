@@ -1,0 +1,11 @@
+﻿global using VocaBuddy.Shared;
+global using VocaBuddy.Shared.Errors;
+global using VocaBuddy.Shared.Extensions;
+global using VocaBuddy.Shared.Dtos;
+global using VocaBuddy.UI.Extensions;
+global using VocaBuddy.UI.Exceptions;
+global using VocaBuddy.UI.Services;
+global using VocaBuddy.UI.BaseComponents;
+global using VocaBuddy.UI.Mappings;
+global using VocaBuddy.UI.ApiHelpers;
+global using VocaBuddy.UI.Authentication;

@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Dtos;
-
-namespace VocaBuddy.UI.Services;
+﻿namespace VocaBuddy.UI.Services;
 
 public class GamePlayService : IGamePlayService
 {

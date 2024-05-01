@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
-using VocaBuddy.Application.Errors;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Api.Middlewares;
 
@@ -26,7 +24,7 @@ public class ErrorHandlingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An exception occured");
+            _logger.LogError(ex, "An exception occurred");
             await HandleExceptionAsync(context, ex);
         }
     }

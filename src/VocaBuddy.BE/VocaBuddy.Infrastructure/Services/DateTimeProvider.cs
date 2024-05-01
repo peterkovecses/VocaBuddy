@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Infrastructure.Interfaces;
-
-namespace VocaBuddy.Infrastructure.Services;
+﻿namespace VocaBuddy.Infrastructure.Services;
 
 internal class DateTimeProvider : IDateTimeProvider
 {

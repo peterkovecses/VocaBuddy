@@ -1,7 +1,4 @@
-﻿using VocaBuddy.Shared.Dtos;
-using VocaBuddy.UI.Mappings;
-
-namespace VocaBuddy.UI.Services;
+﻿namespace VocaBuddy.UI.Services;
 
 public class WordService : IWordService
 {

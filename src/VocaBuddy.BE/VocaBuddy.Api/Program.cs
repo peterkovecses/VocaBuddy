@@ -1,8 +1,4 @@
 using Serilog;
-using VocaBuddy.Api;
-using VocaBuddy.Api.Middlewares;
-using VocaBuddy.Application;
-using VocaBuddy.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,4 @@
-﻿using VocaBuddy.Shared.Dtos;
-
-namespace VocaBuddy.UI.Mappings;
+﻿namespace VocaBuddy.UI.Mappings;
 
 public static class NativeWordDtoMappings
 {

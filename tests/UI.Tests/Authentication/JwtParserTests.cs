@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using VocaBuddy.UI.Authentication;
-using VocaBuddy.UI.Models;
 
 namespace UI.Tests.Authentication;
 

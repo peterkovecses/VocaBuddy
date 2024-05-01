@@ -2,11 +2,6 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using VocaBuddy.Application.Mappings;
-using VocaBuddy.Application.PipelineBehaviors;
-using VocaBuddy.Application.Queries;
-using VocaBuddy.Shared.Dtos;
-using VocaBuddy.Shared.Models;
 
 namespace VocaBuddy.Application;
 

@@ -5,12 +5,10 @@ namespace VocaBuddy.Api.Controllers;
 
 public abstract class ApiControllerBase : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    protected IMediator Mediator => _mediator;
+    protected IMediator Mediator { get; }
 
     protected ApiControllerBase(IMediator mediator)
     {
-        _mediator = mediator;
+        Mediator = mediator;
     }
 }

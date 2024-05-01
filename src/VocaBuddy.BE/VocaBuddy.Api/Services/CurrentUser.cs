@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using VocaBuddy.Application.Interfaces;
 
 namespace VocaBuddy.Api.Services;
 

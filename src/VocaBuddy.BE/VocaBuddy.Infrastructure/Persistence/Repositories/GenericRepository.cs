@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using VocaBuddy.Application.Interfaces;
 
 namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 

@@ -1,5 +1,4 @@
-﻿using Identity.Exceptions;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Services;
 

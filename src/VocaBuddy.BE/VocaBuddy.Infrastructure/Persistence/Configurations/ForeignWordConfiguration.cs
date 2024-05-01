@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using VocaBuddy.Domain.Entities;
-using VocaBuddy.Shared;
 
 namespace VocaBuddy.Infrastructure.Persistence.Configurations;
 
