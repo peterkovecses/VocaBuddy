@@ -63,17 +63,17 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
 
     private async Task<TResult> SendRequestAsync<TResult>(HttpMethod method, string endpoint, object? data = default)
     {
-        var response = await ExecuteSendingAsync(method, endpoint, data);
+        var response = await ExecuteSendingAsync();
 
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
             await _authService.RefreshTokenAsync();
-            response = await ExecuteSendingAsync(method, endpoint, data);
+            response = await ExecuteSendingAsync();
         }
 
         return await response.ReadAsAsync<TResult>();
 
-        async Task<HttpResponseMessage> ExecuteSendingAsync(HttpMethod method, string endpoint, object? data)
+        async Task<HttpResponseMessage> ExecuteSendingAsync()
         {
             await SetAuthorizationHeader();
             var request = new HttpRequestMessage(method, endpoint);

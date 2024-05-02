@@ -1,20 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<InternalsVisibleTo Include="Identity" />
-		<InternalsVisibleTo Include="Vocabuddy.Api" />
-		<InternalsVisibleTo Include="Vocabuddy.Application" />
-		<InternalsVisibleTo Include="Vocabuddy.UI" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.1" />
-	</ItemGroup>
-	
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Identity" />
+    <InternalsVisibleTo Include="Vocabuddy.Api" />
+    <InternalsVisibleTo Include="Vocabuddy.Application" />
+    <InternalsVisibleTo Include="Vocabuddy.UI" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.5.1" />
+  </ItemGroup>
 </Project>
