@@ -10,3 +10,5 @@ global using VocaBuddy.Application.Commands;
 global using VocaBuddy.Application.Errors;
 global using VocaBuddy.Application.Interfaces;
 global using VocaBuddy.Domain.Entities;
+global using AutoMapper;
+global using MediatR;

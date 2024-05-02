@@ -6,4 +6,5 @@ public interface IAuthenticationService
     Task LogoutAsync();
     Task<Result> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest);
     Task RefreshTokenAsync();
+    Task<bool> IsUserAuthenticatedAsync();
 }

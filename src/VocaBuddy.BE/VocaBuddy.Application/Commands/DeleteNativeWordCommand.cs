@@ -1,5 +1,3 @@
-﻿using MediatR;
-
-namespace VocaBuddy.Application.Commands;
+﻿namespace VocaBuddy.Application.Commands;
 
 public record DeleteNativeWordCommand(int WordId) : IRequest<Result>;

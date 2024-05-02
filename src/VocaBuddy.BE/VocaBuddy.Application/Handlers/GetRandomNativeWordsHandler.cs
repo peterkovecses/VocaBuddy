@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-
-namespace VocaBuddy.Application.Handlers;
+﻿namespace VocaBuddy.Application.Handlers;
 
 public class GetRandomNativeWordsHandler : IRequestHandler<GetRandomNativeWordsQuery, Result<List<CompactNativeWordDto>>>
 {

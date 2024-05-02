@@ -24,6 +24,7 @@ public class LoginComponentBase : CustomComponentBase
         finally
         {
             Loading = false;
+            NavManager!.NavigateTo("/");
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using Blazored.LocalStorage;
 
-namespace VocaBuddy.UI.Authentication;
+namespace VocaBuddy.UI.Services.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {
@@ -21,7 +21,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<Result> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
-        
+
         if (result.IsSuccess)
         {
             SignInUser(result.Data!);
@@ -57,13 +57,23 @@ public class AuthenticationService : IAuthenticationService
 
         await StoreTokensAsync(result.Data!);
 
+        return;
+
         async Task<(string authToken, string refreshToken)> RetrieveCurrentTokensAsync()
         {
-            var authToken = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
-            var refreshToken = await _localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
+            var authTokenFromStorage = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
+            var refreshTokenFromStorage = await _localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
 
-            return (authToken.TrimQuotationMarks(), refreshToken.TrimQuotationMarks());
+            return (authTokenFromStorage.TrimQuotationMarks(), refreshTokenFromStorage.TrimQuotationMarks());
         }
+    }
+
+    public async Task<bool> IsUserAuthenticatedAsync()
+    {
+        var authState = await _authStateProvider.GetAuthenticationStateAsync();
+        var userIdentity = authState.User.Identity;
+
+        return userIdentity is not null && userIdentity.IsAuthenticated;
     }
 
     private async Task StoreTokensAsync(TokenHolder tokens)

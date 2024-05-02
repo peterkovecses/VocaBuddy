@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
-namespace VocaBuddy.UI.Authentication;
+namespace VocaBuddy.UI.Services.Authentication;
 
 public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 {
@@ -38,6 +38,20 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
         _httpClient.DefaultRequestHeaders.Authorization = new("bearer", token);
 
         return new AuthenticationState(CreateAuthenticatedUser(token));
+    }
+
+    public async Task<bool> IsUserAuthenticatedAsync()
+    {
+        var authState = await GetAuthenticationStateAsync();
+
+        var userIdentity = authState.User.Identity;
+
+        if (userIdentity is null)
+        {
+            return false;
+        }
+
+        return userIdentity.IsAuthenticated;
     }
 
     public void SignInUser(string token)

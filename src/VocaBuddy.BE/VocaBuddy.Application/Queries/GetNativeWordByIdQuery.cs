@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace VocaBuddy.Application.Queries;
+﻿namespace VocaBuddy.Application.Queries;
 
 public record GetNativeWordByIdQuery(int WordId) : IRequest<Result<CompactNativeWordDto?>>
 {

@@ -1,5 +1,3 @@
-﻿using MediatR;
-
-namespace VocaBuddy.Application.Queries;
+﻿namespace VocaBuddy.Application.Queries;
 
 public record GetLatestNativeWordsQuery(int WordCount) : IRequest<Result<List<CompactNativeWordDto>>>;

@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace VocaBuddy.Application.Handlers;
 

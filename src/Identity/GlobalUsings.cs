@@ -8,3 +8,4 @@ global using Identity.Data;
 global using Identity.Interfaces;
 global using Identity.Models;
 global using Identity.Services;
+global using Microsoft.AspNetCore.Identity;

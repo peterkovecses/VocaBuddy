@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace VocaBuddy.Application.PipelineBehaviors;
+﻿namespace VocaBuddy.Application.PipelineBehaviors;
 
 public class GetLatestNativeWordsWordCountCheckBehavior : IPipelineBehavior<GetLatestNativeWordsQuery, Result<List<NativeWordDto>>>
 {

@@ -11,3 +11,4 @@ global using VocaBuddy.Application.Queries;
 global using VocaBuddy.Application.Errors;
 global using VocaBuddy.Application.Interfaces;
 global using VocaBuddy.Infrastructure;
+global using MediatR;

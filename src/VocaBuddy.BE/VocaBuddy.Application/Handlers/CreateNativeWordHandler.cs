@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-
-namespace VocaBuddy.Application.Handlers;
+﻿namespace VocaBuddy.Application.Handlers;
 
 public class CreateNativeWordHandler : IRequestHandler<CreateNativeWordCommand, Result<NativeWordDto>>
 {

@@ -1,5 +1,3 @@
-﻿using MediatR;
-
-namespace VocaBuddy.Application.Commands;
+﻿namespace VocaBuddy.Application.Commands;
 
 public record UpdateNativeWordCommand(CompactNativeWordDto NativeWord, int RouteId) : IRequest<Result>;

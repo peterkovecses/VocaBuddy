@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace VocaBuddy.UI.Authentication;
+namespace VocaBuddy.UI.Services.Authentication;
 
 public class JwtParser : IJwtParser
 {
@@ -46,12 +46,12 @@ public class JwtParser : IJwtParser
         }
     }
 
-    private static IEnumerable<string> ParseRoles(string rolesStr) 
+    private static IEnumerable<string> ParseRoles(string rolesStr)
         => IsArray(rolesStr)
             ? JsonSerializer.Deserialize<IEnumerable<string>>(rolesStr)!
             : new List<string> { rolesStr };
 
-    private static bool IsArray(string rolesStr) 
+    private static bool IsArray(string rolesStr)
         => rolesStr.StartsWith("[") && rolesStr.EndsWith("]");
 
     private static void AddParsedRolesToClaims(List<Claim> claims, IEnumerable<string> parsedRoles)

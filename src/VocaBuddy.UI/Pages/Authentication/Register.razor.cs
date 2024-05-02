@@ -9,6 +9,14 @@ public class RegisterBase : CustomComponentBase
 
     protected UserRegistrationRequestWithPasswordCheck Model { get; set; } = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (await AuthService!.IsUserAuthenticatedAsync())
+        {
+            NavManager!.NavigateTo("/");
+        }
+    }
+
     protected async Task ExecuteRegistrationAsync()
     {
         try

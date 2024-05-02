@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using FluentValidation;
 using Microsoft.AspNetCore.Components.Authorization;
+using VocaBuddy.UI.Services.Authentication;
 
 namespace VocaBuddy.UI;
 

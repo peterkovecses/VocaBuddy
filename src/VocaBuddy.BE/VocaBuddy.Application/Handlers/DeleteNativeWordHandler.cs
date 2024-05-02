@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace VocaBuddy.Application.Handlers;
+﻿namespace VocaBuddy.Application.Handlers;
 
 public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand, Result>
 {

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Services;
+﻿namespace Identity.Services;
 
 public partial class IdentityService
 {
