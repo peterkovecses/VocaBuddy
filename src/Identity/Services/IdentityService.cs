@@ -30,14 +30,14 @@ public partial class IdentityService : IIdentityService
         var tokenDescription = await CreateTokenDescriptionAsync();
         var token = _tokenHandler.CreateToken(tokenDescription);
         var refreshToken = CreateRefreshToken(user, token);
-        await SaveRefreshTokenAsync(refreshToken);
+        await SaveRefreshTokenAsync();
 
         return new TokenHolder() { AuthToken = _tokenHandler.WriteToken(token), RefreshToken = refreshToken.Token };
 
         async Task<SecurityTokenDescriptor> CreateTokenDescriptionAsync()
             => new()
             {
-                Subject = new ClaimsIdentity(await GetClaimsAsync(user)),
+                Subject = new ClaimsIdentity(await GetClaimsAsync()),
                 Issuer = _tokenValidationParameters.ValidIssuer,
                 Audience = _tokenValidationParameters.ValidAudience,
                 Expires = DateTime.UtcNow.Add(TimeSpan.Parse(_tokenValidationParameters.TokenLifeTime)),
