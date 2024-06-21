@@ -13,7 +13,7 @@ public class NativeWordConfiguration : IEntityTypeConfiguration<NativeWord>
         // Text property configuration
         builder.Property(newWord => newWord.Text)
             .IsRequired()
-            .HasMaxLength(Constants.MaxWordLength)
+            .HasMaxLength(ValidationConstants.MaxWordLength)
             .IsUnicode(true);
 
         // Unique constraint on Name property

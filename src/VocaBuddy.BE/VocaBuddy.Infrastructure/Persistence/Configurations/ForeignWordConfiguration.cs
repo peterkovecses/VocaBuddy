@@ -13,7 +13,7 @@ public class ForeignWordConfiguration : IEntityTypeConfiguration<ForeignWord>
         // Word Name property configuration
         builder.Property(foreignWord => foreignWord.Text)
             .IsRequired()
-            .HasMaxLength(Constants.MaxWordLength)
+            .HasMaxLength(ValidationConstants.MaxWordLength)
             .IsUnicode(true);
 
         // NativeWordId property configuration

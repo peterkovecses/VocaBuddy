@@ -4,8 +4,6 @@ namespace VocaBuddy.UI.Validation;
 
 public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNativeWordDto>
 {
-    private readonly string AboveMaxLengthMessage = $"The number of characters in the word must not exceed {Constants.MaxWordLength}";
-
     public NativeWordCreateUpdateModelValidator()
     {
         RuleFor(word => word.Text)
@@ -13,8 +11,8 @@ public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNat
             .WithMessage("The field is required");
         
         RuleFor(word => word.Text)
-            .MaximumLength(Constants.MaxWordLength)
-            .WithMessage(AboveMaxLengthMessage);
+            .MaximumLength(ValidationConstants.MaxWordLength)
+            .WithMessage(ValidationConstants.AboveMaxLengthMessage);
         
         RuleForEach(word => word.Translations).ChildRules(translationRule =>
         {
@@ -23,8 +21,8 @@ public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNat
                 .WithMessage("The field is required");
 
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text)
-                .MaximumLength(Constants.MaxWordLength)
-                .WithMessage(AboveMaxLengthMessage);
+                .MaximumLength(ValidationConstants.MaxWordLength)
+                .WithMessage(ValidationConstants.AboveMaxLengthMessage);
         });
 
         RuleFor(word => word.Translations)

@@ -7,7 +7,7 @@ public class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandlingMiddleware> _logger;
-    private static readonly (HttpStatusCode, Result) _baseResponseData 
+    private static readonly (HttpStatusCode, Result) BaseResponseData 
         = (HttpStatusCode.InternalServerError, Result.ServerError());
 
     public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
@@ -24,7 +24,7 @@ public class ErrorHandlingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An exception occured");
+            _logger.LogError(ex, ErrorMessages.ExceptionOccurred);
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -41,7 +41,7 @@ public class ErrorHandlingMiddleware
         {
             if (exception is not IdentityExceptionBase identityException)
             {
-                return _baseResponseData;
+                return BaseResponseData;
             }
 
             return (GetStatusCode(identityException), Result.Failure(ErrorInfoFactory.IdentityError(identityException)));
@@ -49,9 +49,9 @@ public class ErrorHandlingMiddleware
         
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An exception occured");
+            _logger.LogError(ex, ErrorMessages.ExceptionOccurred);
 
-            return _baseResponseData;
+            return BaseResponseData;
         }
     }
 

@@ -1,4 +1,4 @@
-﻿global using VocaBuddy.Shared;
+﻿global using VocaBuddy.Shared.Constants;
 global using VocaBuddy.Shared.Extensions;
 global using VocaBuddy.Shared.Dtos;
 global using VocaBuddy.Shared.Models;

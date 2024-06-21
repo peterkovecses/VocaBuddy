@@ -1,4 +1,5 @@
-﻿global using VocaBuddy.Shared.Models;
+﻿global using VocaBuddy.Shared.Constants;
+global using VocaBuddy.Shared.Models;
 global using VocaBuddy.Shared.Errors;
 global using Identity.Exceptions;
 global using Identity;

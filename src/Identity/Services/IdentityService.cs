@@ -27,14 +27,14 @@ public partial class IdentityService : IIdentityService
     async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(IdentityUser user)
     {
         var key = Encoding.ASCII.GetBytes(_tokenValidationParameters.Secret);
-        var tokenDescription = await CreateTokenDescriptionAsync(user, key);
+        var tokenDescription = await CreateTokenDescriptionAsync();
         var token = _tokenHandler.CreateToken(tokenDescription);
         var refreshToken = CreateRefreshToken(user, token);
         await SaveRefreshTokenAsync(refreshToken);
 
         return new TokenHolder() { AuthToken = _tokenHandler.WriteToken(token), RefreshToken = refreshToken.Token };
 
-        async Task<SecurityTokenDescriptor> CreateTokenDescriptionAsync(IdentityUser user, byte[] key)
+        async Task<SecurityTokenDescriptor> CreateTokenDescriptionAsync()
             => new()
             {
                 Subject = new ClaimsIdentity(await GetClaimsAsync(user)),
@@ -53,13 +53,13 @@ public partial class IdentityService : IIdentityService
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
-        async Task SaveRefreshTokenAsync(CustomRefreshToken refreshToken)
+        async Task SaveRefreshTokenAsync()
         {
             await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
         }
 
-        async Task<List<Claim>> GetClaimsAsync(IdentityUser user)
+        async Task<List<Claim>> GetClaimsAsync()
         {
             var claims = new List<Claim>
             {

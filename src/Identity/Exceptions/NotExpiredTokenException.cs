@@ -2,7 +2,7 @@
 {
     public class NotExpiredTokenException : IdentityExceptionBase
     {
-        public NotExpiredTokenException() : base("This token hasn not expired yet.") 
+        public NotExpiredTokenException() : base("This token has not expired yet.") 
         {
             ErrorCode = IdentityErrorCode.NotExpiredToken;
         }
