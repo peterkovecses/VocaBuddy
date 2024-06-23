@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -24,8 +24,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.Tests", "tests\UI.Tests\UI.Tests.csproj", "{DF6A569D-2EFD-4D47-9CF2-581ED21AB706}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Tests", "tests\Api.Tests\Api.Tests.csproj", "{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Tests", "Infrastructure.Tests\Infrastructure.Tests.csproj", "{A1997960-3D45-49F8-8D5D-1C02FC010172}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,10 +71,6 @@ Global
 		{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1997960-3D45-49F8-8D5D-1C02FC010172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1997960-3D45-49F8-8D5D-1C02FC010172}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1997960-3D45-49F8-8D5D-1C02FC010172}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1997960-3D45-49F8-8D5D-1C02FC010172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,7 +79,6 @@ Global
 		{09864AA1-0ACA-4D14-844C-19B01C02BA74} = {FB7BB082-2D97-41F6-9F39-3E73D01D363D}
 		{DF6A569D-2EFD-4D47-9CF2-581ED21AB706} = {FB7BB082-2D97-41F6-9F39-3E73D01D363D}
 		{6146F1CF-CF22-4FBD-BC3A-66FFF8490C9E} = {FB7BB082-2D97-41F6-9F39-3E73D01D363D}
-		{A1997960-3D45-49F8-8D5D-1C02FC010172} = {FB7BB082-2D97-41F6-9F39-3E73D01D363D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {441C3545-E20D-4CC9-81DC-574979B14CE0}
