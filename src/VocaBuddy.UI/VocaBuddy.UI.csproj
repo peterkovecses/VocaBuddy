@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ec64327f-8eba-442d-8034-422229be51a5</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\appsettings.Production.json" />
