@@ -21,10 +21,44 @@ services:
       - "7121:443"
     environment:
       ASPNETCORE_URLS: "${ASPNETCORE_URLS}"
-      ASPNETCORE_HTTPS_PORT: "${ASPNETCORE_HTTPS_PORT}"
+      ASPNETCORE_HTTPS_PORT: "${Identity_HTTPS_PORT}"
       ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
-      ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_Kestrel__Certificates__Default__Password}"
-      ASPNETCORE_Kestrel__Certificates__Default__Path: "${ASPNETCORE_Kestrel__Certificates__Default__Path}"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "${Identity_Certificates_Password}"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "${Identity_Certificates_Path}"
+    volumes:
+      - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  vocabuddy:
+    build:
+      context: ./src
+      dockerfile: VocaBuddy.BE/VocaBuddy.Api/Dockerfile
+    ports:
+      - "5063:80"
+      - "7054:443"
+    environment:
+      ASPNETCORE_URLS: "${ASPNETCORE_URLS}"
+      ASPNETCORE_HTTPS_PORT: "${VocaBuddyApi_HTTPS_PORT}"
+      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "${VocaBuddyApi_Certificates_Password}"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "${VocaBuddyApi_Certificates_Path}"
+    volumes:
+      - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  vocabuddyui:
+    build:
+      context: ./src
+      dockerfile: VocaBuddy.UI/Dockerfile
+    ports:
+      - "5101:80"
+      - "7095:443"
+    environment:
+      ASPNETCORE_URLS: "${ASPNETCORE_URLS}"
+      ASPNETCORE_HTTPS_PORT: "${VocaBuddyUI_HTTPS_PORT}"
+      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "${VocaBuddyUI_Certificates_Password}"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "${VocaBuddyUI_Certificates_Path}"
     volumes:
       - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
