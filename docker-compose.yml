@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  mssql:
+    container_name: ms-sql-server
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64/v8
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "${SA_PASSWORD}"
+
+  identity:
+    build:
+      context: ./src
+      dockerfile: Identity/Dockerfile
+    ports:
+      - "5108:80"
+      - "7121:443"
+    environment:
+      ASPNETCORE_URLS: "${ASPNETCORE_URLS}"
+      ASPNETCORE_HTTPS_PORT: "${ASPNETCORE_HTTPS_PORT}"
+      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "${ASPNETCORE_Kestrel__Certificates__Default__Password}"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "${ASPNETCORE_Kestrel__Certificates__Default__Path}"
+    volumes:
+      - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
