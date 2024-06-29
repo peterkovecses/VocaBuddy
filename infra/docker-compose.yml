@@ -14,7 +14,7 @@ services:
 
   identity:
     build:
-      context: ./src
+      context: ../src
       dockerfile: Identity/Dockerfile
     ports:
       - "5108:80"
@@ -31,7 +31,7 @@ services:
 
   vocabuddy:
     build:
-      context: ./src
+      context: ../src
       dockerfile: VocaBuddy.BE/VocaBuddy.Api/Dockerfile
     ports:
       - "5063:80"
@@ -48,7 +48,7 @@ services:
 
   vocabuddyui:
     build:
-      context: ./src
+      context: ../src
       dockerfile: VocaBuddy.UI/Dockerfile
     ports:
       - "5101:80"
