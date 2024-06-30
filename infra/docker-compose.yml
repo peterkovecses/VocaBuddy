@@ -13,7 +13,7 @@ services:
       SA_PASSWORD: "${SA_PASSWORD}"
 
   identity:
-    image: identity
+    image: peterkovecses/identity
     build:
       context: ../src
       dockerfile: Identity/Dockerfile
@@ -31,7 +31,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   vocabuddy:
-    image: vocabuddy
+    image: peterkovecses/vocabuddy
     build:
       context: ../src
       dockerfile: VocaBuddy.BE/VocaBuddy.Api/Dockerfile
@@ -49,7 +49,7 @@ services:
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
   vocabuddyui:
-    image: vocabuddyui
+    image: peterkovecses/vocabuddyui
     build:
       context: ../src
       dockerfile: VocaBuddy.UI/Dockerfile
