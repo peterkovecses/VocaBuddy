@@ -9,3 +9,4 @@ global using VocaBuddy.UI.Services.Authentication;
 global using VocaBuddy.UI.BaseComponents;
 global using VocaBuddy.UI.Mappings;
 global using VocaBuddy.UI.ApiHelpers;
+global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

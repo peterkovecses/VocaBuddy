@@ -7,6 +7,12 @@ public class LoginComponentBase : CustomComponentBase
     [Inject]
     public IAuthenticationService? AuthService { get; set; }
 
+    [Inject]
+    public ILogger<LoginComponentBase>? Logger { get; set; }
+
+    [Inject] 
+    public IWebAssemblyHostEnvironment? HostEnvironment { get; set; }
+
     protected UserLoginRequest Model { get; set; } = new();
 
     protected async Task ExecuteLoginAsync()
@@ -17,9 +23,13 @@ public class LoginComponentBase : CustomComponentBase
             var result = await AuthService!.LoginAsync(Model);
             HandleResult(result);
         }
-        catch
+        catch(Exception ex)
         {
-            StatusMessage = LoginFailed;
+            if (HostEnvironment!.IsDevelopment())
+            {
+                Logger!.LogError(ex, "An exception was thrown during login.");
+                StatusMessage = LoginFailed;
+            }
         }
         finally
         {
