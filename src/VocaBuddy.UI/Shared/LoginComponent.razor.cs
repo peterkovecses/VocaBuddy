@@ -28,8 +28,8 @@ public class LoginComponentBase : CustomComponentBase
             if (HostEnvironment!.IsDevelopment())
             {
                 Logger!.LogError(ex, "An exception was thrown during login.");
-                StatusMessage = LoginFailed;
             }
+            StatusMessage = LoginFailed;
         }
         finally
         {
