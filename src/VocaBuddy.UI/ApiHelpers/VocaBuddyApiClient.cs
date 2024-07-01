@@ -91,6 +91,6 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     {
         var token = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
         _client.DefaultRequestHeaders.Authorization
-            = new AuthenticationHeaderValue("Bearer", token.TrimQuotationMarks());
+            = new AuthenticationHeaderValue("Bearer", token?.TrimQuotationMarks());
     }
 }

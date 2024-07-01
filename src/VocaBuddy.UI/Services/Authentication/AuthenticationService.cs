@@ -64,7 +64,7 @@ public class AuthenticationService : IAuthenticationService
             var authTokenFromStorage = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
             var refreshTokenFromStorage = await _localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
 
-            return (authTokenFromStorage.TrimQuotationMarks(), refreshTokenFromStorage.TrimQuotationMarks());
+            return (authTokenFromStorage!.TrimQuotationMarks(), refreshTokenFromStorage!.TrimQuotationMarks());
         }
     }
 
