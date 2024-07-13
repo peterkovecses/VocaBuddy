@@ -1,7 +1,3 @@
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using VocaBuddy.UI;
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Logging.AddConfiguration(
