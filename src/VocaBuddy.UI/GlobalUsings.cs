@@ -2,6 +2,7 @@
 global using VocaBuddy.Shared.Errors;
 global using VocaBuddy.Shared.Extensions;
 global using VocaBuddy.Shared.Dtos;
+global using VocaBuddy.UI;
 global using VocaBuddy.UI.Extensions;
 global using VocaBuddy.UI.Exceptions;
 global using VocaBuddy.UI.Services;
@@ -9,4 +10,9 @@ global using VocaBuddy.UI.Services.Authentication;
 global using VocaBuddy.UI.BaseComponents;
 global using VocaBuddy.UI.Mappings;
 global using VocaBuddy.UI.ApiHelpers;
+global using VocaBuddy.UI.Interfaces;
+global using VocaBuddy.UI.Models;
+global using Microsoft.AspNetCore.Components;
+global using VocaBuddy.Shared.Models;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using Microsoft.AspNetCore.Components.Web;
