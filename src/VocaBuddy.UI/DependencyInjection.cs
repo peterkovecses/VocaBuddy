@@ -1,9 +1,4 @@
-﻿using Blazored.LocalStorage;
-using FluentValidation;
-using Microsoft.AspNetCore.Components.Authorization;
-using VocaBuddy.UI.Services.Authentication;
-
-namespace VocaBuddy.UI;
+﻿namespace VocaBuddy.UI;
 
 public static class DependencyInjection
 {
@@ -16,6 +11,11 @@ public static class DependencyInjection
         var vocaBuddyConfigSection = configuration.GetSection(ConfigKeys.VocaBuddyApiConfiguration);
         services.Configure<VocaBuddyApiConfiguration>(vocaBuddyConfigSection);
         var vocaBuddyApiConfig = vocaBuddyConfigSection.Get<VocaBuddyApiConfiguration>();
+
+        var resilienceConfigSection = configuration.GetSection(ConfigKeys.ResilienceConfiguration);
+        services.Configure<ResilienceConfiguration>(resilienceConfigSection);
+        var resilienceConfig = resilienceConfigSection.Get<ResilienceConfiguration>()
+            ?? ResilienceConfiguration.CreateDefaultConfiguration();
 
         services.Configure<PasswordConfiguration>(configuration.GetSection(ConfigKeys.PasswordConfiguration));
 
@@ -39,12 +39,14 @@ public static class DependencyInjection
         services.AddHttpClient<IIdentityApiClient, IdentityApiClient>(client =>
         {
             client.BaseAddress = new Uri(identityConfig!.BaseUrl);
-        });
+        })
+        .AddResilience(resilienceConfig);
 
         services.AddHttpClient<IVocaBuddyApiClient, VocaBuddyApiClient>(client =>
         {
             client.BaseAddress = new Uri(vocaBuddyApiConfig!.BaseUrl);
-        });
+        })
+        .AddResilience(resilienceConfig);
 
         return services;
     }
