@@ -31,5 +31,9 @@ COPY ssl/server.key /etc/nginx/ssl/server.key
 EXPOSE 80
 EXPOSE 443
 
+# Redirect nginx logs to stdout and stderr
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+
 # Set the default command to start nginx with HTTPS
 CMD ["nginx", "-g", "daemon off;"]
