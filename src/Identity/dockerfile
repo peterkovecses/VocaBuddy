@@ -1,19 +1,21 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-WORKDIR /App
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-# Copy csproj files and restore as distinct layers
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 COPY Identity/Identity.csproj ./Identity/
 COPY VocaBuddy.Shared/VocaBuddy.Shared.csproj ./VocaBuddy.Shared/
 RUN dotnet restore ./Identity/Identity.csproj
-
-# Copy everything else and build
 COPY Identity/. ./Identity/
 COPY VocaBuddy.Shared/. ./VocaBuddy.Shared/
-WORKDIR /App/Identity
-RUN dotnet publish -c Release -o out
+RUN dotnet build Identity/Identity.csproj -c Release -o /app/build
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /App
-COPY --from=build-env /App/Identity/out .
+FROM build AS publish
+RUN dotnet publish Identity/Identity.csproj -c Release -o /app/publish
+
+FROM base as final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Identity.dll"]

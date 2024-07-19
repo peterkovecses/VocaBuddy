@@ -28,8 +28,8 @@ services:
       - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
 
-  vocabuddy:
-    image: peterkovecses/vocabuddy
+  vocabuddyapi:
+    image: peterkovecses/vocabuddyapi
     build:
       context: ../src
       dockerfile: VocaBuddy.BE/VocaBuddy.Api/Dockerfile
@@ -49,8 +49,8 @@ services:
   vocabuddyui:
     image: peterkovecses/vocabuddyui
     build:
-      context: ../src
-      dockerfile: VocaBuddy.UI/Dockerfile
+      context: ..
+      dockerfile: src/VocaBuddy.UI/Dockerfile
     ports:
       - "5101:80"
       - "7095:443"

@@ -1,26 +1,27 @@
-# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-WORKDIR /App
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-# Copy csproj files and restore as distinct layers
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 COPY VocaBuddy.BE/VocaBuddy.Api/VocaBuddy.Api.csproj ./VocaBuddy.Api/
 COPY VocaBuddy.BE/VocaBuddy.Application/VocaBuddy.Application.csproj ./VocaBuddy.Application/
 COPY VocaBuddy.BE/VocaBuddy.Infrastructure/VocaBuddy.Infrastructure.csproj ./VocaBuddy.Infrastructure/
 COPY VocaBuddy.BE/VocaBuddy.Domain/VocaBuddy.Domain.csproj ./VocaBuddy.Domain/
 COPY VocaBuddy.Shared/VocaBuddy.Shared.csproj ../VocaBuddy.Shared/
 RUN dotnet restore ./VocaBuddy.Api/VocaBuddy.Api.csproj
-
-# Copy everything else and build
 COPY VocaBuddy.BE/VocaBuddy.Api/. ./VocaBuddy.Api/
 COPY VocaBuddy.BE/VocaBuddy.Application/. ./VocaBuddy.Application/
 COPY VocaBuddy.BE/VocaBuddy.Infrastructure/. ./VocaBuddy.Infrastructure/
 COPY VocaBuddy.BE/VocaBuddy.Domain/. ./VocaBuddy.Domain/
 COPY VocaBuddy.Shared/. ../VocaBuddy.Shared/
-WORKDIR /App/VocaBuddy.Api
-RUN dotnet publish -c Release -o out
+RUN dotnet build VocaBuddy.Api/VocaBuddy.Api.csproj -c Release -o /app/build
 
-# Stage 2: Serve
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /App
-COPY --from=build-env /App/VocaBuddy.Api/out .
+FROM build AS publish
+RUN dotnet publish VocaBuddy.Api/VocaBuddy.Api.csproj -c Release -o /app/publish
+
+FROM base as final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "VocaBuddy.Api.dll"]
