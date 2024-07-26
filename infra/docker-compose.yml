@@ -57,7 +57,6 @@ services:
     environment:
       ASPNETCORE_URLS: "${ASPNETCORE_URLS}"
       ASPNETCORE_HTTPS_PORT: "${VocaBuddyUI_HTTPS_PORT}"
-      ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
       ASPNETCORE_Kestrel__Certificates__Default__Password: "${VocaBuddyUI_Certificates_Password}"
       ASPNETCORE_Kestrel__Certificates__Default__Path: "${VocaBuddyUI_Certificates_Path}"
     volumes:
