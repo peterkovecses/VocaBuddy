@@ -1,16 +1,20 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
 
 namespace VocaBuddy.UI.Extensions;
 
 public static class HttpResponseExtensions
 {
-    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerSettings Settings = new()
+    {
+        NullValueHandling = NullValueHandling.Ignore,
+        MissingMemberHandling = MissingMemberHandling.Ignore
+    };
 
     public static async Task<T> ReadAsAsync<T>(this HttpResponseMessage response)
     {
-        await using var responseStream = await response.Content.ReadAsStreamAsync();
-        var result = await JsonSerializer.DeserializeAsync<T>(responseStream, Options);
+        var responseString = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<T>(responseString, Settings);
 
-        return result is not null ? result : throw new JsonException("Deserialization resulted in null.");
+        return result is not null ? result : throw new JsonSerializationException("Deserialization resulted in null.");
     }
 }
