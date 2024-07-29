@@ -26,8 +26,7 @@ public class Result<TData> : Result
 {
     public TData? Data { get; init; }
 
-    public Result() { }
-
+    [Newtonsoft.Json.JsonConstructor]
     public Result(TData data)
     {
         Data = data;
