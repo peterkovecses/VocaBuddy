@@ -4,7 +4,7 @@ namespace VocaBuddy.Api.Services;
 
 public class CurrentUser : ICurrentUser
 {
-    public const string IdClaimType = "Id";
+    public const string IdClaimType = "id";
 
     private readonly IHttpContextAccessor _httpContextAccessor;
 
