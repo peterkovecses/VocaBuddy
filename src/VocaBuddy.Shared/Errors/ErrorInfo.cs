@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace VocaBuddy.Shared.Errors;
+﻿namespace VocaBuddy.Shared.Errors;
 
 public class ErrorInfo
 {
@@ -10,10 +8,10 @@ public class ErrorInfo
     public ErrorInfo(string code, ApplicationError error)
     {
         Code = code;
-        Errors = new[] { error };
+        Errors = [error];
     }
 
-    [JsonConstructor]
+    [Newtonsoft.Json.JsonConstructor]
     public ErrorInfo(string code, IEnumerable<ApplicationError> errors)
     {
         Code = code;
