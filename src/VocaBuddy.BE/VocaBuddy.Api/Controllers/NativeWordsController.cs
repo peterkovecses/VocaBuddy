@@ -62,7 +62,7 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     {
         if (id != nativeWord.Id)
         {
-            return BadRequest(Result.Failure(new(VocaBuddyErrorCodes.ModelError, new[] { new ApplicationError("The model id does not match the route id.") })));
+            return BadRequest(Result.Failure(new(VocaBuddyErrorCodes.ModelError, new ApplicationError("The model id does not match the route id."))));
         }
 
         var result = await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id), token);
