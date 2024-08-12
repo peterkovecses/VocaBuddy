@@ -1,18 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace VocaBuddy.Api.Controllers;
+﻿namespace VocaBuddy.Api.Controllers;
 
 [Authorize]
 [Route("api/native-words")]
 [ApiController]
-public class NativeWordsController : ApiControllerBase
+public class NativeWordsController(IMediator mediator) : ApiControllerBase(mediator)
 {
-
-    public NativeWordsController(IMediator mediator) : base(mediator)
-    {
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetNativeWords(CancellationToken token)
     {

@@ -12,3 +12,5 @@ global using VocaBuddy.Application.Errors;
 global using VocaBuddy.Application.Interfaces;
 global using VocaBuddy.Infrastructure;
 global using MediatR;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
