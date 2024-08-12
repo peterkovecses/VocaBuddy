@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace VocaBuddy.Api.Extensions;
+﻿namespace VocaBuddy.Api.Extensions;
 
 public static class ApiResponseExtensions
 {
@@ -28,7 +26,7 @@ public static class ApiResponseExtensions
 
         return result.ErrorInfo!.Code switch
         {
-            VocaBuddyErrorCodes.NotFound => new NotFoundResult(),
+            VocaBuddyErrorCodes.NotFound => new ObjectResult(result) { StatusCode = StatusCodes.Status404NotFound},
             _ => new BadRequestObjectResult(result)
         };
     }
