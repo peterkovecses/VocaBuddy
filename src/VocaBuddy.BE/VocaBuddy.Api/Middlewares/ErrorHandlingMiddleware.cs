@@ -29,7 +29,6 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
             _ => (HttpStatusCode.InternalServerError, Result.ServerError())
         };
 
-
     private static async Task SetResponse(HttpContext context, HttpStatusCode code, Result result)
     {
         var jsonContent = JsonSerializer.Serialize(result);
