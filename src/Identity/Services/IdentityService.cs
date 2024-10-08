@@ -1,30 +1,16 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿namespace Identity.Services;
 
-namespace Identity.Services;
-
-public partial class IdentityService : IIdentityService
-{
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly IdentityContext _context;
-    private readonly CustomTokenValidationParameters _tokenValidationParameters;
-    private readonly JwtSecurityTokenHandler _tokenHandler;
-
-    public IdentityService(
-        UserManager<IdentityUser> userManager,
+public partial class IdentityService(UserManager<IdentityUser> userManager,
         IdentityContext context,
         IOptions<CustomTokenValidationParameters> options)
-    {
-        _userManager = userManager;
-        _context = context;
-        _tokenValidationParameters = options.Value;
-        _tokenHandler = new();
-    }
+    : IIdentityService
+{
+    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly IdentityContext _context = context;
+    private readonly CustomTokenValidationParameters _tokenValidationParameters = options.Value;
+    private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
-    async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(IdentityUser user)
+    private async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(IdentityUser user)
     {
         var key = Encoding.ASCII.GetBytes(_tokenValidationParameters.Secret);
         var tokenDescription = await CreateTokenDescriptionAsync();
