@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace VocaBuddy.Application.PipelineBehaviors;
+﻿namespace VocaBuddy.Application.PipelineBehaviors;
 
 public class ValidationBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>

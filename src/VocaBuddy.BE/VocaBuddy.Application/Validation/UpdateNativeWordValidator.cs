@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace VocaBuddy.Application.Validation;
+﻿namespace VocaBuddy.Application.Validation;
 
 public class UpdateNativeWordValidator : AbstractValidator<UpdateNativeWordCommand>
 {

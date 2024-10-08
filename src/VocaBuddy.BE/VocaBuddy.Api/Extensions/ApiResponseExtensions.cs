@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace VocaBuddy.Api.Extensions;
+﻿namespace VocaBuddy.Api.Extensions;
 
 public static class ApiResponseExtensions
 {

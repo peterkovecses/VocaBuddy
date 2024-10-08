@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace VocaBuddy.Application;
+﻿namespace VocaBuddy.Application;
 
 public static class DependencyInjection
 {
