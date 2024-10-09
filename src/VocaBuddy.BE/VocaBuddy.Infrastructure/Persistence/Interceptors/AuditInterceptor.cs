@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using static Microsoft.EntityFrameworkCore.EntityState;
+﻿using static Microsoft.EntityFrameworkCore.EntityState;
 
 namespace VocaBuddy.Infrastructure.Persistence.Interceptors;
 

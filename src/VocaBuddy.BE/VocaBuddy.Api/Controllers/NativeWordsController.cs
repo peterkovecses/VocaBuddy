@@ -51,10 +51,10 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
         var result = await Mediator.Send(new CreateNativeWordCommand(nativeWord), token);
 
         return result
-            .ToApiResponse(result => CreatedAtAction(
+            .ToApiResponse(r => CreatedAtAction(
                 nameof(GetNativeWord),
-                new { id = result.Data! },
-                result));
+                new { id = r.Data! },
+                r));
     }
 
     [HttpPut("{id}")]
@@ -62,7 +62,7 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     {
         if (id != nativeWord.Id)
         {
-            return BadRequest(Result.Failure(new(VocaBuddyErrorCodes.ModelError, new ApplicationError("The model id does not match the route id."))));
+            return BadRequest(Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.ModelError, [new ApplicationError("The model id does not match the route id.")])));
         }
 
         var result = await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id), token);

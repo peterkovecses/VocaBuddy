@@ -1,15 +1,9 @@
 ﻿namespace VocaBuddy.Application.Handlers;
 
-public class GetNativeWordByIdHandler : IRequestHandler<GetNativeWordByIdQuery, Result<CompactNativeWordDto?>>
+public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetNativeWordByIdQuery, Result<CompactNativeWordDto?>>
 {
-    private readonly INativeWordRepository _nativeWords;
-    private readonly IMapper _mapper;
-
-    public GetNativeWordByIdHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _nativeWords = unitOfWork.NativeWords;
-        _mapper = mapper;
-    }
+    private readonly INativeWordRepository _nativeWords = unitOfWork.NativeWords;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<CompactNativeWordDto?>> Handle(GetNativeWordByIdQuery request, CancellationToken cancellationToken)
     {

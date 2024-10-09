@@ -1,32 +1,21 @@
-﻿using Blazored.LocalStorage;
+﻿namespace VocaBuddy.UI.Services.Authentication;
 
-namespace VocaBuddy.UI.Services.Authentication;
-
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationService(
+    IIdentityApiClient client,
+    CustomAuthenticationStateProvider authStateProvider,
+    ILocalStorageService localStorage) : IAuthenticationService
 {
-    private readonly IIdentityApiClient _client;
-    private readonly CustomAuthenticationStateProvider _authStateProvider;
-    private readonly ILocalStorageService _localStorage;
-
-    public AuthenticationService(
-        IIdentityApiClient client,
-        CustomAuthenticationStateProvider authStateProvider,
-        ILocalStorageService localStorage)
-    {
-        _client = client;
-        _authStateProvider = authStateProvider;
-        _localStorage = localStorage;
-    }
+    private readonly IIdentityApiClient _client = client;
+    private readonly CustomAuthenticationStateProvider _authStateProvider = authStateProvider;
+    private readonly ILocalStorageService _localStorage = localStorage;
 
     public async Task<Result> LoginAsync(UserLoginRequest loginRequest)
     {
         var result = await _client.LoginAsync(loginRequest);
 
-        if (result.IsSuccess)
-        {
-            SignInUser(result.Data!);
-            await StoreTokensAsync(result.Data!);
-        }
+        if (!result.IsSuccess) return result;
+        SignInUser(result.Data!);
+        await StoreTokensAsync(result.Data!);
 
         return result;
 

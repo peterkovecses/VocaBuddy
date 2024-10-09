@@ -1,15 +1,9 @@
 ﻿namespace VocaBuddy.Application.Handlers;
 
-public class DeleteNativeWordHandler : IRequestHandler<DeleteNativeWordCommand, Result>
+public class DeleteNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) : IRequestHandler<DeleteNativeWordCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly string _currentUserId;
-
-    public DeleteNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserId = user.Id!;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly string _currentUserId = user.Id!;
 
     public async Task<Result> Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
     {

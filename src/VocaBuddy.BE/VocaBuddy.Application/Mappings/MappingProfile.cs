@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace VocaBuddy.Application.Mappings;
+﻿namespace VocaBuddy.Application.Mappings;
 
 public class MappingProfile : Profile
 {

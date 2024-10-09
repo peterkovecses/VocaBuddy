@@ -1,17 +1,10 @@
 ﻿namespace VocaBuddy.Application.Handlers;
 
-public class UpdateNativeWordHandler : IRequestHandler<UpdateNativeWordCommand, Result>
+public class UpdateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user, IMapper mapper) : IRequestHandler<UpdateNativeWordCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly string _currentUserId;
-    private readonly IMapper _mapper;
-
-    public UpdateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserId = user.Id!;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly string _currentUserId = user.Id!;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result> Handle(UpdateNativeWordCommand request, CancellationToken cancellationToken)
     {

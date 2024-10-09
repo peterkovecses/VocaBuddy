@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace VocaBuddy.UI;
+﻿namespace VocaBuddy.UI;
 
 public static class UiAssemblyMarker
 {

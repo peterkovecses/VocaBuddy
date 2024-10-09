@@ -1,17 +1,10 @@
 ﻿namespace VocaBuddy.Application.Handlers;
 
-public class GetLatestNativeWordsHandler : IRequestHandler<GetLatestNativeWordsQuery, Result<List<CompactNativeWordDto>>>
+public class GetLatestNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser user, IMapper mapper) : IRequestHandler<GetLatestNativeWordsQuery, Result<List<CompactNativeWordDto>>>
 {
-    private readonly INativeWordRepository _nativeWords;
-    private readonly string _currentUserId;
-    private readonly IMapper _mapper;
-
-    public GetLatestNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser user, IMapper mapper)
-    {
-        _nativeWords = unitOfWork.NativeWords;
-        _currentUserId = user.Id!;
-        _mapper = mapper;
-    }
+    private readonly INativeWordRepository _nativeWords = unitOfWork.NativeWords;
+    private readonly string _currentUserId = user.Id!;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<List<CompactNativeWordDto>>> Handle(GetLatestNativeWordsQuery request, CancellationToken cancellationToken)
     {

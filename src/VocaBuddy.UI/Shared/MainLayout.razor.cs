@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
-
-namespace VocaBuddy.UI.Shared;
+﻿namespace VocaBuddy.UI.Shared;
 
 public class MainLayoutBase : LayoutComponentBase, IDisposable
 {
@@ -49,5 +46,5 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     }
 
     public void Dispose()
-        => (AuthStateProvider! as AuthenticationStateProvider).AuthenticationStateChanged -= OnAuthenticationStateChanged;
+        => AuthStateProvider!.AuthenticationStateChanged -= OnAuthenticationStateChanged;
 }

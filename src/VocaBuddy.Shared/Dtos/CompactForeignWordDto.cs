@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using VocaBuddy.Shared.Constants;
-
-namespace VocaBuddy.Shared.Dtos;
+﻿namespace VocaBuddy.Shared.Dtos;
 
 public class CompactForeignWordDto
 {

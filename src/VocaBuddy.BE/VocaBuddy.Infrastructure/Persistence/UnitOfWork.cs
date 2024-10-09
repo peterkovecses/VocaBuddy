@@ -9,8 +9,8 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(VocaBuddyContext context)
     {
         _context = context;
-        _nativeWords = new(() => new NativeWordRepository(_context));
-        _foreignWords = new(() => new ForeignWordRepository(_context));
+        _nativeWords = new Lazy<INativeWordRepository>(() => new NativeWordRepository(_context));
+        _foreignWords = new Lazy<IForeignWordRepository>(() => new ForeignWordRepository(_context));
     }
 
     public INativeWordRepository NativeWords => _nativeWords.Value;

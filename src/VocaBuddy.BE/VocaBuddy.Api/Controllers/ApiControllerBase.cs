@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace VocaBuddy.Api.Controllers;
 
-namespace VocaBuddy.Api.Controllers;
-
-public abstract class ApiControllerBase : ControllerBase
+public abstract class ApiControllerBase(IMediator mediator) : ControllerBase
 {
-    protected IMediator Mediator { get; }
-
-    protected ApiControllerBase(IMediator mediator)
-    {
-        Mediator = mediator;
-    }
+    protected IMediator Mediator { get; } = mediator;
 }

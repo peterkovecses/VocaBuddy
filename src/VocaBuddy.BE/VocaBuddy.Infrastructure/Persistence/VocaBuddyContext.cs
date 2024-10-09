@@ -1,17 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+﻿namespace VocaBuddy.Infrastructure.Persistence;
 
-namespace VocaBuddy.Infrastructure.Persistence;
-
-public class VocaBuddyContext : DbContext
+public class VocaBuddyContext(DbContextOptions<VocaBuddyContext> options, AuditInterceptor auditInterceptor) : DbContext(options)
 {
-    private readonly AuditInterceptor _auditInterceptor;
-
-    public VocaBuddyContext(DbContextOptions<VocaBuddyContext> options, AuditInterceptor auditInterceptor) 
-        : base(options)
-    {
-        _auditInterceptor = auditInterceptor;
-    }
+    private readonly AuditInterceptor _auditInterceptor = auditInterceptor;
 
     public DbSet<NativeWord> NativeWords { get; set; } = default!;
     public DbSet<ForeignWord> ForeignWords { get; set; } = default!;

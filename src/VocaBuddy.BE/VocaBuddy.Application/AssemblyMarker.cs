@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace VocaBuddy.Application;
+﻿namespace VocaBuddy.Application;
 
 public static class ApplicationAssemblyMarker
 {

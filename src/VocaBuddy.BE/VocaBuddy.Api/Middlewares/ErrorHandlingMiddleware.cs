@@ -1,31 +1,16 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Text.Json;
-using VocaBuddy.Shared.Constants;
+﻿namespace VocaBuddy.Api.Middlewares;
 
-namespace VocaBuddy.Api.Middlewares;
-
-public class ErrorHandlingMiddleware
+public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ErrorHandlingMiddleware> _logger;
-
-    public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ErrorMessages.ExceptionOccurred);
+            logger.LogError(ex, ErrorMessages.ExceptionOccurred);
             await HandleExceptionAsync(context, ex);
         }
     }

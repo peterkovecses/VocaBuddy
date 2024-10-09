@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
-namespace Identity;
+﻿namespace Identity;
 
 public static class DependencyInjection
 {

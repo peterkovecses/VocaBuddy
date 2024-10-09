@@ -1,16 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
-namespace VocaBuddy.Infrastructure.Persistence.Repositories;
-
-public abstract class GenericRepository<TEntity, TId> : IGenericRepository<TEntity, TId> where TEntity : class
+public abstract class GenericRepository<TEntity, TId>(DbContext context) : IGenericRepository<TEntity, TId> where TEntity : class
 {
-    protected readonly DbContext Context;
-
-    protected GenericRepository(DbContext context)
-    {
-        Context = context;
-    }
+    protected readonly DbContext Context = context;
 
     public virtual async Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
     {

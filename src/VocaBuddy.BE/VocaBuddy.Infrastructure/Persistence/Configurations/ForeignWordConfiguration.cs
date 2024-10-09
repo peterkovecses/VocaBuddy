@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-
-namespace VocaBuddy.Infrastructure.Persistence.Configurations;
+﻿namespace VocaBuddy.Infrastructure.Persistence.Configurations;
 
 public class ForeignWordConfiguration : IEntityTypeConfiguration<ForeignWord>
 {

@@ -1,11 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-
-namespace VocaBuddy.Infrastructure.Persistence.Repositories;
+﻿namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
 public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeWordRepository
 {
-    public NativeWordRepository(VocaBuddyContext context) : base(context) { }
+    public NativeWordRepository(DbContext context) : base(context) { }
 
     public VocaBuddyContext VocaBuddyContext
         => (Context as VocaBuddyContext)!;

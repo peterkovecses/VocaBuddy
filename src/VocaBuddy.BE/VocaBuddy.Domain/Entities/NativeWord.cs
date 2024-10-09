@@ -8,5 +8,5 @@ public class NativeWord
     public DateTime CreatedUtc { get; set; }
     public DateTime UpdatedUtc { get; set; }
 
-    public required virtual ICollection<ForeignWord> Translations { get; set; }
+    public virtual required ICollection<ForeignWord> Translations { get; set; }
 }

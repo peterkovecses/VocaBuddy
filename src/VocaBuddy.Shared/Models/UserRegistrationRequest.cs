@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VocaBuddy.Shared.Models;
+﻿namespace VocaBuddy.Shared.Models;
 
 public class UserRegistrationRequest
 {

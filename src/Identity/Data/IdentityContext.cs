@@ -1,9 +1,4 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-
-namespace Identity.Data;
+﻿namespace Identity.Data;
 
 public class IdentityContext : ApiAuthorizationDbContext<IdentityUser>
 {

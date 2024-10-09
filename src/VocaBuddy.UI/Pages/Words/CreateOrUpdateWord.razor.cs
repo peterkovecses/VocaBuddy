@@ -92,12 +92,12 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             {
                 if (Update)
                 {
-                    DisplaySuccesfulSavingMessage();
+                    DisplaySuccessfulSavingMessage();
                     NavManager!.NavigateTo("/words");
                 }
                 else
                 {
-                    DisplaySuccesfulSavingMessage();
+                    DisplaySuccessfulSavingMessage();
                     ClearModel();
                     ClearStatusMessage();
                 }
@@ -113,7 +113,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
             return;
 
-            void DisplaySuccesfulSavingMessage()
+            void DisplaySuccessfulSavingMessage()
                 => NotificationService!.ShowSuccess("The word has been successfully saved.");
         }
     }
@@ -123,13 +123,10 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     private async Task<Result> SaveWordAsync()
     {
-        if (WordId.HasValue)
-        {
-            Model.Id = WordId.Value;
-            return await WordService!.UpdateWord(Model);
-        }
+        if (!WordId.HasValue) return await WordService!.CreateWord(Model);
+        Model.Id = WordId.Value;
 
-        return await WordService!.CreateWord(Model);
+        return await WordService!.UpdateWord(Model);
     }
 
     private static CompactNativeWordDto InitializeEmptyModel()

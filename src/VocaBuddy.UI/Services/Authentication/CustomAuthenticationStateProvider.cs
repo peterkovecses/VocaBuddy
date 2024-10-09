@@ -1,30 +1,16 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
+﻿namespace VocaBuddy.UI.Services.Authentication;
 
-namespace VocaBuddy.UI.Services.Authentication;
-
-public class CustomAuthenticationStateProvider : AuthenticationStateProvider
+public class CustomAuthenticationStateProvider(
+    HttpClient httpClient,
+    ILocalStorageService localStorage,
+    IJwtParser jwtParser,
+    IOptions<IdentityApiConfiguration> identityOptions) : AuthenticationStateProvider
 {
-    private readonly HttpClient _httpClient;
-    private readonly ILocalStorageService _localStorage;
-    private readonly IJwtParser _jwtParser;
-    private readonly IdentityApiConfiguration _identityOptions;
-    private readonly AuthenticationState _anonymous;
-
-    public CustomAuthenticationStateProvider(
-        HttpClient httpClient,
-        ILocalStorageService localStorage,
-        IJwtParser jwtParser,
-        IOptions<IdentityApiConfiguration> identityOptions)
-    {
-        _httpClient = httpClient;
-        _localStorage = localStorage;
-        _jwtParser = jwtParser;
-        _identityOptions = identityOptions.Value;
-        _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-    }
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly ILocalStorageService _localStorage = localStorage;
+    private readonly IJwtParser _jwtParser = jwtParser;
+    private readonly IdentityApiConfiguration _identityOptions = identityOptions.Value;
+    private readonly AuthenticationState _anonymous = new(new ClaimsPrincipal(new ClaimsIdentity()));
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
@@ -35,7 +21,7 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
             return _anonymous;
         }
 
-        _httpClient.DefaultRequestHeaders.Authorization = new("bearer", token);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
         return new AuthenticationState(CreateAuthenticatedUser(token));
     }
@@ -43,15 +29,9 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     public async Task<bool> IsUserAuthenticatedAsync()
     {
         var authState = await GetAuthenticationStateAsync();
-
         var userIdentity = authState.User.Identity;
 
-        if (userIdentity is null)
-        {
-            return false;
-        }
-
-        return userIdentity.IsAuthenticated;
+        return userIdentity is not null && userIdentity.IsAuthenticated;
     }
 
     public void SignInUser(string token)
