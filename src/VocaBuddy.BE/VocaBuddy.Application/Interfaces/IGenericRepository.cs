@@ -2,7 +2,7 @@
 
 namespace VocaBuddy.Application.Interfaces;
 
-public interface IGenericRepository<TEntity, TId> where TEntity : class
+public interface IGenericRepository<TEntity, in TId> where TEntity : class
 {
     Task<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
 

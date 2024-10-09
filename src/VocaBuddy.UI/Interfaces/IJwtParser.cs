@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace VocaBuddy.UI.Interfaces
+﻿namespace VocaBuddy.UI.Interfaces
 {
     public interface IJwtParser
     {

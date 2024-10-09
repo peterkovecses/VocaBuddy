@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Options;
-
-namespace VocaBuddy.UI.Validation;
+﻿namespace VocaBuddy.UI.Validation;
 
 public class UserRegistrationRequestWithPasswordCheckValidator : AbstractValidator<UserRegistrationRequestWithPasswordCheck>
 {

@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace VocaBuddy.Infrastructure.Persistence.Configurations;
+﻿namespace VocaBuddy.Infrastructure.Persistence.Configurations;
 
 public class NativeWordConfiguration : IEntityTypeConfiguration<NativeWord>
 {

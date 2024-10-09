@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
-
-namespace VocaBuddy.Api;
+﻿namespace VocaBuddy.Api;
 
 public static class DependencyInjection
 {

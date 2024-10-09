@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace Identity.Models
+﻿namespace Identity.Models
 {
     public class CustomRefreshToken
     {
