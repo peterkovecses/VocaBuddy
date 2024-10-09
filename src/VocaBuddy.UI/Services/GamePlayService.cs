@@ -1,15 +1,10 @@
 ﻿namespace VocaBuddy.UI.Services;
 
-public class GamePlayService : IGamePlayService
+public class GamePlayService(IWordService wordService) : IGamePlayService
 {
-    private readonly IWordService _wordService;
+    private readonly IWordService _wordService = wordService;
     private List<CompactNativeWordDto>? _words;
     private List<CompactNativeWordDto> _mistakes = new();
-
-    public GamePlayService(IWordService wordService)
-    {
-        _wordService = wordService;
-    }
 
     public CompactNativeWordDto? ActualWord { get; private set; }
     public int RemainingWordCount { get; private set; }
@@ -69,7 +64,7 @@ public class GamePlayService : IGamePlayService
     public void LoadMistakes()
     {
         _words = _mistakes;
-        _mistakes = new();
+        _mistakes = [];
     }
 
     public bool TryMoveToNextRound()
@@ -81,16 +76,13 @@ public class GamePlayService : IGamePlayService
             return true;
         }
 
-        if (_mistakes!.Any())
-        {
-            SetInitialMistakeCount();
-            LoadMistakes();
-            SetNextWord();
+        if (!_mistakes!.Any()) return false;
+        SetInitialMistakeCount();
+        LoadMistakes();
+        SetNextWord();
 
-            return true;
-        }
+        return true;
 
-        return false;
     }
 
     private void SetInitialMistakeCount()

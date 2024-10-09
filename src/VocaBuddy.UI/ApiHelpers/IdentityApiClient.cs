@@ -1,18 +1,9 @@
-﻿using Microsoft.Extensions.Options;
-using System.Net.Http.Json;
+﻿namespace VocaBuddy.UI.ApiHelpers;
 
-namespace VocaBuddy.UI.ApiHelpers;
-
-public class IdentityApiClient : IIdentityApiClient
+public class IdentityApiClient(HttpClient client, IOptions<IdentityApiConfiguration> identityOptions) : IIdentityApiClient
 {
-    private readonly HttpClient _client;
-    private readonly IdentityApiConfiguration _identityConfig;
-
-    public IdentityApiClient(HttpClient client, IOptions<IdentityApiConfiguration> identityOptions)
-    {
-        _client = client;
-        _identityConfig = identityOptions.Value;
-    }
+    private readonly HttpClient _client = client;
+    private readonly IdentityApiConfiguration _identityConfig = identityOptions.Value;
 
     public async Task<Result<TokenHolder>> LoginAsync(UserLoginRequest loginRequest)
     {

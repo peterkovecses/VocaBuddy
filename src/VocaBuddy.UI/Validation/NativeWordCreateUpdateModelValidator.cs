@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace VocaBuddy.UI.Validation;
+﻿namespace VocaBuddy.UI.Validation;
 
 public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNativeWordDto>
 {

@@ -1,17 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace VocaBuddy.UI.Services.Authentication;
 
-public class JwtParser : IJwtParser
+public class JwtParser(IOptions<IdentityApiConfiguration> identityOptions) : IJwtParser
 {
-    private readonly IdentityApiConfiguration _identityConfiguration;
-
-    public JwtParser(IOptions<IdentityApiConfiguration> identityOptions)
-    {
-        _identityConfiguration = identityOptions?.Value ?? throw new ArgumentNullException(nameof(identityOptions));
-    }
+    private readonly IdentityApiConfiguration _identityConfiguration =
+        identityOptions.Value ?? throw new ArgumentNullException(nameof(identityOptions));
 
     public IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {

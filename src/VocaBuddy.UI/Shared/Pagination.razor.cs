@@ -6,7 +6,7 @@ public class PaginationBase : ComponentBase
     public int CurrentPage { get; set; }
 
     [Parameter]
-    public List<int> PageSizes { get; set; } = new List<int> { 15, 25, 50 };
+    public List<int> PageSizes { get; set; } = [15, 25, 50];
 
     [Parameter] 
     public int PageSize { get; set; }
