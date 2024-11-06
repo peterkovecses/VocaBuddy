@@ -29,7 +29,7 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
 
         var elapsedTime = Stopwatch.GetElapsedTime(startTime);
         _logger.LogInformation(
-            "Completed request {RequestName}, {ElapsedTimeMs}",
+            "Completed request {RequestName}, ElapsedTime: {ElapsedTimeMs}ms",
             typeof(TRequest).Name,
             elapsedTime);
 
