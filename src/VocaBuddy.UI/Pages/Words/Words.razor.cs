@@ -70,7 +70,7 @@ public class WordsBase : ListComponentBase
             Filter, StringComparison.OrdinalIgnoreCase)
                 || word.TranslationsString.Contains(Filter, StringComparison.OrdinalIgnoreCase);
 
-    private IOrderedEnumerable<NativeWordListViewModel> SortWords(ICollection<NativeWordListViewModel> words)
+    private IOrderedEnumerable<NativeWordListViewModel> SortWords(IEnumerable<NativeWordListViewModel> words)
         => CurrentSortBy switch
         {
             SortBy.Alphabetical => CurrentSortOrder == SortOrder.Ascending ? words.OrderBy(word => word.Text) : words.OrderByDescending(word => word.Text),

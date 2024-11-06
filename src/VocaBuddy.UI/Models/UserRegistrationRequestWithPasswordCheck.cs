@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VocaBuddy.UI.Models;
+﻿namespace VocaBuddy.UI.Models;
 
 public class UserRegistrationRequestWithPasswordCheck
 {

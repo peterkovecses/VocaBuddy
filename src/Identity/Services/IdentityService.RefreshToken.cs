@@ -1,24 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
-namespace Identity.Services;
+﻿namespace Identity.Services;
 
 public partial class IdentityService
 {
     public async Task<TokenHolder> RefreshTokenAsync(string token, string refreshToken)
     {
-        var claimPrincipal = GetPrincipalFromToken(token);
-        ValidatePrincipal(claimPrincipal);
-        var storedRefreshToken = await GetStoredRefreshTokenAsync(refreshToken);
-        ValidateRefreshToken(claimPrincipal, storedRefreshToken);
-        await MakeTokenUsedUpAsync(storedRefreshToken!);
-        var user = await FindUserByIdAsync(claimPrincipal);
+        var claimPrincipal = GetPrincipalFromToken();
+        ValidatePrincipal();
+        var storedRefreshToken = await GetStoredRefreshTokenAsync();
+        ValidateRefreshToken();
+        await MakeTokenUsedUpAsync();
+        var user = await FindUserByIdAsync();
 
         return await CreateSuccessfulAuthenticationResultAsync(user!);
 
-        ClaimsPrincipal GetPrincipalFromToken(string token)
+        ClaimsPrincipal GetPrincipalFromToken()
         {
             ClaimsPrincipal? principal;
             SecurityToken validatedToken;
@@ -42,7 +37,7 @@ public partial class IdentityService
             return principal;
         }
 
-        void ValidatePrincipal(ClaimsPrincipal claimPrincipal)
+        void ValidatePrincipal()
         {
             var expiryDateUnix =
                 long.Parse(claimPrincipal.Claims.Single(claim => claim.Type == JwtRegisteredClaimNames.Exp).Value);
@@ -56,10 +51,10 @@ public partial class IdentityService
             }
         }
 
-        async Task<CustomRefreshToken?> GetStoredRefreshTokenAsync(string refreshToken)
-            => await _context.RefreshTokens.SingleOrDefaultAsync(r => r.Token == refreshToken);
+        async Task<CustomRefreshToken?> GetStoredRefreshTokenAsync()
+            => await context.RefreshTokens.SingleOrDefaultAsync(r => r.Token == refreshToken);
 
-        void ValidateRefreshToken(ClaimsPrincipal claimPrincipal, CustomRefreshToken? storedRefreshToken)
+        void ValidateRefreshToken()
         {
             if (storedRefreshToken == null)
             {
@@ -88,10 +83,10 @@ public partial class IdentityService
             }
         }
 
-        async Task MakeTokenUsedUpAsync(CustomRefreshToken storedRefreshToken)
+        async Task MakeTokenUsedUpAsync()
         {
-            storedRefreshToken.Used = true;
-            await _context.SaveChangesAsync();
+            storedRefreshToken!.Used = true;
+            await context.SaveChangesAsync();
         }
 
         static bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
@@ -99,7 +94,7 @@ public partial class IdentityService
                 jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase);
 
-        async Task<IdentityUser?> FindUserByIdAsync(ClaimsPrincipal claimPrincipal)
-            => await _userManager.FindByIdAsync(claimPrincipal.Claims.Single(claim => claim.Type == "id").Value);
+        async Task<IdentityUser?> FindUserByIdAsync()
+            => await userManager.FindByIdAsync(claimPrincipal.Claims.Single(claim => claim.Type == "id").Value);
     }
 }

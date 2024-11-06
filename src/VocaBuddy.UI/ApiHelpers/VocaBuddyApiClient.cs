@@ -1,29 +1,15 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
+﻿namespace VocaBuddy.UI.ApiHelpers;
 
-namespace VocaBuddy.UI.ApiHelpers;
-
-public class VocaBuddyApiClient : IVocaBuddyApiClient
+public class VocaBuddyApiClient(
+    HttpClient client,
+    IOptions<VocaBuddyApiConfiguration> vocaBuddyApiOptions,
+    ILocalStorageService localStorage,
+    IAuthenticationService authService) : IVocaBuddyApiClient
 {
-    private readonly HttpClient _client;
-    private readonly ILocalStorageService _localStorage;
-    private readonly IAuthenticationService _authService;
-    private readonly VocaBuddyApiConfiguration _vocaBuddyApiConfig;
-
-    public VocaBuddyApiClient(
-        HttpClient client,
-        IOptions<VocaBuddyApiConfiguration> vocaBuddyApiOptions,
-        ILocalStorageService localStorage,
-        IAuthenticationService authService)
-    {
-        _client = client;
-        _localStorage = localStorage;
-        _authService = authService;
-        _vocaBuddyApiConfig = vocaBuddyApiOptions.Value;
-    }
+    private readonly HttpClient _client = client;
+    private readonly ILocalStorageService _localStorage = localStorage;
+    private readonly IAuthenticationService _authService = authService;
+    private readonly VocaBuddyApiConfiguration _vocaBuddyApiConfig = vocaBuddyApiOptions.Value;
 
     public Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
         => GetAsync<Result<List<NativeWordDto>>>(_vocaBuddyApiConfig.NativeWordsEndpoints);
@@ -65,11 +51,9 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
     {
         var response = await ExecuteSendingAsync();
 
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            await _authService.RefreshTokenAsync();
-            response = await ExecuteSendingAsync();
-        }
+        if (response.StatusCode != HttpStatusCode.Unauthorized) return await response.ReadAsAsync<TResult>();
+        await _authService.RefreshTokenAsync();
+        response = await ExecuteSendingAsync();
 
         return await response.ReadAsAsync<TResult>();
 
@@ -78,7 +62,7 @@ public class VocaBuddyApiClient : IVocaBuddyApiClient
             await SetAuthorizationHeader();
             var request = new HttpRequestMessage(method, endpoint);
 
-            if (data != null)
+            if (data is not null)
             {
                 request.Content = JsonContent.Create(data);
             }

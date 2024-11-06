@@ -1,44 +1,37 @@
-﻿using Microsoft.Extensions.Logging;
+﻿namespace VocaBuddy.Application.PipelineBehaviors;
 
-namespace VocaBuddy.Application.PipelineBehaviors;
-
-public class LoggingBehavior<TRequest, TResponse>
+public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : Result
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-
-    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger = logger;
 
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
+        var startTime = Stopwatch.GetTimestamp();
         _logger.LogInformation(
-            "Starting request {RequestName}, {DateTimeUtc}",
-            typeof(TRequest).Name,
-            DateTime.UtcNow);
+            "Starting request {RequestName}", 
+            typeof(TRequest).Name);
 
         var result = await next();
 
         if (result.IsFailure)
         {
             _logger.LogError(
-                "Request failure {RequestName}, {@Error}, {DateTimeUtc}",
+                "Request failure {RequestName}, {@Error}",
                 typeof(TRequest).Name,
-                result.ErrorInfo,
-                DateTime.UtcNow);
+                result.ErrorInfo);
         }
 
+        var elapsedTime = Stopwatch.GetElapsedTime(startTime);
         _logger.LogInformation(
-            "Completed request {RequestName}, {DateTimeUtc}",
+            "Completed request {RequestName}, ElapsedTime: {ElapsedTime}",
             typeof(TRequest).Name,
-            DateTime.UtcNow);
+            elapsedTime);
 
         return result;
     }

@@ -1,17 +1,8 @@
-﻿using System.Security.Claims;
+﻿namespace VocaBuddy.Api.Services;
 
-namespace VocaBuddy.Api.Services;
-
-public class CurrentUser : ICurrentUser
+public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
 {
     public const string IdClaimType = "id";
 
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public CurrentUser(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
-    public string? Id => _httpContextAccessor.HttpContext?.User.FindFirstValue(IdClaimType);
+    public string? Id => httpContextAccessor.HttpContext?.User.FindFirstValue(IdClaimType);
 }

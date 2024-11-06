@@ -1,13 +1,8 @@
 ﻿namespace VocaBuddy.UI.Services;
 
-public class WordService : IWordService
+public class WordService(IVocaBuddyApiClient client) : IWordService
 {
-    private readonly IVocaBuddyApiClient _client;
-
-    public WordService(IVocaBuddyApiClient client)
-    {
-        _client = client;
-    }
+    private readonly IVocaBuddyApiClient _client = client;
 
     public async Task<List<NativeWordListViewModel>> GetWordListViewModelsAsync()
     {
