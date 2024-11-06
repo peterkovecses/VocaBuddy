@@ -11,6 +11,7 @@ global using VocaBuddy.Application.Errors;
 global using VocaBuddy.Application.Interfaces;
 global using VocaBuddy.Domain.Entities;
 global using System.Reflection;
+global using System.Diagnostics;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.DependencyInjection;
 global using AutoMapper;

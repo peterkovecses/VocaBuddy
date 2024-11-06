@@ -12,26 +12,26 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
+        var startTime = Stopwatch.GetTimestamp();
         _logger.LogInformation(
-            "Starting request {RequestName}, {DateTimeUtc}",
-            typeof(TRequest).Name,
-            DateTime.UtcNow);
+            "Starting request {RequestName}", 
+            typeof(TRequest).Name);
 
         var result = await next();
 
         if (result.IsFailure)
         {
             _logger.LogError(
-                "Request failure {RequestName}, {@Error}, {DateTimeUtc}",
+                "Request failure {RequestName}, {@Error}",
                 typeof(TRequest).Name,
-                result.ErrorInfo,
-                DateTime.UtcNow);
+                result.ErrorInfo);
         }
 
+        var elapsedTime = Stopwatch.GetElapsedTime(startTime);
         _logger.LogInformation(
-            "Completed request {RequestName}, {DateTimeUtc}",
+            "Completed request {RequestName}, {ElapsedTimeMs}",
             typeof(TRequest).Name,
-            DateTime.UtcNow);
+            elapsedTime);
 
         return result;
     }
