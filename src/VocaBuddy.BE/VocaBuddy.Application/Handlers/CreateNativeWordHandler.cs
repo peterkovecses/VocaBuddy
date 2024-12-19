@@ -8,7 +8,7 @@ public class CreateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user, 
 
     public async Task<Result<NativeWordDto>> Handle(CreateNativeWordCommand request, CancellationToken cancellationToken)
     {
-        var nativeWord = _mapper.Map<NativeWord>(request.NativeWorld);
+        var nativeWord = _mapper.Map<NativeWord>(request.NativeWord);
         SetUserId();
         await SaveWordAsync();
 
