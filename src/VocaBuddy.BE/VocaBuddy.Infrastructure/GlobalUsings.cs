@@ -1,6 +1,7 @@
 ﻿global using VocaBuddy.Shared.Constants;
 global using VocaBuddy.Application.Interfaces;
 global using VocaBuddy.Domain.Entities;
+global using VocaBuddy.Domain.Common;
 global using VocaBuddy.Infrastructure.Interfaces;
 global using VocaBuddy.Infrastructure.Persistence;
 global using VocaBuddy.Infrastructure.Persistence.Interceptors;

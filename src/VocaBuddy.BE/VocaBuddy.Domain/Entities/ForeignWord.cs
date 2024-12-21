@@ -1,8 +1,7 @@
 ﻿namespace VocaBuddy.Domain.Entities;
 
-public class ForeignWord
+public class ForeignWord : EntityBase
 {
-    public int Id { get; set; }
     public required string Text { get; set; }
 
     public required int NativeWordId { get; set; }
