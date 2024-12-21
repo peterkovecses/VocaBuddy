@@ -5,8 +5,6 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
         IOptions<CustomTokenValidationParameters> options)
     : IIdentityService
 {
-    private readonly UserManager<IdentityUser> _userManager = userManager;
-    private readonly IdentityContext _context = context;
     private readonly CustomTokenValidationParameters _tokenValidationParameters = options.Value;
     private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
@@ -41,8 +39,8 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
 
         async Task SaveRefreshTokenAsync()
         {
-            await _context.RefreshTokens.AddAsync(refreshToken);
-            await _context.SaveChangesAsync();
+            await context.RefreshTokens.AddAsync(refreshToken);
+            await context.SaveChangesAsync();
         }
 
         async Task<List<Claim>> GetClaimsAsync()
@@ -55,9 +53,9 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
                 new("id", user.Id)
             };
 
-            var userClaims = await _userManager.GetClaimsAsync(user);
+            var userClaims = await userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
-            var userRoles = (await _userManager.GetRolesAsync(user))
+            var userRoles = (await userManager.GetRolesAsync(user))
                                 .Select(role => new Claim(ClaimTypes.Role, role));
             claims.AddRange(userRoles);
 
@@ -66,5 +64,5 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
     }
 
     private async Task<IdentityUser?> FindUserByEmailAsync(string email)
-        => await _userManager.FindByNameAsync(email);
+        => await userManager.FindByNameAsync(email);
 }
