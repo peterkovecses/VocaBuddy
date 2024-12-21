@@ -6,7 +6,6 @@ public class GetNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser user, IM
 {
     private readonly INativeWordRepository _nativeWords = unitOfWork.NativeWords;
     private readonly string _currentUserId = user.Id!;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<List<NativeWordDto>>> Handle(
         GetNativeWordsQuery request,
@@ -15,6 +14,6 @@ public class GetNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser user, IM
         Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId;
         var words = await _nativeWords.GetAsync(predicate, cancellationToken);
 
-        return Result.Success(_mapper.Map<List<NativeWordDto>>(words));
+        return Result.Success(mapper.Map<List<NativeWordDto>>(words));
     }
 }

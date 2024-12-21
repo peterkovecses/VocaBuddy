@@ -6,9 +6,6 @@ public class VocaBuddyApiClient(
     ILocalStorageService localStorage,
     IAuthenticationService authService) : IVocaBuddyApiClient
 {
-    private readonly HttpClient _client = client;
-    private readonly ILocalStorageService _localStorage = localStorage;
-    private readonly IAuthenticationService _authService = authService;
     private readonly VocaBuddyApiConfiguration _vocaBuddyApiConfig = vocaBuddyApiOptions.Value;
 
     public Task<Result<List<NativeWordDto>>> GetNativeWordsAsync()
@@ -52,7 +49,7 @@ public class VocaBuddyApiClient(
         var response = await ExecuteSendingAsync();
 
         if (response.StatusCode != HttpStatusCode.Unauthorized) return await response.ReadAsAsync<TResult>();
-        await _authService.RefreshTokenAsync();
+        await authService.RefreshTokenAsync();
         response = await ExecuteSendingAsync();
 
         return await response.ReadAsAsync<TResult>();
@@ -67,14 +64,14 @@ public class VocaBuddyApiClient(
                 request.Content = JsonContent.Create(data);
             }
 
-            return await _client.SendAsync(request);
+            return await client.SendAsync(request);
         }
     }
 
     private async Task SetAuthorizationHeader()
     {
-        var token = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
-        _client.DefaultRequestHeaders.Authorization
+        var token = await localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
+        client.DefaultRequestHeaders.Authorization
             = new AuthenticationHeaderValue("Bearer", token?.TrimQuotationMarks());
     }
 }

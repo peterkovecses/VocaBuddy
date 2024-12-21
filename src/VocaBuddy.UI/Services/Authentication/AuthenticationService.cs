@@ -5,13 +5,9 @@ public class AuthenticationService(
     CustomAuthenticationStateProvider authStateProvider,
     ILocalStorageService localStorage) : IAuthenticationService
 {
-    private readonly IIdentityApiClient _client = client;
-    private readonly CustomAuthenticationStateProvider _authStateProvider = authStateProvider;
-    private readonly ILocalStorageService _localStorage = localStorage;
-
     public async Task<Result> LoginAsync(UserLoginRequest loginRequest)
     {
-        var result = await _client.LoginAsync(loginRequest);
+        var result = await client.LoginAsync(loginRequest);
 
         if (!result.IsSuccess) return result;
         SignInUser(result.Data!);
@@ -20,22 +16,22 @@ public class AuthenticationService(
         return result;
 
         void SignInUser(TokenHolder tokens)
-            => _authStateProvider.SignInUser(tokens.AuthToken);
+            => authStateProvider.SignInUser(tokens.AuthToken);
     }
 
     public async Task LogoutAsync()
     {
-        await _localStorage.RemoveItemAsync(ConfigKeys.AuthTokenStorageKey);
-        _authStateProvider.SignOutUser();
+        await localStorage.RemoveItemAsync(ConfigKeys.AuthTokenStorageKey);
+        authStateProvider.SignOutUser();
     }
 
     public async Task<Result> RegisterAsync(UserRegistrationRequestWithPasswordCheck userRegistrationRequest)
-        => await _client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
+        => await client.RegisterAsync(userRegistrationRequest.ConvertToIdentityModel());
 
     public async Task RefreshTokenAsync()
     {
         var (authToken, refreshToken) = await RetrieveCurrentTokensAsync();
-        var result = await _client.RefreshTokenAsync(
+        var result = await client.RefreshTokenAsync(
             new RefreshTokenRequest { AuthToken = authToken, RefreshToken = refreshToken });
 
         if (result.IsFailure)
@@ -50,8 +46,8 @@ public class AuthenticationService(
 
         async Task<(string authToken, string refreshToken)> RetrieveCurrentTokensAsync()
         {
-            var authTokenFromStorage = await _localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
-            var refreshTokenFromStorage = await _localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
+            var authTokenFromStorage = await localStorage.GetItemAsStringAsync(ConfigKeys.AuthTokenStorageKey);
+            var refreshTokenFromStorage = await localStorage.GetItemAsStringAsync(ConfigKeys.RefreshTokenStorageKey);
 
             return (authTokenFromStorage!.TrimQuotationMarks(), refreshTokenFromStorage!.TrimQuotationMarks());
         }
@@ -59,7 +55,7 @@ public class AuthenticationService(
 
     public async Task<bool> IsUserAuthenticatedAsync()
     {
-        var authState = await _authStateProvider.GetAuthenticationStateAsync();
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
         var userIdentity = authState.User.Identity;
 
         return userIdentity is not null && userIdentity.IsAuthenticated;
@@ -67,7 +63,7 @@ public class AuthenticationService(
 
     private async Task StoreTokensAsync(TokenHolder tokens)
     {
-        await _localStorage.SetItemAsync(ConfigKeys.AuthTokenStorageKey, tokens.AuthToken);
-        await _localStorage.SetItemAsync(ConfigKeys.RefreshTokenStorageKey, tokens.RefreshToken);
+        await localStorage.SetItemAsync(ConfigKeys.AuthTokenStorageKey, tokens.AuthToken);
+        await localStorage.SetItemAsync(ConfigKeys.RefreshTokenStorageKey, tokens.RefreshToken);
     }
 }
