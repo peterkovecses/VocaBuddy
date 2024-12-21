@@ -2,18 +2,16 @@
 
 public class WordService(IVocaBuddyApiClient client) : IWordService
 {
-    private readonly IVocaBuddyApiClient _client = client;
-
     public async Task<List<NativeWordListViewModel>> GetWordListViewModelsAsync()
     {
-        var words = (await _client.GetNativeWordsAsync()).Data;
+        var words = (await client.GetNativeWordsAsync()).Data;
 
         return words.MapToListViewModels();
     }
 
     public async Task<List<CompactNativeWordDto>> GetRandomWordsAsync(int count)
     {
-        var result = await _client.GetRandomNativeWordsAsync(count);
+        var result = await client.GetRandomNativeWordsAsync(count);
         ThrowIfFailure(result);
 
         return result.Data!;
@@ -21,26 +19,26 @@ public class WordService(IVocaBuddyApiClient client) : IWordService
 
     public async Task<List<CompactNativeWordDto>> GetLatestWordsAsync(int count)
     {
-        var result = await _client.GetLatestNativeWordsAsync(count);
+        var result = await client.GetLatestNativeWordsAsync(count);
         ThrowIfFailure(result);
 
         return result.Data!;
     }
 
     public Task<Result<CompactNativeWordDto>> GetWordAsync(int id)
-        => _client.GetNativeWordAsync(id);
+        => client.GetNativeWordAsync(id);
 
     public Task<Result<int>> GetWordCountAsync()
-        => _client.GetNativeWordCountAsync();
+        => client.GetNativeWordCountAsync();
 
     public Task<Result> CreateWord(CompactNativeWordDto word)
-        => _client.CreateNativeWordAsync(word);
+        => client.CreateNativeWordAsync(word);
 
     public Task<Result> UpdateWord(CompactNativeWordDto word)
-        => _client.UpdateNativeWordAsync(word);
+        => client.UpdateNativeWordAsync(word);
 
     public Task<Result> DeleteWordAsync(int id)
-        => _client.DeleteNativeWordAsync(id);
+        => client.DeleteNativeWordAsync(id);
 
     private static void ThrowIfFailure<T>(Result<List<T>> result)
     {

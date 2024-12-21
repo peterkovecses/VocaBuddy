@@ -3,7 +3,6 @@
 public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetNativeWordByIdQuery, Result<CompactNativeWordDto?>>
 {
     private readonly INativeWordRepository _nativeWords = unitOfWork.NativeWords;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<CompactNativeWordDto?>> Handle(GetNativeWordByIdQuery request, CancellationToken cancellationToken)
     {
@@ -17,6 +16,6 @@ public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork, IMapper mapper) : 
 
         request.EntityUserId = nativeWord.UserId;
 
-        return Result.Success(_mapper.Map<CompactNativeWordDto?>(nativeWord));
+        return Result.Success(mapper.Map<CompactNativeWordDto?>(nativeWord));
     }
 }

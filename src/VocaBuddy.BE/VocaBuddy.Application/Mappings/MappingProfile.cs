@@ -8,7 +8,13 @@ public class MappingProfile : Profile
         CreateMap<ForeignWord, ForeignWordDto>();
         CreateMap<NativeWord, CompactNativeWordDto>();
         CreateMap<ForeignWord, CompactForeignWordDto>();
-        CreateMap<CompactNativeWordDto, NativeWord>();
-        CreateMap<CompactForeignWordDto, ForeignWord>();
+        
+        CreateMap<CompactNativeWordDto, NativeWord>()
+	        .ForMember(dest => dest.CreatedUtc, opt => opt.Ignore())
+	        .ForMember(dest => dest.UpdatedUtc, opt => opt.Ignore());
+        
+        CreateMap<CompactForeignWordDto, ForeignWord>()
+	        .ForMember(dest => dest.CreatedUtc, opt => opt.Ignore())
+	        .ForMember(dest => dest.UpdatedUtc, opt => opt.Ignore());
     }
 }
