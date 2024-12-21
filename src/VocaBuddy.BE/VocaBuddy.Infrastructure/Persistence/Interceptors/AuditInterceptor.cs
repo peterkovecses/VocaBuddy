@@ -40,8 +40,10 @@ public class AuditInterceptor(IDateTimeProvider dateTimeProvider) : SaveChangesI
     {
         foreach (var foreignWordEntityEntry in eventData.Context!.ChangeTracker.Entries<ForeignWord>())
         {
-            if (foreignWordEntityEntry.State is not Modified) continue;
-            var nativeWord = eventData.Context.Set<NativeWord>().Single(nativeWord => nativeWord.Id == foreignWordEntityEntry.Entity.NativeWordId);
+            if (foreignWordEntityEntry.State is not (Added or Modified)) continue;
+            var nativeWordId = foreignWordEntityEntry.Entity.NativeWordId;
+            if (nativeWordId == 0) continue;
+            var nativeWord = eventData.Context.Set<NativeWord>().Single(nativeWord => nativeWord.Id == nativeWordId);
             nativeWord.UpdatedUtc = dateTimeProvider.UtcNow;
         }
     }
@@ -50,8 +52,10 @@ public class AuditInterceptor(IDateTimeProvider dateTimeProvider) : SaveChangesI
     {
         foreach (var foreignWordEntityEntry in eventData.Context!.ChangeTracker.Entries<ForeignWord>())
         {
-            if (foreignWordEntityEntry.State is not Modified) continue;
-            var nativeWord = await eventData.Context.Set<NativeWord>().SingleAsync(nativeWord => nativeWord.Id == foreignWordEntityEntry.Entity.NativeWordId);
+            if (foreignWordEntityEntry.State is not (Added or Modified)) continue;
+            var nativeWordId = foreignWordEntityEntry.Entity.NativeWordId;
+            if (nativeWordId == 0) continue;
+            var nativeWord = await eventData.Context.Set<NativeWord>().SingleAsync(nativeWord => nativeWord.Id == nativeWordId);
             nativeWord.UpdatedUtc = dateTimeProvider.UtcNow;
         }
     }
