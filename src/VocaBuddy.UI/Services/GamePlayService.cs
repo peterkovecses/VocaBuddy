@@ -2,7 +2,6 @@
 
 public class GamePlayService(IWordService wordService) : IGamePlayService
 {
-    private readonly IWordService _wordService = wordService;
     private List<CompactNativeWordDto>? _words;
     private List<CompactNativeWordDto> _mistakes = new();
 
@@ -40,11 +39,11 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         {
             if (latestWords)
             {
-                _words = await _wordService!.GetLatestWordsAsync(wordCount);
+                _words = await wordService!.GetLatestWordsAsync(wordCount);
             }
             else
             {
-                _words = await _wordService!.GetRandomWordsAsync(wordCount);
+                _words = await wordService!.GetRandomWordsAsync(wordCount);
             }
         }
 

@@ -2,8 +2,6 @@
 
 public class VocaBuddyContext(DbContextOptions<VocaBuddyContext> options, AuditInterceptor auditInterceptor) : DbContext(options)
 {
-    private readonly AuditInterceptor _auditInterceptor = auditInterceptor;
-
     public DbSet<NativeWord> NativeWords { get; set; } = default!;
     public DbSet<ForeignWord> ForeignWords { get; set; } = default!;
 
@@ -14,5 +12,5 @@ public class VocaBuddyContext(DbContextOptions<VocaBuddyContext> options, AuditI
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.AddInterceptors(_auditInterceptor);            
+        => optionsBuilder.AddInterceptors(auditInterceptor);            
 }

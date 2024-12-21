@@ -4,12 +4,11 @@ public class GetLatestNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser us
 {
     private readonly INativeWordRepository _nativeWords = unitOfWork.NativeWords;
     private readonly string _currentUserId = user.Id!;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<Result<List<CompactNativeWordDto>>> Handle(GetLatestNativeWordsQuery request, CancellationToken cancellationToken)
     {
         var words = await _nativeWords.GetLatestAsync(request.WordCount, _currentUserId, cancellationToken);
 
-        return Result.Success(_mapper.Map<List<CompactNativeWordDto>>(words));
+        return Result.Success(mapper.Map<List<CompactNativeWordDto>>(words));
     }
 }

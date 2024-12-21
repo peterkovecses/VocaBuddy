@@ -2,12 +2,11 @@
 
 public class DeleteNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) : IRequestHandler<DeleteNativeWordCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly string _currentUserId = user.Id!;
 
     public async Task<Result> Handle(DeleteNativeWordCommand request, CancellationToken cancellationToken)
     {
-        var nativeWordToDelete = await _unitOfWork.NativeWords.FindByIdAsync(request.WordId, cancellationToken);
+        var nativeWordToDelete = await unitOfWork.NativeWords.FindByIdAsync(request.WordId, cancellationToken);
 
         if (nativeWordToDelete is null)
         {
@@ -19,8 +18,8 @@ public class DeleteNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) 
             return Result.Failure(ErrorInfoFactory.UserIdNotMatch());
         }
 
-        _unitOfWork.NativeWords.Remove(nativeWordToDelete);
-        await _unitOfWork.CompleteAsync();
+        unitOfWork.NativeWords.Remove(nativeWordToDelete);
+        await unitOfWork.CompleteAsync();
 
         return Result.Success();
     }

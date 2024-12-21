@@ -4,15 +4,15 @@ public class CreateNativeWordValidator : AbstractValidator<CreateNativeWordComma
 {
     public CreateNativeWordValidator()
     {
-        RuleFor(command => command.NativeWorld.Text).NotEmpty();
-        RuleFor(command => command.NativeWorld.Text).MaximumLength(ValidationConstants.MaxWordLength);
-        RuleForEach(command => command.NativeWorld.Translations).ChildRules(translationRule =>
+        RuleFor(command => command.NativeWord.Text).NotEmpty();
+        RuleFor(command => command.NativeWord.Text).MaximumLength(ValidationConstants.MaxWordLength);
+        RuleForEach(command => command.NativeWord.Translations).ChildRules(translationRule =>
         {
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).NotEmpty();
             translationRule.RuleFor(foreignWordDto => foreignWordDto.Text).MaximumLength(ValidationConstants.MaxWordLength);
         });
 
-        RuleFor(command => command.NativeWorld.Translations)
+        RuleFor(command => command.NativeWord.Translations)
             .Must(translations => translations.Select(translation => translation.Text).AllUnique())
             .WithMessage("Translations must be unique.");
     }

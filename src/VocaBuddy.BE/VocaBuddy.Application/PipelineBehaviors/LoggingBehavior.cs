@@ -5,15 +5,13 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
     where TRequest : IRequest<TResponse>
     where TResponse : Result
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger = logger;
-
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
         var startTime = Stopwatch.GetTimestamp();
-        _logger.LogInformation(
+        logger.LogInformation(
             "Starting request {RequestName}", 
             typeof(TRequest).Name);
 
@@ -21,14 +19,14 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
 
         if (result.IsFailure)
         {
-            _logger.LogError(
+            logger.LogError(
                 "Request failure {RequestName}, {@Error}",
                 typeof(TRequest).Name,
                 result.ErrorInfo);
         }
 
         var elapsedTime = Stopwatch.GetElapsedTime(startTime);
-        _logger.LogInformation(
+        logger.LogInformation(
             "Completed request {RequestName}, ElapsedTime: {ElapsedTime}",
             typeof(TRequest).Name,
             elapsedTime);
