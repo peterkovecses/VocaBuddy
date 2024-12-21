@@ -17,10 +17,7 @@ namespace VocaBuddy.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,6 +30,9 @@ namespace VocaBuddy.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("NativeWordId")
                         .HasColumnType("int");
 
@@ -41,6 +41,9 @@ namespace VocaBuddy.Infrastructure.Persistence.Migrations
                         .HasMaxLength(30)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("UpdatedUtc")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
