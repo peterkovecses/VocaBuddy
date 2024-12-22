@@ -6,12 +6,11 @@ public class RecordMistakesHandler(IUnitOfWork unitOfWork, ICurrentUser user) : 
     
     public async Task<Result> Handle(RecordMistakesCommand request, CancellationToken cancellationToken)
     {
-        var mistakes = request.Mistakes.ToDictionary(mistake => mistake.NativeWordId, mistake => mistake.MistakeCount);
-        Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId && mistakes.ContainsKey(word.Id);
+        Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId && request.MistakenWordIds.Any(id => id == word.Id);
         var words = await unitOfWork.NativeWords.GetAsync(predicate, cancellationToken);
         foreach (var word in words)
         {
-            word.MistakeCount += mistakes[word.Id];
+            word.MistakeCount++;
         }
         await unitOfWork.CompleteAsync(cancellationToken);
         

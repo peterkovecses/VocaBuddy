@@ -3,7 +3,7 @@
 public class GamePlayService(IWordService wordService) : IGamePlayService
 {
     private List<CompactNativeWordDto>? _words;
-    private List<CompactNativeWordDto> _mistakes = new();
+    private List<CompactNativeWordDto> _mistakes = [];
 
     public CompactNativeWordDto? ActualWord { get; private set; }
     public int RemainingWordCount { get; private set; }
@@ -66,22 +66,27 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         _mistakes = [];
     }
 
-    public bool TryMoveToNextRound()
+    public async Task<bool> TryMoveToNextRoundAsync()
     {
-        if (_words!.Any())
+        if (_words!.Count > 0)
         {
             SetNextWord();
 
             return true;
         }
 
-        if (!_mistakes!.Any()) return false;
+        if (_mistakes.Count == 0) return false;
+        await RecordMistakes();
         SetInitialMistakeCount();
         LoadMistakes();
         SetNextWord();
 
         return true;
+    }
 
+    private async Task RecordMistakes()
+    {
+        await wordService.RecordMistakes(_mistakes.Select(mistake => mistake.Id));
     }
 
     private void SetInitialMistakeCount()

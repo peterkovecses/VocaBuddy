@@ -9,5 +9,6 @@ public interface IVocaBuddyApiClient
     Task<Result<int>> GetNativeWordCountAsync();
     Task<Result> CreateNativeWordAsync(CompactNativeWordDto word);
     Task<Result> UpdateNativeWordAsync(CompactNativeWordDto word);
+    Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds);
     Task<Result> DeleteNativeWordAsync(int id);
 }

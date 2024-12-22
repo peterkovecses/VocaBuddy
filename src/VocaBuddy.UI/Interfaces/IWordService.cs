@@ -9,5 +9,6 @@ public interface IWordService
     Task<Result<int>> GetWordCountAsync();
     Task<Result> CreateWord(CompactNativeWordDto word);
     Task<Result> UpdateWord(CompactNativeWordDto word);
+    Task<Result> RecordMistakes(IEnumerable<int> mistakenWordIds);
     Task<Result> DeleteWordAsync(int id);
 }
