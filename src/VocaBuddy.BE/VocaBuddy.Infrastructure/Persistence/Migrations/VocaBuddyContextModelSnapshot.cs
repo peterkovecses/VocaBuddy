@@ -63,6 +63,9 @@ namespace VocaBuddy.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MistakeCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -93,7 +96,10 @@ namespace VocaBuddy.Infrastructure.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("UserId", "Text"), false);
 
-                    b.ToTable("NativeWords");
+                    b.ToTable("NativeWords", t =>
+                        {
+                            t.HasCheckConstraint("CK_NativeWord_MistakeCount_NonNegative", "[MistakeCount] >= 0");
+                        });
                 });
 
             modelBuilder.Entity("VocaBuddy.Domain.Entities.ForeignWord", b =>
