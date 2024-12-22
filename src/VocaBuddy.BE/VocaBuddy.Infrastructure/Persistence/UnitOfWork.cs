@@ -16,7 +16,7 @@ public class UnitOfWork : IUnitOfWork
     public INativeWordRepository NativeWords => _nativeWords.Value;
     public IForeignWordRepository ForeignWords => _foreignWords.Value;
 
-    public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
+    public async Task<int> CompleteAsync(CancellationToken cancellationToken) => await _context.SaveChangesAsync(cancellationToken);
 
     private bool _disposed = false;
 
