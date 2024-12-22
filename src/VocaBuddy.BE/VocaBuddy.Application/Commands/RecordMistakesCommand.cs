@@ -1,3 +1,3 @@
 namespace VocaBuddy.Application.Commands;
 
-public record RecordMistakesCommand(IEnumerable<WordMistake> Mistakes) : IRequest<Result>;
+public record RecordMistakesCommand(IEnumerable<int> MistakenWordIds) : IRequest<Result>;

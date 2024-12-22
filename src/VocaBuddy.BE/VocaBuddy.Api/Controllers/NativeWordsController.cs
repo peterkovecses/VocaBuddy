@@ -71,9 +71,9 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     }
 
     [HttpPut]
-    public async Task<IActionResult> RecordMistakes(IEnumerable<WordMistake> mistakes, CancellationToken token)
+    public async Task<IActionResult> RecordMistakes(IEnumerable<int> mistakenWordIds, CancellationToken token)
     {
-        var result = await Mediator.Send(new RecordMistakesCommand(mistakes), token);
+        var result = await Mediator.Send(new RecordMistakesCommand(mistakenWordIds), token);
 
         return result.ToApiResponse();
     }
