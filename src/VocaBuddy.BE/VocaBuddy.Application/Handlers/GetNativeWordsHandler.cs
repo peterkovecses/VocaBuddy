@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace VocaBuddy.Application.Handlers;
+﻿namespace VocaBuddy.Application.Handlers;
 
 public class GetNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser user, IMapper mapper) : IRequestHandler<GetNativeWordsQuery, Result<List<NativeWordDto>>>
 {

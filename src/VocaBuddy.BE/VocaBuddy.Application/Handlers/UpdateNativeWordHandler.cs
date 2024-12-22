@@ -29,7 +29,7 @@ public class UpdateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user, 
         async Task UpdateWordAsync()
         {
             mapper.Map(request.NativeWord, nativeWordToUpdate);
-            await unitOfWork.CompleteAsync();
+            await unitOfWork.CompleteAsync(cancellationToken);
         }
     }
 }
