@@ -66,7 +66,7 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         _mistakes = [];
     }
 
-    public async Task<bool> TryMoveToNextRoundAsync()
+    public bool TryMoveToNextRound()
     {
         if (_words!.Count > 0)
         {
@@ -76,7 +76,8 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         }
 
         if (_mistakes.Count == 0) return false;
-        await RecordMistakes();
+        var mistakenWordIds = GetMistakenWordIds();
+        RecordMistakes(mistakenWordIds);
         SetInitialMistakeCount();
         LoadMistakes();
         SetNextWord();
@@ -84,10 +85,11 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         return true;
     }
 
-    private async Task RecordMistakes()
-    {
-        await wordService.RecordMistakes(_mistakes.Select(mistake => mistake.Id));
-    }
+    private List<int> GetMistakenWordIds() 
+        => _mistakes.Select(word => word.Id).ToList();
+
+    private void RecordMistakes(IEnumerable<int> mistakenWordIds)
+        => Task.Run(() => wordService.RecordMistakes(mistakenWordIds));
 
     private void SetInitialMistakeCount()
         => MistakeCount ??= _mistakes.Count;

@@ -39,4 +39,11 @@ public class NativeWordRepository : GenericRepository<NativeWord, int>, INativeW
         => VocaBuddyContext.NativeWords
             .Where(word => word.UserId == userId)
             .CountAsync(cancellationToken);
+
+    public async Task RecordMistakesAsync(string userId, IEnumerable<int> mistakenWordIds, CancellationToken cancellationToken) 
+        => await VocaBuddyContext.NativeWords
+            .Where(word => word.UserId == userId && mistakenWordIds.Contains(word.Id))
+            .ExecuteUpdateAsync(updates =>
+                    updates.SetProperty(word => word.MistakeCount, word => word.MistakeCount + 1),
+                cancellationToken);
 }
