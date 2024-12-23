@@ -12,5 +12,5 @@ public interface IGamePlayService
     void MarkActualWordAsAMistake();
     void SetNextWord();
     void LoadMistakes();
-    Task<bool> TryMoveToNextRoundAsync();
+    bool TryMoveToNextRound();
 }

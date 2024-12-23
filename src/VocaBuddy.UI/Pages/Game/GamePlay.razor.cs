@@ -39,9 +39,9 @@ public class GamePlayBase : CustomComponentBase
         GamePlayService!.MarkActualWordAsAMistake();
     }
 
-    protected async Task NextRound()
+    protected void NextRound()
     {
-        if (await GamePlayService!.TryMoveToNextRoundAsync())
+        if (GamePlayService!.TryMoveToNextRound())
         {
             ResetForm();
         }

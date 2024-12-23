@@ -39,6 +39,7 @@ public class WordService(IVocaBuddyApiClient client) : IWordService
 
     public Task<Result> RecordMistakes(IEnumerable<int> mistakenWordIds)
         => client.RecordMistakesAsync(mistakenWordIds);
+    
     public Task<Result> DeleteWordAsync(int id)
         => client.DeleteNativeWordAsync(id);
 
