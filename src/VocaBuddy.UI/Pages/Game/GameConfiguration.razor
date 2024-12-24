@@ -1,5 +1,6 @@
 ﻿@page "/game-configuration"
 @attribute [Authorize]
+@using VocaBuddy.UI.Constants
 @inherits GameConfigurationBase
 
 <PageTitle>Game Configuration</PageTitle>
@@ -38,19 +39,19 @@
                                         @if (WordCount < MaxWordCount)
                                         {
                                             <div class="form-check ms-3">
-                                                <input class="form-check-input" type="radio" id="random" name="gameMode" @onchange="@(() => GameMode = GameMode.Random)" checked="@(GameMode == GameMode.Random)">
+                                                <input class="form-check-input" type="radio" id="random" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Random)" checked="@(GameMode == GameModeConstants.Random)">
                                                 <label class="form-check-label" for="random">
                                                     Random
                                                 </label>
                                             </div>
                                             <div class="form-check ms-3">
-                                                <input class="form-check-input" type="radio" id="latest" name="gameMode" @onchange="@(() => GameMode = GameMode.Latest)" checked="@(GameMode == GameMode.Latest)">
+                                                <input class="form-check-input" type="radio" id="latest" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Latest)" checked="@(GameMode == GameModeConstants.Latest)">
                                                 <label class="form-check-label" for="latest">
                                                     Latest
                                                 </label>
                                             </div>
                                             <div class="form-check ms-3">
-                                                <input class="form-check-input" type="radio" id="mistaken" name="gameMode" @onchange="@(() => GameMode = GameMode.Mistaken)" checked="@(GameMode == GameMode.Mistaken)">
+                                                <input class="form-check-input" type="radio" id="mistaken" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Mistaken)" checked="@(GameMode == GameModeConstants.Mistaken)">
                                                 <label class="form-check-label" for="mistaken">
                                                     Mistaken
                                                 </label>
