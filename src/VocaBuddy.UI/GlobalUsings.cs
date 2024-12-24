@@ -6,6 +6,7 @@ global using VocaBuddy.Shared.Models;
 global using VocaBuddy.UI;
 global using VocaBuddy.UI.ApiHelpers;
 global using VocaBuddy.UI.BaseComponents;
+global using VocaBuddy.UI.Constants;
 global using VocaBuddy.UI.Exceptions;
 global using VocaBuddy.UI.Extensions;
 global using VocaBuddy.UI.Interfaces;

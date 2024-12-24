@@ -7,7 +7,7 @@ public class GameConfigurationBase : CustomComponentBase
 
     protected int? MaxWordCount { set; get; }
     protected int WordCount { set; get; }
-    protected GameMode GameMode { get; set; } = GameMode.Random;
+    protected string GameMode { get; set; } = GameModeConstants.Random;
 
     protected override async Task OnInitializedAsync()
     {

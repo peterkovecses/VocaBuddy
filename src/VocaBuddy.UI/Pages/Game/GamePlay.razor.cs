@@ -8,7 +8,7 @@ public class GamePlayBase : CustomComponentBase
 
     [Parameter]
     [SupplyParameterFromQuery]
-    public GameMode GameMode { set; get; } = GameMode.Random;
+    public string GameMode { set; get; } = GameModeConstants.Random;
 
     protected string UserInput { set; get; } = string.Empty;
 
