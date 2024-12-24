@@ -34,28 +34,33 @@
                                     <label for="wordCount" class="form-label">
                                         The number of words you want to practice (there is @MaxWordCount words in your vocabulary)
                                     </label>
-                                    <div class="d-flex align-items-center">
-                                        <input id="wordCount" class="form-control" type="number" min="1" max="@MaxWordCount" @bind="WordCount" @oninput="SetWordCount" required style="width: 80px;"/>
+                                    <div class="d-flex flex-column align-items-start">
+                                        <input id="wordCount" class="form-control mb-3" type="number" min="1" max="@MaxWordCount" @bind="WordCount" @oninput="SetWordCount" required style="width: 80px;"/>
                                         @if (WordCount < MaxWordCount)
                                         {
-                                            <div class="form-check ms-3">
-                                                <input class="form-check-input" type="radio" id="random" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Random)" checked="@(GameMode == GameModeConstants.Random)">
-                                                <label class="form-check-label" for="random">
-                                                    Random
-                                                </label>
-                                            </div>
-                                            <div class="form-check ms-3">
-                                                <input class="form-check-input" type="radio" id="latest" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Latest)" checked="@(GameMode == GameModeConstants.Latest)">
-                                                <label class="form-check-label" for="latest">
-                                                    Latest
-                                                </label>
-                                            </div>
-                                            <div class="form-check ms-3">
-                                                <input class="form-check-input" type="radio" id="mistaken" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Mistaken)" checked="@(GameMode == GameModeConstants.Mistaken)">
-                                                <label class="form-check-label" for="mistaken">
-                                                    Mistaken
-                                                </label>
-                                            </div>
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <label class="form-check-label me-2">Game mode:</label>
+                                                <div class="d-flex">
+                                                    <div class="form-check me-2">
+                                                        <input class="form-check-input" type="radio" id="random" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Random)" checked="@(GameMode == GameModeConstants.Random)">
+                                                        <label class="form-check-label" for="random">
+                                                            Random
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check me-2">
+                                                        <input class="form-check-input" type="radio" id="latest" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Latest)" checked="@(GameMode == GameModeConstants.Latest)">
+                                                        <label class="form-check-label" for="latest">
+                                                            Latest
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" id="mistaken" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Mistaken)" checked="@(GameMode == GameModeConstants.Mistaken)">
+                                                        <label class="form-check-label" for="mistaken">
+                                                            Mistaken
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>  
                                         }
                                     </div>
                                 </div>
