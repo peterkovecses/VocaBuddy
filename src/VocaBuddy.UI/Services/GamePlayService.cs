@@ -27,7 +27,7 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         return isCorrectAnswer;
     }
 
-    public async Task InitializeGame(bool latestWords, int wordCount)
+    public async Task InitializeGame(GameMode gameMode, int wordCount)
     {
         await LoadWordsAsync();
         SetInitialRemainingWordCount();
@@ -37,14 +37,13 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
 
         async Task LoadWordsAsync()
         {
-            if (latestWords)
+            _words = gameMode switch
             {
-                _words = await wordService!.GetLatestWordsAsync(wordCount);
-            }
-            else
-            {
-                _words = await wordService!.GetRandomWordsAsync(wordCount);
-            }
+                GameMode.Random => await wordService.GetRandomWordsAsync(wordCount),
+                GameMode.Latest => await wordService.GetLatestWordsAsync(wordCount),
+                GameMode.Mistaken => await wordService.GetMistakenWordsAsync(wordCount),
+                _ => throw new ArgumentException("Invalid game mode.", nameof(gameMode))
+            };
         }
 
         void SetInitialRemainingWordCount()

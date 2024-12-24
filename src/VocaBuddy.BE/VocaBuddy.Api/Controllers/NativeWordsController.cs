@@ -28,6 +28,14 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
 
         return result.ToApiResponse();
     }
+    
+    [HttpGet("mistaken")]
+    public async Task<IActionResult> GetMistakenNativeWords(int count, CancellationToken token)
+    {
+        var result = await Mediator.Send(new GetMistakenNativeWordsQuery(count), token);
+
+        return result.ToApiResponse();
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetNativeWord(int id, CancellationToken token)

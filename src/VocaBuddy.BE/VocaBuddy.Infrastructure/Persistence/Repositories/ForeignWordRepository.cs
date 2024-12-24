@@ -1,9 +1,8 @@
 ﻿namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
-public class ForeignWordRepository : GenericRepository<ForeignWord, int>, IForeignWordRepository
+public class ForeignWordRepository(DbContext context)
+	: GenericRepository<ForeignWord, int>(context), IForeignWordRepository
 {
-	public ForeignWordRepository(DbContext context) : base(context) { }
-
-	public VocaBuddyContext VocaBuddyContext
+	private VocaBuddyContext VocaBuddyContext
 		=> (Context as VocaBuddyContext)!;
 }

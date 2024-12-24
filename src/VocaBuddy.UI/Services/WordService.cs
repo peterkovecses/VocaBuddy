@@ -25,6 +25,14 @@ public class WordService(IVocaBuddyApiClient client) : IWordService
         return result.Data!;
     }
 
+    public async Task<List<CompactNativeWordDto>> GetMistakenWordsAsync(int count)
+    {
+        var result = await client.GetMistakenNativeWordsAsync(count);
+        ThrowIfFailure(result);
+
+        return result.Data!;
+    }
+    
     public Task<Result<CompactNativeWordDto>> GetWordAsync(int id)
         => client.GetNativeWordAsync(id);
 
