@@ -18,7 +18,7 @@ public class CreateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user, 
         async Task SaveWordAsync()
         {
             await unitOfWork.NativeWords.AddAsync(nativeWord, cancellationToken);
-            await unitOfWork.CompleteAsync();
+            await unitOfWork.CompleteAsync(cancellationToken);
         }
     }
 }

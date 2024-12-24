@@ -7,7 +7,7 @@ public class GameConfigurationBase : CustomComponentBase
 
     protected int? MaxWordCount { set; get; }
     protected int WordCount { set; get; }
-    protected bool LatestWords { get; set; }
+    protected string GameMode { get; set; } = GameModeConstants.Random;
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,5 +27,5 @@ public class GameConfigurationBase : CustomComponentBase
     }
 
     public void StartGame()
-        => NavManager!.NavigateTo($"/gameplay?WordCount={WordCount}&LatestWords={LatestWords}");
+        => NavManager!.NavigateTo($"/gameplay?WordCount={WordCount}&GameMode={GameMode}");
 }

@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace VocaBuddy.Application.Interfaces;
+﻿namespace VocaBuddy.Application.Interfaces;
 
 public interface IGenericRepository<TEntity, in TId> where TEntity : class
 {

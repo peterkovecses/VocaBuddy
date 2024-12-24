@@ -16,6 +16,9 @@ public class VocaBuddyApiClient(
 
     public Task<Result<List<CompactNativeWordDto>>> GetLatestNativeWordsAsync(int count)
         => GetAsync<Result<List<CompactNativeWordDto>>>($"{_vocaBuddyApiConfig.LatestNativeWordsEndpoints}?count={count}");
+    
+    public Task<Result<List<CompactNativeWordDto>>> GetMistakenNativeWordsAsync(int count)
+        => GetAsync<Result<List<CompactNativeWordDto>>>($"{_vocaBuddyApiConfig.MistakenNativeWordsEndpoints}?count={count}");
 
     public Task<Result<CompactNativeWordDto>> GetNativeWordAsync(int id)
         => GetAsync<Result<CompactNativeWordDto>>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");
@@ -28,6 +31,9 @@ public class VocaBuddyApiClient(
 
     public Task<Result> UpdateNativeWordAsync(CompactNativeWordDto word)
         => PutAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{word.Id}", word);
+
+    public Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds)
+        => PutAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}", mistakenWordIds);
 
     public Task<Result> DeleteNativeWordAsync(int id)
         => DeleteAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{id}");

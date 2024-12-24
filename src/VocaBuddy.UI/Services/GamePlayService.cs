@@ -3,7 +3,7 @@
 public class GamePlayService(IWordService wordService) : IGamePlayService
 {
     private List<CompactNativeWordDto>? _words;
-    private List<CompactNativeWordDto> _mistakes = new();
+    private List<CompactNativeWordDto> _mistakes = [];
 
     public CompactNativeWordDto? ActualWord { get; private set; }
     public int RemainingWordCount { get; private set; }
@@ -27,7 +27,7 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         return isCorrectAnswer;
     }
 
-    public async Task InitializeGame(bool latestWords, int wordCount)
+    public async Task InitializeGame(string gameMode, int wordCount)
     {
         await LoadWordsAsync();
         SetInitialRemainingWordCount();
@@ -37,14 +37,13 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
 
         async Task LoadWordsAsync()
         {
-            if (latestWords)
+            _words = gameMode switch
             {
-                _words = await wordService!.GetLatestWordsAsync(wordCount);
-            }
-            else
-            {
-                _words = await wordService!.GetRandomWordsAsync(wordCount);
-            }
+                GameModeConstants.Random => await wordService.GetRandomWordsAsync(wordCount),
+                GameModeConstants.Latest => await wordService.GetLatestWordsAsync(wordCount),
+                GameModeConstants.Mistaken => await wordService.GetMistakenWordsAsync(wordCount),
+                _ => throw new ArgumentException("Invalid game mode.", nameof(gameMode))
+            };
         }
 
         void SetInitialRemainingWordCount()
@@ -68,21 +67,28 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
 
     public bool TryMoveToNextRound()
     {
-        if (_words!.Any())
+        if (_words!.Count > 0)
         {
             SetNextWord();
 
             return true;
         }
 
-        if (!_mistakes!.Any()) return false;
+        if (_mistakes.Count == 0) return false;
+        var mistakenWordIds = GetMistakenWordIds();
+        RecordMistakes(mistakenWordIds);
         SetInitialMistakeCount();
         LoadMistakes();
         SetNextWord();
 
         return true;
-
     }
+
+    private List<int> GetMistakenWordIds() 
+        => _mistakes.Select(word => word.Id).ToList();
+
+    private void RecordMistakes(IEnumerable<int> mistakenWordIds)
+        => Task.Run(() => wordService.RecordMistakes(mistakenWordIds));
 
     private void SetInitialMistakeCount()
         => MistakeCount ??= _mistakes.Count;

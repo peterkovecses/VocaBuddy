@@ -8,7 +8,7 @@ public class GamePlayBase : CustomComponentBase
 
     [Parameter]
     [SupplyParameterFromQuery]
-    public bool LatestWords { set; get; }
+    public string GameMode { set; get; } = GameModeConstants.Random;
 
     protected string UserInput { set; get; } = string.Empty;
 
@@ -22,7 +22,7 @@ public class GamePlayBase : CustomComponentBase
     protected override async Task OnInitializedAsync()
     {
         ValidateWordCount();
-        await GamePlayService!.InitializeGame(LatestWords, WordCount);
+        await GamePlayService!.InitializeGame(GameMode, WordCount);
     }
 
     protected void OnSubmit()

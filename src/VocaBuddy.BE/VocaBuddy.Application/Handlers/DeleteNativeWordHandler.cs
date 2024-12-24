@@ -19,7 +19,7 @@ public class DeleteNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) 
         }
 
         unitOfWork.NativeWords.Remove(nativeWordToDelete);
-        await unitOfWork.CompleteAsync();
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         return Result.Success();
     }
