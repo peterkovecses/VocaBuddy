@@ -6,5 +6,6 @@ public class VocaBuddyApiConfiguration
     public string NativeWordsEndpoints { get; set; } = default!;
     public string RandomNativeWordsEndpoints { get; set; } = default!;
     public string LatestNativeWordsEndpoints { get; set; } = default!;
+    public string MistakenNativeWordsEndpoints { get; set; } = default!;
     public string NativeWordsCountEndpoint { get; set; } = default!;
 }
