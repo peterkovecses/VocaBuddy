@@ -13,7 +13,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     [Inject]
     public IWordService? WordService { get; set; }
 
-    public bool Update => WordId.HasValue;
+    private bool Update => WordId.HasValue;
 
     protected override async Task OnInitializedAsync()
     {
@@ -123,8 +123,8 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     private async Task<Result> SaveWordAsync()
     {
-        if (!WordId.HasValue) return await WordService!.CreateWord(Model);
-        Model.Id = WordId.Value;
+        if (!Update) return await WordService!.CreateWord(Model);
+        Model.Id = WordId!.Value;
 
         return await WordService!.UpdateWord(Model);
     }
@@ -132,7 +132,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     private static CompactNativeWordDto InitializeEmptyModel()
         => new()
         {
-            Translations = new List<CompactForeignWordDto> { new() }
+            Translations = [new CompactForeignWordDto()]
         };
 
     private void ClearModel()
