@@ -37,7 +37,7 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
         return result.ToApiResponse();
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")] // Do not specify the int type in the route because it causes problems in case of creating words
     public async Task<IActionResult> GetNativeWord(int id, CancellationToken token)
     {
         var result = await Mediator.Send(new GetNativeWordByIdQuery(id), token);
