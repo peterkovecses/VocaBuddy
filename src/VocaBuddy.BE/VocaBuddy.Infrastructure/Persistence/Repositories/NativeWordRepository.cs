@@ -21,21 +21,19 @@ public class NativeWordRepository(DbContext context)
 
     public async Task<List<NativeWord>> GetLatestAsync(int count, string userId, CancellationToken cancellationToken)
         => (await VocaBuddyContext.NativeWords
-                .Include(word => word.Translations)
-                .Where(word => word.UserId == userId)
-                .OrderByDescending(word => word.UpdatedUtc)
-                .Take(count)
-                .ToListAsync(cancellationToken))
-            .RandomOrder();
-    
+            .Include(word => word.Translations)
+            .Where(word => word.UserId == userId)
+            .OrderByDescending(word => word.UpdatedUtc)
+            .Take(count)
+            .ToListAsync(cancellationToken));
+
     public async Task<List<NativeWord>> GetMistakenAsync(int count, string userId, CancellationToken cancellationToken)
         => (await VocaBuddyContext.NativeWords
-                .Include(word => word.Translations)
-                .Where(word => word.UserId == userId)
-                .OrderByDescending(word => word.MistakeCount)
-                .Take(count)
-                .ToListAsync(cancellationToken))
-            .RandomOrder();
+            .Include(word => word.Translations)
+            .Where(word => word.UserId == userId)
+            .OrderByDescending(word => word.MistakeCount)
+            .Take(count)
+            .ToListAsync(cancellationToken));
 
     public override Task<NativeWord?> FindByIdAsync(int id, CancellationToken cancellationToken)
         => VocaBuddyContext.NativeWords
