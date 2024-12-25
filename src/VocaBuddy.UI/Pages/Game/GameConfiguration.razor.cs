@@ -25,7 +25,10 @@ public class GameConfigurationBase : CustomComponentBase
         WordCount = !string.IsNullOrEmpty((string)e.Value!) ? Convert.ToInt32(e.Value) : 0;
         StateHasChanged();
     }
+    
+    protected Action SetGameMode(string mode) 
+        => () => GameMode = mode;
 
-    public void StartGame()
+    protected void StartGame()
         => NavManager!.NavigateTo($"/gameplay?WordCount={WordCount}&GameMode={GameMode}");
 }

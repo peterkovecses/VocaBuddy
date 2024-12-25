@@ -42,19 +42,19 @@
                                                 <label class="form-check-label me-2">Game mode:</label>
                                                 <div class="d-flex">
                                                     <div class="form-check me-2">
-                                                        <input class="form-check-input" type="radio" id="random" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Random)" checked="@(GameMode == GameModeConstants.Random)">
+                                                        <input class="form-check-input" type="radio" id="random" name="gameMode" @onchange="@(SetGameMode(GameModeConstants.Random))" checked="@(GameMode == GameModeConstants.Random)">
                                                         <label class="form-check-label" for="random">
                                                             Random
                                                         </label>
                                                     </div>
                                                     <div class="form-check me-2">
-                                                        <input class="form-check-input" type="radio" id="latest" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Latest)" checked="@(GameMode == GameModeConstants.Latest)">
+                                                        <input class="form-check-input" type="radio" id="latest" name="gameMode" @onchange="@(SetGameMode(GameModeConstants.Latest))" checked="@(GameMode == GameModeConstants.Latest)">
                                                         <label class="form-check-label" for="latest">
                                                             Latest
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" id="mistaken" name="gameMode" @onchange="@(() => GameMode = GameModeConstants.Mistaken)" checked="@(GameMode == GameModeConstants.Mistaken)">
+                                                        <input class="form-check-input" type="radio" id="mistaken" name="gameMode" @onchange="@(SetGameMode(GameModeConstants.Mistaken))" checked="@(GameMode == GameModeConstants.Mistaken)">
                                                         <label class="form-check-label" for="mistaken">
                                                             Mistaken
                                                         </label>

@@ -8,6 +8,7 @@ global using VocaBuddy.Application.PipelineBehaviors;
 global using VocaBuddy.Application.Queries;
 global using VocaBuddy.Application.Commands;
 global using VocaBuddy.Application.Errors;
+global using VocaBuddy.Application.Extensions;
 global using VocaBuddy.Application.Interfaces;
 global using VocaBuddy.Domain.Entities;
 global using System.Reflection;

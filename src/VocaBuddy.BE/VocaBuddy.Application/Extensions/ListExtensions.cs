@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.Infrastructure.Persistence.Extensions;
+﻿namespace VocaBuddy.Application.Extensions;
 
 public static class ListExtensions
 {
