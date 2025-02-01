@@ -1,4 +1,4 @@
-﻿namespace VocaBuddy.UI.BaseComponents;
+﻿namespace VocaBuddy.UI.Shared.BaseComponents;
 
 public class ListComponentBase : CustomComponentBase
 {

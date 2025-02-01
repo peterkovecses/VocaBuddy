@@ -80,8 +80,7 @@
 
     @if (!Loading)
     {
-        <Pagination TItem="NativeWordListViewModel"
-                    CurrentPage="CurrentPage"
+        <Pagination CurrentPage="CurrentPage"
                     PageSize="PageSize"
                     TotalItems="FilteredWords.Count"
                     OnPageChanged="OnChangePage"
