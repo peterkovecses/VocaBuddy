@@ -6,7 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\VocaBuddy.Application\VocaBuddy.Application.csproj" />
-    <ProjectReference Include="..\VocaBuddy.Domain\VocaBuddy.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />

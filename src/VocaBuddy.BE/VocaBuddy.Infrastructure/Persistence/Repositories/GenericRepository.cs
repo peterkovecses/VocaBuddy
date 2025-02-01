@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
-public abstract class GenericRepository<TEntity, TId>(DbContext context) : IGenericRepository<TEntity, TId> where TEntity : class
+public abstract class GenericRepository<TEntity, TId>(DbContext context) : IGenericRepository<TEntity, TId> where TEntity : EntityBase
 {
     protected readonly DbContext Context = context;
 
