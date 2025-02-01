@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.Application.Handlers;
 
-public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetNativeWordByIdQuery, Result<CompactNativeWordDto?>>
+public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetNativeWordByIdQuery, Result<CompactNativeWordDto?>>
 {
     private readonly INativeWordRepository _nativeWords = unitOfWork.NativeWords;
 
@@ -14,8 +14,8 @@ public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork, IMapper mapper) : 
             return Result.Failure<CompactNativeWordDto?>(ErrorInfoFactory.NotFound(request.WordId));
         }
 
-        request.EntityUserId = nativeWord.UserId;
-
-        return Result.Success(mapper.Map<CompactNativeWordDto?>(nativeWord));
+        request.EntityUserId = nativeWord.UserId; ;
+        
+        return Result.Success(CompactNativeWordDtoMapper.FromDomainModel(nativeWord))!;
     }
 }

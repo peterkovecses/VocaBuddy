@@ -16,6 +16,5 @@ global using System.Diagnostics;
 global using System.Linq.Expressions;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.DependencyInjection;
-global using AutoMapper;
 global using MediatR;
 global using FluentValidation;

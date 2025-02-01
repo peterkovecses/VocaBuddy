@@ -57,7 +57,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     }
 
     protected void AddTranslation()
-        => Model.Translations.Add(new CompactForeignWordDto());
+        => Model.Translations.Add(new ForeignWordDto());
 
     protected void RemoveTranslation(int index)
         => Model.Translations.RemoveAt(index);
@@ -132,7 +132,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     private static CompactNativeWordDto InitializeEmptyModel()
         => new()
         {
-            Translations = [new CompactForeignWordDto()]
+            Translations = [new ForeignWordDto()]
         };
 
     private void ClearModel()

@@ -1,16 +1,16 @@
 ﻿namespace VocaBuddy.Application.Handlers;
 
-public class CreateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user, IMapper mapper) : IRequestHandler<CreateNativeWordCommand, Result<NativeWordDto>>
+public class CreateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) : IRequestHandler<CreateNativeWordCommand, Result<NativeWordDto>>
 {
     private readonly string _currentUserId = user.Id!;
 
     public async Task<Result<NativeWordDto>> Handle(CreateNativeWordCommand request, CancellationToken cancellationToken)
     {
-        var nativeWord = mapper.Map<NativeWord>(request.NativeWord);
+        var nativeWord = request.NativeWord.ToDomainModel();
         SetUserId();
         await SaveWordAsync();
 
-        return Result.Success(mapper.Map<NativeWordDto>(nativeWord));
+        return Result.Success(NativeWordDtoMapper.FromDomainModel(nativeWord));
 
         void SetUserId()
             => nativeWord.UserId = _currentUserId;
