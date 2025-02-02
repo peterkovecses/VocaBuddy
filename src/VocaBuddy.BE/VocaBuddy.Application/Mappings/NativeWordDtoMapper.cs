@@ -2,18 +2,18 @@ namespace VocaBuddy.Application.Mappings;
 
 public static class NativeWordDtoMapper
 {
-    public static NativeWordDto FromDomainModel(NativeWord nativeWord)
+    public static NativeWordDto FromDomainModel(NativeWord source)
         => new NativeWordDto
         {
-            Id = nativeWord.Id,
-            Text = nativeWord.Text,
-            Translations = ForeignWordMapper.FromDomainModel(nativeWord.Translations),
-            CreatedUtc = nativeWord.CreatedUtc,
-            UpdatedUtc = nativeWord.UpdatedUtc
+            Id = source.Id,
+            Text = source.Text,
+            Translations = ForeignWordMapper.FromDomainModel(source.Translations),
+            CreatedUtc = source.CreatedUtc,
+            UpdatedUtc = source.UpdatedUtc
         };
     
-    public static List<NativeWordDto> FromDomainModel(IEnumerable<NativeWord> nativeWords)
-        => nativeWords
+    public static List<NativeWordDto> FromDomainModel(IEnumerable<NativeWord> source)
+        => source
             .Select(FromDomainModel)
             .ToList();
 }

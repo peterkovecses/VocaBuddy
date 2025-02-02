@@ -2,26 +2,26 @@ namespace VocaBuddy.Application.Mappings;
 
 public static class CompactNativeWordDtoMapper
 {
-    public static NativeWord ToDomainModel(this CompactNativeWordDto nativeWordDto)
+    public static NativeWord ToDomainModel(this CompactNativeWordDto source)
         => new NativeWord
         {
-            Id = nativeWordDto.Id,
-            Text = nativeWordDto.Text,
-            Translations = nativeWordDto
+            Id = source.Id,
+            Text = source.Text,
+            Translations = source
                 .Translations
-                .ToDomainModel(nativeWordDto.Id)
+                .ToDomainModel(source.Id)
         };
     
-    public static CompactNativeWordDto FromDomainModel(NativeWord nativeWord)
+    public static CompactNativeWordDto FromDomainModel(NativeWord source)
         => new CompactNativeWordDto
         {
-            Id = nativeWord.Id,
-            Text = nativeWord.Text,
-            Translations = ForeignWordMapper.FromDomainModel(nativeWord.Translations)
+            Id = source.Id,
+            Text = source.Text,
+            Translations = ForeignWordMapper.FromDomainModel(source.Translations)
         };
     
-    public static List<CompactNativeWordDto> FromDomainModel(IEnumerable<NativeWord> nativeWords)
-        => nativeWords
+    public static List<CompactNativeWordDto> FromDomainModel(IEnumerable<NativeWord> source)
+        => source
             .Select(FromDomainModel)
             .ToList();
     
