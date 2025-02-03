@@ -1,9 +1,9 @@
 namespace VocaBuddy.Application.Mappings;
 
-public static class ForeignWordMapper
+public static class ForeignWordMappings
 {
     public static ForeignWord ToDomainModel(this ForeignWordDto source, int nativeWordId)
-        => new ForeignWord
+        => new()
         {
             Id = source.Id,
             Text = source.Text,
@@ -15,15 +15,15 @@ public static class ForeignWordMapper
             .Select(foreignWordDto => foreignWordDto.ToDomainModel(nativeWordId))
             .ToList();
     
-    public static ForeignWordDto FromDomainModel(ForeignWord source)
-        => new ForeignWordDto
+    public static ForeignWordDto ToForeignWordDto(this ForeignWord source)
+        => new()
         {
             Id = source.Id,
             Text = source.Text
         };
     
-    public static List<ForeignWordDto> FromDomainModel(IEnumerable<ForeignWord> source)
+    public static List<ForeignWordDto> ToForeignWordDto(this IEnumerable<ForeignWord> source)
         => source
-            .Select(FromDomainModel)
+            .Select(ToForeignWordDto)
             .ToList();
 }

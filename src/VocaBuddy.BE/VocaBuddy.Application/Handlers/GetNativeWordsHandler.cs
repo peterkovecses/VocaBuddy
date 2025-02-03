@@ -12,6 +12,6 @@ public class GetNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser user) : 
         Expression<Func<NativeWord, bool>> predicate = word => word.UserId == _currentUserId;
         var words = await _nativeWords.GetAsync(predicate, cancellationToken);
 
-        return Result.Success(NativeWordDtoMapper.FromDomainModel(words));
+        return Result.Success(words.ToNativeWordDto());
     }
 }

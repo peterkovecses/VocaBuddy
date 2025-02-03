@@ -21,9 +21,9 @@ public class JwtParserTests
         var jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjoiVXNlciJ9._3aeiaR37_T9CtIhThjIop6Z-0fI1qD8Ht87CBLWm68";
         var expectedClaims = new List<Claim> 
         {
-            new Claim(ClaimTypes.Role, "User"),
-            new Claim("name", "John Doe"),
-            new Claim("email", "johndoe@example.com")
+            new(ClaimTypes.Role, "User"),
+            new("name", "John Doe"),
+            new("email", "johndoe@example.com")
         };
 
         // Act
@@ -40,10 +40,10 @@ public class JwtParserTests
         var jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJyb2xlIjpbIkFkbWluIiwiVXNlciJdfQ.cJYW7WigNkOxWtfcOjYaeRLyX5OPKIIhBPaCmbXytpA";
         var expectedClaims = new List<Claim> 
         {
-            new Claim(ClaimTypes.Role, "Admin"),
-            new Claim(ClaimTypes.Role, "User"),
-            new Claim("name", "John Doe"),
-            new Claim("email", "johndoe@example.com"),
+            new(ClaimTypes.Role, "Admin"),
+            new(ClaimTypes.Role, "User"),
+            new("name", "John Doe"),
+            new("email", "johndoe@example.com"),
         };
 
         // Act
