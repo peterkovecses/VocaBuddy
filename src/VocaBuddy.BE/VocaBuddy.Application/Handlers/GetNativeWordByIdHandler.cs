@@ -16,6 +16,6 @@ public class GetNativeWordByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<
 
         request.EntityUserId = nativeWord.UserId; ;
         
-        return Result.Success(CompactNativeWordDtoMapper.FromDomainModel(nativeWord))!;
+        return Result.Success(nativeWord.ToCompactNativeWordDto())!;
     }
 }
