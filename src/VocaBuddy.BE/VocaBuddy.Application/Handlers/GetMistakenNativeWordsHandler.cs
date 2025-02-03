@@ -9,6 +9,6 @@ public class GetMistakenNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser 
     {
         var words = await _nativeWords.GetMistakenAsync(request.WordCount, _currentUserId, cancellationToken);
 
-        return Result.Success(CompactNativeWordDtoMapper.FromDomainModel(words.RandomOrder()));
+        return Result.Success(words.RandomOrder().ToCompactNativeWordDto());
     }
 }

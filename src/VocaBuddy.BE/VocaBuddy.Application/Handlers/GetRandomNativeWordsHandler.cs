@@ -9,6 +9,6 @@ public class GetRandomNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser us
     {
         var words = await _nativeWords.GetRandomAsync(request.WordCount, _currentUserId, cancellationToken);
 
-        return Result.Success(CompactNativeWordDtoMapper.FromDomainModel(words));
+        return Result.Success(words.ToCompactNativeWordDto());
     }
 }

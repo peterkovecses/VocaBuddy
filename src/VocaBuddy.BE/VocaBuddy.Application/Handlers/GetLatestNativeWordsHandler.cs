@@ -9,6 +9,6 @@ public class GetLatestNativeWordsHandler(IUnitOfWork unitOfWork, ICurrentUser us
     {
         var words = await _nativeWords.GetLatestAsync(request.WordCount, _currentUserId, cancellationToken);
 
-        return Result.Success(CompactNativeWordDtoMapper.FromDomainModel(words.RandomOrder()));
+        return Result.Success(words.RandomOrder().ToCompactNativeWordDto());
     }
 }

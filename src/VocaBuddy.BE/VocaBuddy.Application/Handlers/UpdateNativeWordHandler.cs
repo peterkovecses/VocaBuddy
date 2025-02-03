@@ -28,7 +28,7 @@ public class UpdateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) 
 
         async Task UpdateWordAsync()
         {
-            CompactNativeWordDtoMapper.CopyTo(request.NativeWord, nativeWordToUpdate);
+            request.NativeWord.CopyTo(nativeWordToUpdate);
             await unitOfWork.CompleteAsync(cancellationToken);
         }
     }

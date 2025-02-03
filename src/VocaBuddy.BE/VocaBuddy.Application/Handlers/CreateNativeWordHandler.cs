@@ -10,7 +10,7 @@ public class CreateNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) 
         SetUserId();
         await SaveWordAsync();
 
-        return Result.Success(NativeWordDtoMapper.FromDomainModel(nativeWord));
+        return Result.Success(nativeWord.ToNativeWordDto());
 
         void SetUserId()
             => nativeWord.UserId = _currentUserId;
