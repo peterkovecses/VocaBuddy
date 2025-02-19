@@ -22,7 +22,7 @@ public class GamePlayBase : CustomComponentBase
     protected override async Task OnInitializedAsync()
     {
         ValidateWordCount();
-        await GamePlayService!.InitializeGame(GameMode, WordCount);
+        await GamePlayService!.InitializeGameAsync(GameMode, WordCount, CancellationToken);
     }
 
     protected void OnSubmit()

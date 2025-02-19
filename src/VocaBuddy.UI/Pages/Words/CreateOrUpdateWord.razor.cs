@@ -22,7 +22,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
             try
             {
                 Loading = true;
-                var result = await WordService!.GetWordAsync(WordId!.Value);
+                var result = await WordService!.GetWordAsync(WordId!.Value, CancellationToken);
                 HandleResult(result);
             }
             catch // If the API is not responding
@@ -123,10 +123,10 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     private async Task<Result> SaveWordAsync()
     {
-        if (!Update) return await WordService!.CreateWord(Model);
+        if (!Update) return await WordService!.CreateWordAsync(Model, CancellationToken);
         Model.Id = WordId!.Value;
 
-        return await WordService!.UpdateWord(Model);
+        return await WordService!.UpdateWordAsync(Model, CancellationToken);
     }
 
     private static CompactNativeWordDto InitializeEmptyModel()

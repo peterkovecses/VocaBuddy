@@ -11,7 +11,7 @@ public class GameConfigurationBase : CustomComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await WordService!.GetWordCountAsync();
+        var result = await WordService!.GetWordCountAsync(CancellationToken);
         if (result.IsFailure)
         {
             NavManager!.NavigateTo("/error");
