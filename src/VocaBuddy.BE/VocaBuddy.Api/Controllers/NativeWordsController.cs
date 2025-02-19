@@ -6,41 +6,41 @@
 public class NativeWordsController(IMediator mediator) : ApiControllerBase(mediator)
 {
     [HttpGet]
-    public async Task<IActionResult> GetNativeWords(CancellationToken token)
+    public async Task<IActionResult> GetNativeWords(CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetNativeWordsQuery(), token);
+        var result = await Mediator.Send(new GetNativeWordsQuery(), cancellationToken);
 
         return result.ToApiResponse();
     }
 
     [HttpGet("random")]
-    public async Task<IActionResult> GetRandomNativeWords(int count, CancellationToken token)
+    public async Task<IActionResult> GetRandomNativeWords(int count, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetRandomNativeWordsQuery(count), token);
+        var result = await Mediator.Send(new GetRandomNativeWordsQuery(count), cancellationToken);
 
         return result.ToApiResponse();
     }
 
     [HttpGet("latest")]
-    public async Task<IActionResult> GetLatestNativeWords(int count, CancellationToken token)
+    public async Task<IActionResult> GetLatestNativeWords(int count, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetLatestNativeWordsQuery(count), token);
+        var result = await Mediator.Send(new GetLatestNativeWordsQuery(count), cancellationToken);
 
         return result.ToApiResponse();
     }
     
     [HttpGet("mistaken")]
-    public async Task<IActionResult> GetMistakenNativeWords(int count, CancellationToken token)
+    public async Task<IActionResult> GetMistakenNativeWords(int count, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetMistakenNativeWordsQuery(count), token);
+        var result = await Mediator.Send(new GetMistakenNativeWordsQuery(count), cancellationToken);
 
         return result.ToApiResponse();
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetNativeWord(int id, CancellationToken token)
+    public async Task<IActionResult> GetNativeWord(int id, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetNativeWordByIdQuery(id), token);
+        var result = await Mediator.Send(new GetNativeWordByIdQuery(id), cancellationToken);
 
         return result.ToApiResponse();
     }
@@ -54,9 +54,9 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNativeWorld(CompactNativeWordDto nativeWord, CancellationToken token)
+    public async Task<IActionResult> CreateNativeWorld(CompactNativeWordDto nativeWord, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new CreateNativeWordCommand(nativeWord), token);
+        var result = await Mediator.Send(new CreateNativeWordCommand(nativeWord), cancellationToken);
 
         return result
             .ToApiResponse(r => CreatedAtAction(
@@ -66,30 +66,30 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateNativeWord(int id, CompactNativeWordDto nativeWord, CancellationToken token)
+    public async Task<IActionResult> UpdateNativeWord(int id, CompactNativeWordDto nativeWord, CancellationToken cancellationToken)
     {
         if (id != nativeWord.Id)
         {
             return BadRequest(Result.Failure(new ErrorInfo(VocaBuddyErrorCodes.ModelError, [new ApplicationError("The model id does not match the route id.")])));
         }
 
-        var result = await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id), token);
+        var result = await Mediator.Send(new UpdateNativeWordCommand(nativeWord, id), cancellationToken);
 
         return result.ToApiResponse();
     }
 
     [HttpPut]
-    public async Task<IActionResult> RecordMistakes(IEnumerable<int> mistakenWordIds, CancellationToken token)
+    public async Task<IActionResult> RecordMistakes(IEnumerable<int> mistakenWordIds, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new RecordMistakesCommand(mistakenWordIds), token);
+        var result = await Mediator.Send(new RecordMistakesCommand(mistakenWordIds), cancellationToken);
 
         return result.ToApiResponse();
     }
     
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteNativeWord(int id, CancellationToken token)
+    public async Task<IActionResult> DeleteNativeWord(int id, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new DeleteNativeWordCommand(id), token);
+        var result = await Mediator.Send(new DeleteNativeWordCommand(id), cancellationToken);
 
         return result.ToApiResponse();
     }
