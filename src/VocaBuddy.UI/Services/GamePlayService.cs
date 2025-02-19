@@ -27,7 +27,7 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         return isCorrectAnswer;
     }
 
-    public async Task InitializeGame(string gameMode, int wordCount)
+    public async Task InitializeGameAsync(string gameMode, int wordCount, CancellationToken cancellationToken)
     {
         await LoadWordsAsync();
         SetInitialRemainingWordCount();
@@ -39,9 +39,9 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         {
             _words = gameMode switch
             {
-                GameModeConstants.Random => await wordService.GetRandomWordsAsync(wordCount),
-                GameModeConstants.Latest => await wordService.GetLatestWordsAsync(wordCount),
-                GameModeConstants.Mistaken => await wordService.GetMistakenWordsAsync(wordCount),
+                GameModeConstants.Random => await wordService.GetRandomWordsAsync(wordCount, cancellationToken),
+                GameModeConstants.Latest => await wordService.GetLatestWordsAsync(wordCount, cancellationToken),
+                GameModeConstants.Mistaken => await wordService.GetMistakenWordsAsync(wordCount, cancellationToken),
                 _ => throw new ArgumentException("Invalid game mode.", nameof(gameMode))
             };
         }
@@ -88,7 +88,7 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
         => _mistakes.Select(word => word.Id).ToList();
 
     private void RecordMistakes(IEnumerable<int> mistakenWordIds)
-        => Task.Run(() => wordService.RecordMistakes(mistakenWordIds));
+        => Task.Run(() => wordService.RecordMistakesAsync(mistakenWordIds));
 
     private void SetInitialMistakeCount()
         => MistakeCount ??= _mistakes.Count;

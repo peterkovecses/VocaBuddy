@@ -19,7 +19,7 @@ public class WordsBase : ListComponentBase
         try
         {
             Loading = true;
-            Words = await WordService!.GetWordListViewModelsAsync();
+            Words = await WordService!.GetWordListViewModelsAsync(CancellationToken);
         }
         catch (RefreshTokenException)
         {
@@ -48,7 +48,7 @@ public class WordsBase : ListComponentBase
     {
         try
         {
-            var result = await WordService!.DeleteWordAsync(ItemToDeleteId);
+            var result = await WordService!.DeleteWordAsync(ItemToDeleteId, CancellationToken);
             HandleResult(ItemToDeleteId, result);
         }
         catch (RefreshTokenException)

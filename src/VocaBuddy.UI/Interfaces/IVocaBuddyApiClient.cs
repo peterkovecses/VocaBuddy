@@ -2,14 +2,14 @@
 
 public interface IVocaBuddyApiClient
 {
-    Task<Result<List<NativeWordDto>>> GetNativeWordsAsync();
-    Task<Result<List<CompactNativeWordDto>>> GetRandomNativeWordsAsync(int count);
-    Task<Result<List<CompactNativeWordDto>>> GetLatestNativeWordsAsync(int count);
-    Task<Result<List<CompactNativeWordDto>>> GetMistakenNativeWordsAsync(int count);
-    Task<Result<CompactNativeWordDto>> GetNativeWordAsync(int id);
-    Task<Result<int>> GetNativeWordCountAsync();
-    Task<Result> CreateNativeWordAsync(CompactNativeWordDto word);
-    Task<Result> UpdateNativeWordAsync(CompactNativeWordDto word);
-    Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds);
-    Task<Result> DeleteNativeWordAsync(int id);
+    Task<Result<List<NativeWordDto>>> GetNativeWordsAsync(CancellationToken cancellationToken);
+    Task<Result<List<CompactNativeWordDto>>> GetRandomNativeWordsAsync(int count, CancellationToken cancellationToken);
+    Task<Result<List<CompactNativeWordDto>>> GetLatestNativeWordsAsync(int count, CancellationToken cancellationToken);
+    Task<Result<List<CompactNativeWordDto>>> GetMistakenNativeWordsAsync(int count, CancellationToken cancellationToken);
+    Task<Result<CompactNativeWordDto>> GetNativeWordAsync(int id, CancellationToken cancellationToken);
+    Task<Result<int>> GetNativeWordCountAsync(CancellationToken cancellationToken);
+    Task<Result> CreateNativeWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken);
+    Task<Result> UpdateNativeWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken);
+    Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds, CancellationToken cancellationToken);
+    Task<Result> DeleteNativeWordAsync(int id, CancellationToken cancellationToken);
 }

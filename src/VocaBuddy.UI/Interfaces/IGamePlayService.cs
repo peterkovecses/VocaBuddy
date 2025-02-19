@@ -8,7 +8,7 @@ public interface IGamePlayService
     bool WordsNotLoaded { get; }
 
     bool IsCorrectAnswer(string userInput);
-    Task InitializeGame(string gameMode, int wordCount);
+    Task InitializeGameAsync(string gameMode, int wordCount, CancellationToken cancellationToken);
     void MarkActualWordAsAMistake();
     void SetNextWord();
     void LoadMistakes();

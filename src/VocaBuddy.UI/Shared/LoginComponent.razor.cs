@@ -20,7 +20,7 @@ public class LoginComponentBase : CustomComponentBase
         try
         {
             Loading = true;
-            var result = await AuthService!.LoginAsync(Model);
+            var result = await AuthService!.LoginAsync(Model, CancellationToken);
             HandleResult(result);
         }
         catch(Exception ex)

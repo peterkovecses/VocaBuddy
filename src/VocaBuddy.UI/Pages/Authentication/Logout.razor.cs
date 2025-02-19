@@ -7,7 +7,7 @@ public class LogoutBase : CustomComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        await AuthService!.LogoutAsync();
+        await AuthService!.LogoutAsync(CancellationToken);
         NavManager!.NavigateTo("/");
     }
 }

@@ -22,7 +22,7 @@ public class RegisterBase : CustomComponentBase
         try
         {
             Loading = true;
-            var result = await AuthService!.RegisterAsync(Model);
+            var result = await AuthService!.RegisterAsync(Model, CancellationToken);
             await HandleResultAsync(result);
         }
         catch
@@ -60,6 +60,6 @@ public class RegisterBase : CustomComponentBase
             Password = Model.Password
         };
 
-        await AuthService!.LoginAsync(loginRequest);
+        await AuthService!.LoginAsync(loginRequest, CancellationToken);
     }
 }
