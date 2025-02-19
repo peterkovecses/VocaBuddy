@@ -13,7 +13,7 @@ public abstract class GenericRepository<TEntity, TId>(DbContext context) : IGene
     }
 
     public virtual async Task<TEntity?> FindByIdAsync(TId id, CancellationToken cancellationToken)
-        => await Context.Set<TEntity>().FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
+        => await Context.Set<TEntity>().FindAsync([id], cancellationToken: cancellationToken);
 
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
         => await Context.Set<TEntity>().AddAsync(entity, cancellationToken);

@@ -86,9 +86,9 @@ public class GamePlayService(IWordService wordService) : IGamePlayService
 
     private List<int> GetMistakenWordIds() 
         => _mistakes.Select(word => word.Id).ToList();
-
+    
     private void RecordMistakes(IEnumerable<int> mistakenWordIds)
-        => Task.Run(() => wordService.RecordMistakesAsync(mistakenWordIds));
+        => _ = wordService.RecordMistakesAsync(mistakenWordIds);
 
     private void SetInitialMistakeCount()
         => MistakeCount ??= _mistakes.Count;
