@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-
-namespace Api.Tests.Services;
+namespace Api.UnitTests.Services;
 
 public class CurrentUserTests
 {
