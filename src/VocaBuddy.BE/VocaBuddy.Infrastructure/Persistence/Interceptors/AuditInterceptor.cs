@@ -22,7 +22,7 @@ public class AuditInterceptor(IDateTimeProvider dateTimeProvider) : SaveChangesI
     
     private void UpdateEntityTimestamps(DbContextEventData eventData)
     {
-        foreach (var entityEntry in eventData.Context!.ChangeTracker.Entries<EntityBase>())
+        foreach (var entityEntry in eventData.Context!.ChangeTracker.Entries<IAuditableEntity>())
         {
             if (entityEntry.State is Added)
             {

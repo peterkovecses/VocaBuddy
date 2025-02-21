@@ -1,0 +1,9 @@
+global using Xunit;
+global using FluentAssertions;
+global using NSubstitute;
+global using Microsoft.AspNetCore.Mvc;
+global using System.Security.Claims;
+global using Microsoft.AspNetCore.Http;
+global using VocaBuddy.Api.Extensions;
+global using VocaBuddy.Shared.Models;
+global using VocaBuddy.Api.Services;
