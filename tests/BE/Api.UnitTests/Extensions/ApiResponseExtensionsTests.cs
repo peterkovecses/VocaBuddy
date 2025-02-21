@@ -1,8 +1,4 @@
-using VocaBuddy.Shared.Models;
-using VocaBuddy.Api.Extensions;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Api.Tests.Extensions;
+namespace Api.UnitTests.Extensions;
 
 public class ApiResponseExtensionsTests
 {

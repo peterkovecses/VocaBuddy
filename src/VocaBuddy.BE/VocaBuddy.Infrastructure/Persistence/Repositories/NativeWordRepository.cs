@@ -1,12 +1,12 @@
 ﻿namespace VocaBuddy.Infrastructure.Persistence.Repositories;
 
-public class NativeWordRepository(DbContext context)
-    : GenericRepository<NativeWord, int>(context), INativeWordRepository
+internal sealed class NativeWordRepository(DbContext context)
+    : RepositoryBase<NativeWord, int>(context), INativeWordRepository
 {
     private VocaBuddyContext VocaBuddyContext
         => (Context as VocaBuddyContext)!;
 
-    public override Task<List<NativeWord>> GetAsync(Expression<Func<NativeWord, bool>> predicate, CancellationToken cancellationToken)
+    public Task<List<NativeWord>> GetAsync(Expression<Func<NativeWord, bool>> predicate, CancellationToken cancellationToken)
         => VocaBuddyContext.NativeWords
             .Include(word => word.Translations)
             .Where(predicate)
@@ -35,7 +35,7 @@ public class NativeWordRepository(DbContext context)
             .Take(count)
             .ToListAsync(cancellationToken));
 
-    public override Task<NativeWord?> FindByIdAsync(int id, CancellationToken cancellationToken)
+    public Task<NativeWord?> FindByIdAsync(int id, CancellationToken cancellationToken)
         => VocaBuddyContext.NativeWords
             .Include(word => word.Translations)
             .FirstOrDefaultAsync(word => word.Id == id, cancellationToken);

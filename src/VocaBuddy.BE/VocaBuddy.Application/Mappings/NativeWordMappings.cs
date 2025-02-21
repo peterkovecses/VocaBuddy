@@ -42,7 +42,6 @@ public static class NativeWordMappings
     
     public static void CopyTo(this CompactNativeWordDto source, NativeWord destination)
     {
-        destination.Id = source.Id;
         destination.Text = source.Text;
         destination.Translations = source
             .Translations

@@ -1,8 +1,8 @@
 namespace VocaBuddy.Domain.Common;
 
-public class EntityBase
+public class EntityBase<TEntityId> : IAuditableEntity
 {
-    public int Id { get; set; }
+    public TEntityId Id { get; init; } = default!;
     public DateTime CreatedUtc { get; set; }
     public DateTime UpdatedUtc { get; set; }
 }

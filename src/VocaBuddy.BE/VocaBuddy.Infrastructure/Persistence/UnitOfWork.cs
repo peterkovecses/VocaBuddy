@@ -1,24 +1,21 @@
 ﻿namespace VocaBuddy.Infrastructure.Persistence;
 
-public class UnitOfWork : IUnitOfWork
+internal class UnitOfWork : IUnitOfWork
 {
     private readonly VocaBuddyContext _context;
     private readonly Lazy<INativeWordRepository> _nativeWords;
-    private readonly Lazy<IForeignWordRepository> _foreignWords;
 
     public UnitOfWork(VocaBuddyContext context)
     {
         _context = context;
         _nativeWords = new Lazy<INativeWordRepository>(() => new NativeWordRepository(_context));
-        _foreignWords = new Lazy<IForeignWordRepository>(() => new ForeignWordRepository(_context));
     }
 
     public INativeWordRepository NativeWords => _nativeWords.Value;
-    public IForeignWordRepository ForeignWords => _foreignWords.Value;
 
     public async Task<int> CompleteAsync(CancellationToken cancellationToken) => await _context.SaveChangesAsync(cancellationToken);
 
-    private bool _disposed = false;
+    private bool _disposed;
 
     ~UnitOfWork() => Dispose(false);
 
