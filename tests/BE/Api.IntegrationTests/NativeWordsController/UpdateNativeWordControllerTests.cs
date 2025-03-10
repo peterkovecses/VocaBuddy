@@ -1,5 +1,6 @@
 namespace Api.IntegrationTests.NativeWordsController;
 
+[Collection("VocaBuddy API collection")]
 public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : IntegrationTest(apiFactory)
 {
     [Fact]
