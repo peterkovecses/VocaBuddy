@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VocaBuddy.UI.Extensions;
+namespace VocaBuddy.Shared.Extensions;
 
 public static class HttpResponseExtensions
 {
@@ -10,11 +10,13 @@ public static class HttpResponseExtensions
         MissingMemberHandling = MissingMemberHandling.Ignore
     };
 
-    public static async Task<T> ReadAsAsync<T>(this HttpResponseMessage response, CancellationToken cancellationToken)
+    public static async Task<T> ReadAsAsync<T>(this HttpResponseMessage response, CancellationToken cancellationToken = default)
     {
         var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
         var result = JsonConvert.DeserializeObject<T>(responseString, Settings);
 
-        return result is not null ? result : throw new JsonSerializationException("Deserialization resulted in null.");
+        return result is not null 
+            ? result 
+            : throw new JsonSerializationException("Deserialization resulted in null.");
     }
 }

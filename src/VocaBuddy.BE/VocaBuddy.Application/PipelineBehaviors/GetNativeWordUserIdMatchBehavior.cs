@@ -1,16 +1,16 @@
 ﻿namespace VocaBuddy.Application.PipelineBehaviors;
 
-public class GetNativeWordUserIdMatchBehavior(ICurrentUser user) : IPipelineBehavior<GetNativeWordByIdQuery, Result<NativeWordDto>>
+public class GetNativeWordUserIdMatchBehavior(ICurrentUser user) : IPipelineBehavior<GetNativeWordByIdQuery, Result<CompactNativeWordDto>>
 {
     private readonly string _currentUserId = user.Id!;
 
-    public async Task<Result<NativeWordDto>> Handle(GetNativeWordByIdQuery request, RequestHandlerDelegate<Result<NativeWordDto>> next, CancellationToken cancellationToken)
+    public async Task<Result<CompactNativeWordDto>> Handle(GetNativeWordByIdQuery request, RequestHandlerDelegate<Result<CompactNativeWordDto>> next, CancellationToken cancellationToken)
     {
         var result = await next();
 
         if (result.IsSuccess && request.EntityUserId != _currentUserId)
         {
-            return Result.Failure<NativeWordDto>(ErrorInfoFactory.UserIdNotMatch());
+            return Result.Failure<CompactNativeWordDto>(ErrorInfoFactory.UserIdNotMatch());
         }
 
         return result;
