@@ -1,6 +1,6 @@
 namespace Api.IntegrationTests;
 
-public abstract class IntegrationTest(VocaBuddyApiFactory apiFactory)
+public abstract class IntegrationTestBase(VocaBuddyApiFactory apiFactory)
 {
     private static readonly Random Random = new();
     protected readonly HttpClient Client = apiFactory.CreateClient();

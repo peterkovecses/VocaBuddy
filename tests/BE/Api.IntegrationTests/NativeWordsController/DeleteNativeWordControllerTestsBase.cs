@@ -1,7 +1,7 @@
 namespace Api.IntegrationTests.NativeWordsController;
 
 [Collection("VocaBuddy API collection")]
-public class DeleteNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : IntegrationTest(apiFactory)
+public class DeleteNativeWordControllerTestsBase(VocaBuddyApiFactory apiFactory) : IntegrationTestBase(apiFactory)
 {
     [Fact]
     public async Task Delete_WhenAuthHeaderIsNotSet_ShouldReturnUnAuthorized()

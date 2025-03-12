@@ -1,7 +1,7 @@
 namespace Api.IntegrationTests.NativeWordsController;
 
 [Collection("VocaBuddy API collection")]
-public class GetNativeWordsControllerTests(VocaBuddyApiFactory apiFactory) : IntegrationTest(apiFactory)
+public class GetNativeWordsControllerTestsBase(VocaBuddyApiFactory apiFactory) : IntegrationTestBase(apiFactory)
 {
     [Fact]
     public async Task Get_WhenAuthHeaderIsNotSet_ShouldReturnUnAuthorized()

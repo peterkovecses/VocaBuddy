@@ -1,4 +1,4 @@
 namespace Api.IntegrationTests;
 
-[CollectionDefinition("VocaBuddy API collection", DisableParallelization = false)]
+[CollectionDefinition("VocaBuddy API collection")]
 public class VocaBuddyApiCollection : ICollectionFixture<VocaBuddyApiFactory>;
