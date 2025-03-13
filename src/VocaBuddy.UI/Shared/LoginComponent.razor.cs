@@ -44,7 +44,7 @@ public class LoginComponentBase : CustomComponentBase
         {
             StatusMessage = result.ErrorInfo!.Code switch
             {
-                IdentityErrorCode.InvalidCredentials => result.ErrorInfo.Errors.First().Message,
+                IdentityErrorCodes.InvalidCredentials => result.ErrorInfo.Errors.First().Message,
                 _ => LoginFailed
             };
         }

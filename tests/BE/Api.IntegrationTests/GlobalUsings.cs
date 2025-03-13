@@ -1,0 +1,11 @@
+global using Xunit;
+global using FluentAssertions;
+global using System.Net;
+global using System.Net.Http.Json;
+global using Microsoft.IdentityModel.Tokens;
+global using VocaBuddy.Api;
+global using VocaBuddy.Shared.Dtos;
+global using VocaBuddy.Shared.Extensions;
+global using VocaBuddy.Shared.Models;
+global using VocaBuddy.Shared.Errors;
+global using Api.IntegrationTests.AuthHelpers;

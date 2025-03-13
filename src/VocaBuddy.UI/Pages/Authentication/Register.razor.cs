@@ -46,8 +46,8 @@ public class RegisterBase : CustomComponentBase
 
         StatusMessage = result.ErrorInfo!.Code switch
         {
-            IdentityErrorCode.UserExists => result.ErrorInfo.Errors.First().Message,
-            IdentityErrorCode.InvalidUserRegistrationInput => result.ErrorInfo.Errors.First().Message,
+            IdentityErrorCodes.UserExists => result.ErrorInfo.Errors.First().Message,
+            IdentityErrorCodes.InvalidUserRegistrationInput => result.ErrorInfo.Errors.First().Message,
             _ => RegistrationFailed
         };
     }

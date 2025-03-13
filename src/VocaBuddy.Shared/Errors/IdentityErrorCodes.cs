@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.Shared.Errors;
 
-public static class IdentityErrorCode
+public static class IdentityErrorCodes
 {
     public const string UserExists = "UserExists";
     public const string InvalidUserRegistrationInput = "InvalidUserRegistrationInput";
