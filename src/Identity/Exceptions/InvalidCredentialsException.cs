@@ -4,6 +4,6 @@ public class InvalidCredentialsException : IdentityExceptionBase
 {
     public InvalidCredentialsException() : base("Incorrect username or password.") 
     {
-        ErrorCode = IdentityErrorCode.InvalidCredentials;
+        ErrorCode = IdentityErrorCodes.InvalidCredentials;
     }
 }

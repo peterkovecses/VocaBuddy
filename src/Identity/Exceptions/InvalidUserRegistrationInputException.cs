@@ -4,6 +4,6 @@ public class InvalidUserRegistrationInputException : IdentityExceptionBase
 {
 	public InvalidUserRegistrationInputException(string message) : base(message) 
 	{
-		ErrorCode = IdentityErrorCode.InvalidUserRegistrationInput;
+		ErrorCode = IdentityErrorCodes.InvalidUserRegistrationInput;
 	}
 }
