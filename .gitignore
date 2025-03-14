@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# SSL Certificates and Private Keys
+*.crt
+*.key
+*.pem
+*.csr
