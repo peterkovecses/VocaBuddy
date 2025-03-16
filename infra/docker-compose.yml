@@ -1,3 +1,5 @@
+name: vocabuddy
+
 services:
   mssql:
     container_name: ms-sql-server
