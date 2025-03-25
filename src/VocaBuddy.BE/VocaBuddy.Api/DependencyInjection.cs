@@ -5,9 +5,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
-        
         services.AddScoped<ICurrentUser, CurrentUser>();
-
         services.AddCors(options =>
         {
             options.AddPolicy(name: "_myAllowSpecificOrigins",
@@ -22,7 +20,6 @@ public static class DependencyInjection
         var tokenValidationParametersConfigSection = configuration.GetSection("TokenValidationParameters");
         var tokenValidationParameters = new CustomTokenValidationParameters();
         tokenValidationParametersConfigSection.Bind(tokenValidationParameters);
-
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,7 +32,6 @@ public static class DependencyInjection
         });
 
         services.AddAuthorization();
-
         services.AddSwaggerGen(opt =>
         {
             opt.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
