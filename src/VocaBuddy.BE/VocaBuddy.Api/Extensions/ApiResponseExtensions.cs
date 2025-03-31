@@ -4,16 +4,9 @@ public static class ApiResponseExtensions
 {
     public static IActionResult ToApiResponse(this Result result)
     {
-        if (result.IsSuccess)
-        {
-            return new OkObjectResult(result);
-        }
-
-        return result.ErrorInfo!.Code switch
-        {
-            VocaBuddyErrorCodes.NotFound => new ObjectResult(result) { StatusCode = StatusCodes.Status404NotFound},
-            _ => new BadRequestObjectResult(result)
-        };
+        return result.IsSuccess 
+            ? new OkObjectResult(result) 
+            : Error(result);
     }
 
     public static IActionResult ToApiResponse<TData>(this Result<TData> result,
@@ -24,10 +17,14 @@ public static class ApiResponseExtensions
             return objectResultGenerator?.Invoke(result) ?? new OkObjectResult(result);
         }
 
-        return result.ErrorInfo!.Code switch
+        return Error(result);
+
+    }
+    
+    private static ObjectResult Error(Result result) =>
+        result.ErrorInfo!.Code switch
         {
             VocaBuddyErrorCodes.NotFound => new ObjectResult(result) { StatusCode = StatusCodes.Status404NotFound},
             _ => new BadRequestObjectResult(result)
         };
-    }
 }
