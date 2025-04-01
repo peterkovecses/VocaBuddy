@@ -5,31 +5,31 @@ internal sealed class NativeWordRepository(DbContext context)
 {
     public Task<List<NativeWord>> GetAsync(Expression<Func<NativeWord, bool>> predicate, CancellationToken cancellationToken)
         => DbSet
-            .Include(word => word.Translations)
             .Where(predicate)
+            .Include(word => word.Translations)
             .ToListAsync(cancellationToken);
 
     public Task<List<NativeWord>> GetRandomAsync(int count, string userId, CancellationToken cancellationToken)
         => DbSet
-            .Include(word => word.Translations)
             .Where(word => word.UserId == userId)
             .TakeRandom(count)
+            .Include(word => word.Translations)
             .ToListAsync(cancellationToken);
 
     public Task<List<NativeWord>> GetLatestAsync(int count, string userId, CancellationToken cancellationToken)
         => DbSet
-            .Include(word => word.Translations)
             .Where(word => word.UserId == userId)
             .OrderByDescending(word => word.UpdatedUtc)
             .Take(count)
+            .Include(word => word.Translations)
             .ToListAsync(cancellationToken);
 
     public Task<List<NativeWord>> GetMistakenAsync(int count, string userId, CancellationToken cancellationToken)
         => DbSet
-            .Include(word => word.Translations)
             .Where(word => word.UserId == userId)
             .OrderByDescending(word => word.MistakeCount)
             .Take(count)
+            .Include(word => word.Translations)
             .ToListAsync(cancellationToken);
 
     public override Task<NativeWord?> FindByIdAsync(int id, CancellationToken cancellationToken)
