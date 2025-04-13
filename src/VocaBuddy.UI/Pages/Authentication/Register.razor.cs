@@ -54,7 +54,7 @@ public class RegisterBase : CustomComponentBase
 
     private async Task SignInUserAsync()
     {
-        var loginRequest = new UserLoginRequest()
+        var loginRequest = new UserLoginRequest
         {
             Email = Model.Email,
             Password = Model.Password

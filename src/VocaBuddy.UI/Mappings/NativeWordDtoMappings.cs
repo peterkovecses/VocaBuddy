@@ -2,11 +2,8 @@
 
 public static class NativeWordDtoMappings
 {
-    public static List<NativeWordListViewModel> MapToListViewModels(this List<NativeWordDto>? words)
-    {
-        ArgumentNullException.ThrowIfNull(words, nameof(words));
-
-        return words.Select(word => new NativeWordListViewModel
+    public static List<NativeWordListViewModel> MapToListViewModels(this List<NativeWordDto> words) =>
+        words.Select(word => new NativeWordListViewModel
             {
                 Id = word.Id,
                 Text = word.Text,
@@ -15,5 +12,12 @@ public static class NativeWordDtoMappings
                 TranslationsString = string.Join(", ", word.Translations.Select(translation => translation.Text))
             })
             .ToList();
-    }
+
+    public static UpdateNativeWordDto ToUpdateModel(this CreateNativeWordDto source, int id) =>
+        new()
+        {
+            Id = id,
+            Text = source.Text,
+            Translations = source.Translations
+        };
 }

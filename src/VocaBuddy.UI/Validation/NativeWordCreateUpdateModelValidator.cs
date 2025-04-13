@@ -1,6 +1,6 @@
 ﻿namespace VocaBuddy.UI.Validation;
 
-public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNativeWordDto>
+public class NativeWordCreateUpdateModelValidator : AbstractValidator<CreateOrUpdateModel>
 {
     public NativeWordCreateUpdateModelValidator()
     {
@@ -24,6 +24,8 @@ public class NativeWordCreateUpdateModelValidator : AbstractValidator<CompactNat
         });
 
         RuleFor(word => word.Translations)
+            .NotEmpty()
+            .WithMessage("At least one translation is required.")
             .Must(translations => translations.Select(translation => translation.Text).AllUnique())
             .WithMessage("Translations must be unique.");
     }

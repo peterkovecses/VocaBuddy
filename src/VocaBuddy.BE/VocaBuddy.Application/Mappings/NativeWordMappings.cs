@@ -2,7 +2,16 @@ namespace VocaBuddy.Application.Mappings;
 
 public static class NativeWordMappings
 {
-    public static NativeWord ToDomainModel(this CompactNativeWordDto source)
+    public static NativeWord ToDomainModel(this CreateNativeWordDto source)
+        => new()
+        {
+            Text = source.Text,
+            Translations = source
+                .Translations
+                .ToDomainModel()
+        };
+    
+    public static NativeWord ToDomainModel(this UpdateNativeWordDto source)
         => new()
         {
             Id = source.Id,
@@ -40,7 +49,7 @@ public static class NativeWordMappings
             .Select(ToCompactNativeWordDto)
             .ToList();
     
-    public static void CopyTo(this CompactNativeWordDto source, NativeWord destination)
+    public static void CopyTo(this UpdateNativeWordDto source, NativeWord destination)
     {
         destination.Text = source.Text;
         destination.Translations = source

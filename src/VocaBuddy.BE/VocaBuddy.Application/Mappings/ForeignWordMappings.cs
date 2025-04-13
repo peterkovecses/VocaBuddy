@@ -10,7 +10,7 @@ public static class ForeignWordMappings
             NativeWordId = nativeWordId
         };
     
-    public static List<ForeignWord> ToDomainModel(this IEnumerable<ForeignWordDto> source, int nativeWordId)
+    public static List<ForeignWord> ToDomainModel(this IEnumerable<ForeignWordDto> source, int nativeWordId = default)
         => source
             .Select(foreignWordDto => foreignWordDto.ToDomainModel(nativeWordId))
             .ToList();

@@ -1,4 +1,10 @@
-﻿namespace VocaBuddy.Application;
+﻿using VocaBuddy.Application.Features.NativeWord.Queries.GetById;
+using VocaBuddy.Application.Features.NativeWord.Queries.GetLatest;
+using VocaBuddy.Application.Features.NativeWord.Queries.GetRandom;
+using VocaBuddy.Application.Logging;
+using VocaBuddy.Application.Validation;
+
+namespace VocaBuddy.Application;
 
 public static class DependencyInjection
 {

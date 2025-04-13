@@ -2,5 +2,5 @@
 
 public static class ErrorMessages
 {
-    public const string ExceptionOccurred = "An exception occurred";
+    public const string ExceptionOccurred = "An exception occurred.";
 }

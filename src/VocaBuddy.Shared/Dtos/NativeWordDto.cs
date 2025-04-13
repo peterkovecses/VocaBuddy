@@ -2,10 +2,10 @@
 
 public class NativeWordDto
 {
-    public int Id { get; set; }
-    public string Text { get; set; } = default!;
-    public DateTime CreatedUtc { get; set; }
-    public DateTime UpdatedUtc { get; set; }
+    public int Id { get; init; }
+    public string Text { get; init; } = default!;
+    public DateTime CreatedUtc { get; init; }
+    public DateTime UpdatedUtc { get; init; }
 
-    public List<ForeignWordDto> Translations { get; set; } = default!;
+    public List<ForeignWordDto> Translations { get; init; } = default!;
 }

@@ -54,7 +54,7 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNativeWorld(CompactNativeWordDto nativeWord, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateNativeWorld(CreateNativeWordDto nativeWord, CancellationToken cancellationToken)
     {
         var result = await Mediator.Send(new CreateNativeWordCommand(nativeWord), cancellationToken);
 
@@ -66,7 +66,7 @@ public class NativeWordsController(IMediator mediator) : ApiControllerBase(media
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateNativeWord(int id, CompactNativeWordDto nativeWord, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateNativeWord(int id, UpdateNativeWordDto nativeWord, CancellationToken cancellationToken)
     {
         if (id != nativeWord.Id)
         {

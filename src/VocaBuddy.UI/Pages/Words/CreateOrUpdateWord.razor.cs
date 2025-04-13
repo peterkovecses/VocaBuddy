@@ -7,9 +7,9 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     [Parameter]
     public int? WordId { get; set; }
-
-    protected CompactNativeWordDto Model { get; set; } = InitializeEmptyModel();
-
+    
+    protected CreateOrUpdateModel Model { get; } = new();
+    
     [Inject]
     public IWordService? WordService { get; set; }
 
@@ -17,6 +17,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        InitializeTranslations();
         if (Update)
         {
             try
@@ -51,7 +52,8 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                     return;
                 }
 
-                Model = result.Data!;
+                Model.Text = result.Data!.Text;
+                Model.Translations = result.Data.Translations;
             }
         }
     }
@@ -99,6 +101,7 @@ public class CreateOrUpdateWordBase : CustomComponentBase
                 {
                     DisplaySuccessfulSavingMessage();
                     ClearModel();
+                    InitializeTranslations();
                     ClearStatusMessage();
                 }
             }
@@ -124,17 +127,16 @@ public class CreateOrUpdateWordBase : CustomComponentBase
     private async Task<Result> SaveWordAsync()
     {
         if (!Update) return await WordService!.CreateWordAsync(Model, CancellationToken);
-        Model.Id = WordId!.Value;
 
-        return await WordService!.UpdateWordAsync(Model, CancellationToken);
+        return await WordService!.UpdateWordAsync(Model.ToUpdateModel(WordId!.Value), CancellationToken);
     }
 
-    private static CompactNativeWordDto InitializeEmptyModel()
-        => new()
-        {
-            Translations = [new ForeignWordDto()]
-        };
+    private void InitializeTranslations()
+        => Model.Translations.Add(new ForeignWordDto());
 
     private void ClearModel()
-        => Model = InitializeEmptyModel();
+    {
+        Model.Text = string.Empty;
+        Model.Translations.Clear();
+    }
 }

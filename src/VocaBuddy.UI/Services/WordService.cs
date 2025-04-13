@@ -4,9 +4,10 @@ public class WordService(IVocaBuddyApiClient client) : IWordService
 {
     public async Task<List<NativeWordListViewModel>> GetWordListViewModelsAsync(CancellationToken cancellationToken)
     {
-        var words = (await client.GetNativeWordsAsync(cancellationToken)).Data;
-
-        return words.MapToListViewModels();
+        var result = await client.GetNativeWordsAsync(cancellationToken);
+        ThrowIfFailure(result);
+        
+        return result.Data!.MapToListViewModels();
     }
 
     public async Task<List<CompactNativeWordDto>> GetRandomWordsAsync(int count, CancellationToken cancellationToken)
@@ -39,10 +40,10 @@ public class WordService(IVocaBuddyApiClient client) : IWordService
     public Task<Result<int>> GetWordCountAsync(CancellationToken cancellationToken)
         => client.GetNativeWordCountAsync(cancellationToken);
 
-    public Task<Result> CreateWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken)
+    public Task<Result> CreateWordAsync(CreateNativeWordDto word, CancellationToken cancellationToken)
         => client.CreateNativeWordAsync(word, cancellationToken);
 
-    public Task<Result> UpdateWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken)
+    public Task<Result> UpdateWordAsync(UpdateNativeWordDto word, CancellationToken cancellationToken)
         => client.UpdateNativeWordAsync(word, cancellationToken);
 
     public Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds, CancellationToken cancellationToken = default)

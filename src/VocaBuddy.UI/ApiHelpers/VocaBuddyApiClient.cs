@@ -26,10 +26,10 @@ public class VocaBuddyApiClient(
     public Task<Result<int>> GetNativeWordCountAsync(CancellationToken cancellationToken = default)
         => GetAsync<Result<int>>(_vocaBuddyApiConfig.NativeWordsCountEndpoint, cancellationToken);
 
-    public Task<Result> CreateNativeWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken = default)
+    public Task<Result> CreateNativeWordAsync(CreateNativeWordDto word, CancellationToken cancellationToken = default)
         => PostAsync<Result>(_vocaBuddyApiConfig.NativeWordsEndpoints, word, cancellationToken);
 
-    public Task<Result> UpdateNativeWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken = default)
+    public Task<Result> UpdateNativeWordAsync(UpdateNativeWordDto word, CancellationToken cancellationToken = default)
         => PutAsync<Result>($"{_vocaBuddyApiConfig.NativeWordsEndpoints}/{word.Id}", word, cancellationToken);
 
     public Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds, CancellationToken cancellationToken = default)

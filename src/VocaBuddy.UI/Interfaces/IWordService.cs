@@ -8,8 +8,8 @@ public interface IWordService
     Task<List<CompactNativeWordDto>> GetMistakenWordsAsync(int count, CancellationToken cancellationToken);
     Task<Result<CompactNativeWordDto>> GetWordAsync(int id, CancellationToken cancellationToken);
     Task<Result<int>> GetWordCountAsync(CancellationToken cancellationToken);
-    Task<Result> CreateWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken);
-    Task<Result> UpdateWordAsync(CompactNativeWordDto word, CancellationToken cancellationToken);
+    Task<Result> CreateWordAsync(CreateNativeWordDto word, CancellationToken cancellationToken);
+    Task<Result> UpdateWordAsync(UpdateNativeWordDto word, CancellationToken cancellationToken);
     Task<Result> RecordMistakesAsync(IEnumerable<int> mistakenWordIds, CancellationToken cancellationToken = default);
     Task<Result> DeleteWordAsync(int id, CancellationToken cancellationToken);
 }

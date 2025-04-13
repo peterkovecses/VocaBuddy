@@ -9,7 +9,7 @@ public class JwtParserTests
 
     public JwtParserTests()
     {
-        var identityConfig = new IdentityApiConfiguration() { RoleKey = "role" };
+        var identityConfig = new IdentityApiConfiguration { RoleKey = "role" };
         var identityOptions = Options.Create(identityConfig);
         _sut = new JwtParser(identityOptions);
     }

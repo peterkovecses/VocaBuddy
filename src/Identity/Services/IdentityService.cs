@@ -16,7 +16,7 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
         var refreshToken = CreateRefreshToken(user, token);
         await SaveRefreshTokenAsync();
 
-        return new TokenHolder() { AuthToken = _tokenHandler.WriteToken(token), RefreshToken = refreshToken.Token };
+        return new TokenHolder { AuthToken = _tokenHandler.WriteToken(token), RefreshToken = refreshToken.Token };
 
         async Task<SecurityTokenDescriptor> CreateTokenDescriptionAsync()
             => new()
