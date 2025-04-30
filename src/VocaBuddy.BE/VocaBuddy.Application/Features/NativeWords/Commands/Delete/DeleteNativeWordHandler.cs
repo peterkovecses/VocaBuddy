@@ -24,6 +24,6 @@ public class DeleteNativeWordHandler(IUnitOfWork unitOfWork, ICurrentUser user) 
         return Result.Success();
     }
 
-    private bool ValidateUserId(Domain.Entities.NativeWord nativeWordToDelete)
+    private bool ValidateUserId(NativeWord nativeWordToDelete)
         => nativeWordToDelete.UserId == _currentUserId;
 }
