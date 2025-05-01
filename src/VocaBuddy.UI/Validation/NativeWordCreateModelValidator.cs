@@ -1,8 +1,8 @@
 ﻿namespace VocaBuddy.UI.Validation;
 
-public class NativeWordCreateUpdateModelValidator : AbstractValidator<CreateOrUpdateModel>
+public class NativeWordCreateModelValidator : AbstractValidator<CreateNativeWordDto>
 {
-    public NativeWordCreateUpdateModelValidator()
+    public NativeWordCreateModelValidator()
     {
         RuleFor(word => word.Text)
             .NotEmpty()
