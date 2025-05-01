@@ -15,6 +15,7 @@
     </div>
 
     <label>Translations</label>
+    
     @for (var i = 0; i < Model.Translations.Count; i++)
     {
         var index = i;
@@ -33,6 +34,8 @@
             </div>
         </div>
     }
+    
+    <ValidationMessage For="@(() => Model.Translations)" />
 
     <div class="mb-3">
         <button type="button" class="btn btn-primary btn-sm" @onclick="AddTranslation">+</button>
@@ -47,7 +50,7 @@
 </EditForm>
 
 @code {
-    [Parameter] public INativeWord Model { get; set; } = default!;
+    [Parameter] public INativeWordDto Model { get; set; } = default!;
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public EventCallback<int> OnRemoveTranslation { get; set; }
     [Parameter] public EventCallback OnAddTranslation { get; set; }

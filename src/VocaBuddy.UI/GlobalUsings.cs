@@ -3,6 +3,7 @@ global using VocaBuddy.Shared.Dtos;
 global using VocaBuddy.Shared.Errors;
 global using VocaBuddy.Shared.Extensions;
 global using VocaBuddy.Shared.Models;
+global using VocaBuddy.Shared.Interfaces;
 global using VocaBuddy.UI.Shared.BaseComponents;
 global using VocaBuddy.UI;
 global using VocaBuddy.UI.ApiHelpers;

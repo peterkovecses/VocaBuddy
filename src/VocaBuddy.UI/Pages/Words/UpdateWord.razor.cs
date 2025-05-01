@@ -1,17 +1,11 @@
 namespace VocaBuddy.UI.Pages.Words;
 
-public class UpdateWordBase : CustomComponentBase
+public class UpdateWordBase : EditWordComponentBase<UpdateNativeWordDto>
 {
     private const string WordLoadingFailed = "The word to update could not be loaded.";
-    private const string SaveFailed = "Failed to save the word.";
 
     [Parameter]
     public int WordId { get; set; }
-    
-    protected UpdateNativeWordDto Model { get; } = new();
-    
-    [Inject]
-    public IWordService? WordService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -22,12 +16,6 @@ public class UpdateWordBase : CustomComponentBase
 
     private void SetModelId() 
         => Model.Id = WordId;
-
-    protected void AddTranslation()
-        => Model.Translations.Add(new ForeignWordDto());
-
-    protected void RemoveTranslation(int index)
-        => Model.Translations.RemoveAt(index);
     
     private async Task LoadWordAsync()
     {
@@ -35,7 +23,7 @@ public class UpdateWordBase : CustomComponentBase
         {
             Loading = true;
             var result = await WordService!.GetWordAsync(WordId, CancellationToken);
-            HandleResult(result);
+            HandleLoadingResult(result);
         }
         catch // If the API is not responding
         {
@@ -46,81 +34,45 @@ public class UpdateWordBase : CustomComponentBase
         {
             Loading = false;
         }
-
-        return;
-
-        void HandleResult(Result<CompactNativeWordDto> result)
-        {
-            if (result.IsFailure) // If the response is not successful
-            {
-                var message = result.ErrorInfo!.Code switch
-                {
-                    VocaBuddyErrorCodes.NotFound => "The word to modify was not found.",
-                    _ => WordLoadingFailed
-                };
-
-                NotificationService!.ShowFailure(message);
-                NavManager!.NavigateTo("/words");
-
-                return;
-            }
-
-            Model.Text = result.Data!.Text;
-            Model.Translations = result.Data.Translations;
-        }
     }
     
-    protected async Task UpdateWordAsync()
+    protected override void HandleSaveResult(Result result)
     {
-        try
+        if (result.IsSuccess)
         {
-            ValidateTranslations();
-            Loading = true;
-            var result = await SaveWordAsync();
-            HandleResult(result);
+            DisplaySuccessfulSavingMessage();
+            NavManager!.NavigateTo("/words");
         }
-        catch (RefreshTokenException)
+        else
         {
-            SessionExpired();
-        }
-        catch
-        {
-            StatusMessage = SaveFailed;
-        }
-        finally
-        {
-            Loading = false;
-        }
-
-        return;
-
-        void HandleResult(Result result)
-        {
-            if (result.IsSuccess)
+            StatusMessage = result.ErrorInfo!.Code switch
             {
-                DisplaySuccessfulSavingMessage();
-                NavManager!.NavigateTo("/words");
-            }
-            else
-            {
-                StatusMessage = result.ErrorInfo!.Code switch
-                {
-                    VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
-                    _ => SaveFailed
-                };
-            }
+                VocaBuddyErrorCodes.Duplicate => "The word already exists in your dictionary.",
+                _ => SaveFailed
+            };
         }
-        
-        void DisplaySuccessfulSavingMessage()
-            => NotificationService!.ShowSuccess("The word has been successfully saved.");
     }
 
-    private async Task<Result> SaveWordAsync() => 
+    protected override async Task<Result> SaveWordAsync() => 
         await WordService!.UpdateWordAsync(Model, CancellationToken);
-
-    private void InitializeTranslations()
-        => Model.Translations.Add(new ForeignWordDto());
     
-    private void ValidateTranslations() => 
-        Model.Translations.RemoveAll(translation => string.IsNullOrWhiteSpace(translation.Text));
+    private void HandleLoadingResult(Result<CompactNativeWordDto> result)
+    {
+        if (result.IsFailure) // If the response is not successful
+        {
+            var message = result.ErrorInfo!.Code switch
+            {
+                VocaBuddyErrorCodes.NotFound => "The word to modify was not found.",
+                _ => WordLoadingFailed
+            };
+
+            NotificationService!.ShowFailure(message);
+            NavManager!.NavigateTo("/words");
+
+            return;
+        }
+
+        Model.Text = result.Data!.Text;
+        Model.Translations = result.Data.Translations;
+    }
 }
