@@ -15,10 +15,13 @@ public class UpdateWordBase : CustomComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        Model.Id = WordId!;
+        SetModelId();
         InitializeTranslations();
         await LoadWordAsync();
     }
+
+    private void SetModelId() 
+        => Model.Id = WordId;
 
     protected void AddTranslation()
         => Model.Translations.Add(new ForeignWordDto());
@@ -106,12 +109,10 @@ public class UpdateWordBase : CustomComponentBase
                     _ => SaveFailed
                 };
             }
-
-            return;
-
-            void DisplaySuccessfulSavingMessage()
-                => NotificationService!.ShowSuccess("The word has been successfully saved.");
         }
+        
+        void DisplaySuccessfulSavingMessage()
+            => NotificationService!.ShowSuccess("The word has been successfully saved.");
     }
 
     private async Task<Result> SaveWordAsync() => 
