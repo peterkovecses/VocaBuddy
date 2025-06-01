@@ -1,17 +1,10 @@
 ﻿namespace VocaBuddy.Application.Validation;
 
-public class ValidationBehavior<TRequest, TResponse>
+public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
-        where TResponse : Result
+    where TRequest : IRequest<TResponse>
+    where TResponse : Result
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
-    {
-        _validators = validators;
-    }
-
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
@@ -31,7 +24,7 @@ public class ValidationBehavior<TRequest, TResponse>
     {
         var allErrors = new List<ApplicationError>();
 
-        foreach (var validator in _validators)
+        foreach (var validator in validators)
         {
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
             if (validationResult.IsValid) continue;
@@ -52,10 +45,9 @@ public class ValidationBehavior<TRequest, TResponse>
     {
         var responseType = typeof(TResponse);
         if (!responseType.IsGenericType) return (TResponse)Result.Failure(errorInfo);
-        var failureConstructor = responseType.GetConstructor(new[] { typeof(ErrorInfo) });
-        var resultInstance = failureConstructor!.Invoke(new object[] { errorInfo });
+        var failureConstructor = responseType.GetConstructor([typeof(ErrorInfo)]);
+        var resultInstance = failureConstructor!.Invoke([errorInfo]);
 
         return (TResponse)resultInstance;
-
     }
 }
