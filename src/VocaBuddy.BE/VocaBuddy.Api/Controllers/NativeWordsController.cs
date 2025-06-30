@@ -1,15 +1,4 @@
-﻿using VocaBuddy.Application.Features.NativeWord.Commands.Create;
-using VocaBuddy.Application.Features.NativeWord.Commands.Delete;
-using VocaBuddy.Application.Features.NativeWord.Commands.RecordMistakes;
-using VocaBuddy.Application.Features.NativeWord.Commands.Update;
-using VocaBuddy.Application.Features.NativeWord.Queries.GetAll;
-using VocaBuddy.Application.Features.NativeWord.Queries.GetById;
-using VocaBuddy.Application.Features.NativeWord.Queries.GetCount;
-using VocaBuddy.Application.Features.NativeWord.Queries.GetLatest;
-using VocaBuddy.Application.Features.NativeWord.Queries.GetMistaken;
-using VocaBuddy.Application.Features.NativeWord.Queries.GetRandom;
-
-namespace VocaBuddy.Api.Controllers;
+﻿namespace VocaBuddy.Api.Controllers;
 
 [Authorize]
 [Route("api/native-words")]
