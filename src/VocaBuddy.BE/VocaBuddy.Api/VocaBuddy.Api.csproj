@@ -17,7 +17,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VocaBuddy.Application\VocaBuddy.Application.csproj" />
     <ProjectReference Include="..\VocaBuddy.Infrastructure\VocaBuddy.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
