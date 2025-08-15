@@ -100,9 +100,6 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var result = await response.ReadAsAsync<Result>();
         result.IsFailure.Should().BeTrue();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.UserIdNotMatch);
-        
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{createdWord.Id}");
     }
     
     [Fact]
@@ -132,9 +129,6 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var result = await response.ReadAsAsync<Result>();
         result.IsSuccess.Should().BeTrue();
-        
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{createdWord.Id}");
     }
     
     [Theory]
@@ -171,9 +165,6 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var result = await response.ReadAsAsync<Result>();
         result.IsFailure.Should().BeTrue();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.ValidationError);
-        
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{createdWord.Id}");
     }
     
     [Fact]
@@ -204,9 +195,6 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var result = await response.ReadAsAsync<Result>();
         result.IsFailure.Should().BeTrue();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.ValidationError);
-        
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{createdWord.Id}");
     }
     
     [Fact]
@@ -244,9 +232,5 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var result = await response.ReadAsAsync<Result>();
         result.IsFailure.Should().BeTrue();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.Duplicate);
-    
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{duplicateTargetWordId}");
-        await Client.DeleteAsync($"api/native-words/{createdWord.Id}");
     }
 }

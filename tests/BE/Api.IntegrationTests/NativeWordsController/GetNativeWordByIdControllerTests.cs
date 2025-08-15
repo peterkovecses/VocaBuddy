@@ -88,9 +88,5 @@ public class GetNativeWordByIdControllerTests(VocaBuddyApiFactory apiFactory) : 
         result.IsFailure.Should().BeTrue();
         result.Data.Should().BeNull();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.UserIdNotMatch);
-        
-        // Cleanup
-        SetAuthHeader(creatorId);
-        await Client.DeleteAsync($"api/native-words/{createdWordId}");
     }
 }

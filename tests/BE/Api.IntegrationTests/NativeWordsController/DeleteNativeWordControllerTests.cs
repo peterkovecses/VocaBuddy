@@ -79,9 +79,5 @@ public class DeleteNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var result = await response.ReadAsAsync<Result>();
         result.IsFailure.Should().BeTrue();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.UserIdNotMatch);
-        
-        // Cleanup
-        SetAuthHeader(creatorId);
-        await Client.DeleteAsync($"api/native-words/{createdWordId}");
     }
 }

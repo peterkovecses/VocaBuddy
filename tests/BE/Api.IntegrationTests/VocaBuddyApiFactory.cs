@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Respawn;
 using Testcontainers.MsSql;
 using VocaBuddy.Infrastructure.Persistence;
 
@@ -21,6 +22,10 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
         .WithName($"vocabuddy-db-{Guid.NewGuid()}")
         .WithPortBinding(1433, true)
         .Build();
+    
+    private Respawner _respawner = default!;
+    
+    public HttpClient HttpClient { get; private set; } = default!;
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -66,13 +71,18 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
         });
     }
     
+    public async Task ResetDatabaseAsync() => 
+        await _respawner.ResetAsync(_dbContainer.GetConnectionString());
+
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
+        // if you're using a database besides SQL Server, pass an open DbConnection
+        _respawner = await Respawner.CreateAsync(
+            _dbContainer.GetConnectionString());
+        HttpClient = CreateClient();
     }
 
-    public new async Task DisposeAsync()
-    {
+    public new async Task DisposeAsync() => 
         await _dbContainer.DisposeAsync();
-    }
 }

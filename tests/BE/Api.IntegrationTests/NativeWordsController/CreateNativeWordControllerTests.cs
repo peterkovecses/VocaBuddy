@@ -43,9 +43,6 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         result.Data.Translations[0].Text.Should().Be(createRequest.Translations[0].Text);
         response.Headers.Location!.ToString().Should()
             .Be($"http://localhost/api/native-words/{result.Data!.Id}");
-        
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{result.Data!.Id}");
     }
     
     [Theory]
@@ -120,8 +117,5 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         result.IsFailure.Should().BeTrue();
         result.Data.Should().BeNull();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.Duplicate);
-        
-        // Cleanup
-        await Client.DeleteAsync($"api/native-words/{createdWord!.Id}");
     }
 }

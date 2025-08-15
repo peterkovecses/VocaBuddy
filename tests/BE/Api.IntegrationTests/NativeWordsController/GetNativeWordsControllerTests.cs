@@ -50,12 +50,6 @@ public class GetNativeWordsControllerTests(VocaBuddyApiFactory apiFactory) : Int
         result.Data.Should().NotBeNull();
         result.Data.Should().HaveCount(createdWords.Count);
         result.Data.Should().BeEquivalentTo(createdWords);
-        
-        // Cleanup
-        foreach (var createdWord in createdWords)
-        {
-            await Client.DeleteAsync($"api/native-words/{createdWord!.Id}");   
-        }
     }
     
     [Fact]
