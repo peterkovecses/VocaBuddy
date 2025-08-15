@@ -25,7 +25,7 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
         .WithPortBinding(1433, true)
         .Build();
     
-    private DbConnection _dbConnection = default;
+    private DbConnection _dbConnection = default!;
     private Respawner _respawner = default!;
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
