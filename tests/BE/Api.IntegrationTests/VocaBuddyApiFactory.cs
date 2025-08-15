@@ -1,8 +1,10 @@
+using System.Data.Common;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -23,6 +25,7 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
         .WithPortBinding(1433, true)
         .Build();
     
+    private DbConnection _dbConnection = default;
     private Respawner _respawner = default!;
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -75,9 +78,19 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
-        // if you're using a database besides SQL Server, pass an open DbConnection
+        _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
+        await InitializeRespawner();
+    }
+
+    private async Task InitializeRespawner()
+    {
+        await _dbConnection.OpenAsync();
         _respawner = await Respawner.CreateAsync(
-            _dbContainer.GetConnectionString());
+            _dbContainer.GetConnectionString(),
+            new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.SqlServer
+            });
     }
 
     public new async Task DisposeAsync() => 

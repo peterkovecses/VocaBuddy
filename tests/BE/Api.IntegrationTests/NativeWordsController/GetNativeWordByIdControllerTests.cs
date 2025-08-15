@@ -41,8 +41,6 @@ public class GetNativeWordByIdControllerTests(VocaBuddyApiFactory apiFactory) : 
         returnedWord.Id.Should().Be(createdWord.Id);
         returnedWord.Text.Should().Be(createdWord.Text);
         returnedWord.Translations.Should().BeEquivalentTo(createdWord.Translations);
-        
-        await Client.DeleteAsync($"api/native-words/{createdWord.Id}");
     }
     
     [Fact]
