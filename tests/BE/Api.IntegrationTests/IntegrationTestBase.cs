@@ -3,7 +3,7 @@ namespace Api.IntegrationTests;
 public abstract class IntegrationTestBase(VocaBuddyApiFactory apiFactory) : IAsyncLifetime
 {
     private static readonly Random Random = new();
-    protected readonly HttpClient Client = apiFactory.HttpClient;
+    protected readonly HttpClient Client = apiFactory.CreateClient();
 
     protected void SetAuthHeader(int? userId = default)
     {

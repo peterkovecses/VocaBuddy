@@ -25,8 +25,6 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
     
     private Respawner _respawner = default!;
     
-    public HttpClient HttpClient { get; private set; } = default!;
-    
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureLogging(logging =>
@@ -80,7 +78,6 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
         // if you're using a database besides SQL Server, pass an open DbConnection
         _respawner = await Respawner.CreateAsync(
             _dbContainer.GetConnectionString());
-        HttpClient = CreateClient();
     }
 
     public new async Task DisposeAsync() => 
