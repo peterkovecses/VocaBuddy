@@ -73,7 +73,7 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
     }
     
     public async Task ResetDatabaseAsync() => 
-        await _respawner.ResetAsync(_dbContainer.GetConnectionString());
+        await _respawner.ResetAsync(_dbConnection);
 
     public async Task InitializeAsync()
     {
@@ -86,7 +86,7 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
     {
         await _dbConnection.OpenAsync();
         _respawner = await Respawner.CreateAsync(
-            _dbContainer.GetConnectionString(),
+            _dbConnection,
             new RespawnerOptions
             {
                 DbAdapter = DbAdapter.SqlServer
