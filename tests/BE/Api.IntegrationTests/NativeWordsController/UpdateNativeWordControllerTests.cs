@@ -132,13 +132,13 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
     }
     
     [Theory]
-    [InlineData(null, "valid")] 
+    [InlineData(null, "valid")]
     [InlineData("", "valid")] 
-    [InlineData(" ", "valid")] 
+    [InlineData(" ", "valid")]
     [InlineData("valid", null)]
     [InlineData("valid", "")]
     [InlineData("valid", " ")]
-    public async Task Update_WhenTextIsInvalid_ShouldReturnValidationError(string nativeWordText, string translationText)
+    public async Task Update_WhenTextIsInvalid_ShouldReturnValidationError(string? nativeWordText, string? translationText)
     {
         // Arrange
         SetAuthHeader();
@@ -153,8 +153,8 @@ public class UpdateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var updateRequest = new UpdateNativeWordDto
         {
             Id = createdWord!.Id,
-            Text = nativeWordText,
-            Translations = [ new ForeignWordDto { Text = translationText } ]
+            Text = nativeWordText!,
+            Translations = [ new ForeignWordDto { Text = translationText! } ]
         };
 
         // Act

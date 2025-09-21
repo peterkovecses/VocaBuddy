@@ -73,7 +73,7 @@ public class DeleteNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         
         // Act
         var response = await Client.DeleteAsync($"api/native-words/{createdWordId}");
-
+    
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var result = await response.ReadAsAsync<Result>();

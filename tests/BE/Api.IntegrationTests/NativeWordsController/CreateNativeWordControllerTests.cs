@@ -10,7 +10,7 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var createRequest = new CreateNativeWordDto
         {
             Text = "teszt",
-            Translations = [ new ForeignWordDto { Text = "test" } ]
+            Translations = [new ForeignWordDto { Text = "test" }]
         };
 
         // Act
@@ -19,7 +19,7 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
-    
+
     [Fact]
     public async Task Create_WithValidData_ShouldCreateNativeWord()
     {
@@ -28,7 +28,7 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var createRequest = new CreateNativeWordDto
         {
             Text = "teszt",
-            Translations = [ new ForeignWordDto { Text = "test" } ]
+            Translations = [new ForeignWordDto { Text = "test" }]
         };
 
         // Act
@@ -44,22 +44,23 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         response.Headers.Location!.ToString().Should()
             .Be($"http://localhost/api/native-words/{result.Data!.Id}");
     }
-    
+
     [Theory]
-    [InlineData(null, "valid")] 
-    [InlineData("", "valid")] 
-    [InlineData(" ", "valid")] 
+    [InlineData(null, "valid")]
     [InlineData("valid", null)]
+    [InlineData("", "valid")]
+    [InlineData(" ", "valid")]
     [InlineData("valid", "")]
     [InlineData("valid", " ")]
-    public async Task Create_WhenTextIsInvalid_ShouldReturnValidationError(string nativeWordText, string translationText)
+    public async Task Create_WhenTextIsInvalid_ShouldReturnValidationError(string? nativeWordText,
+        string? translationText)
     {
         // Arrange
         SetAuthHeader();
         var createRequest = new CreateNativeWordDto
         {
-            Text = nativeWordText,
-            Translations = [ new ForeignWordDto { Text = translationText } ]
+            Text = nativeWordText!,
+            Translations = [new ForeignWordDto { Text = translationText! }]
         };
 
         // Act
@@ -72,7 +73,7 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         result.Data.Should().BeNull();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.ValidationError);
     }
-    
+
     [Fact]
     public async Task Create_WhenTranslationsIsEmpty_ShouldReturnValidationError()
     {
@@ -94,7 +95,7 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         result.Data.Should().BeNull();
         result.ErrorInfo!.Code.Should().Be(VocaBuddyErrorCodes.ValidationError);
     }
-    
+
     [Fact]
     public async Task Create_WhenNativeWordAlreadyExists_ShouldReturnDuplicateErrorCode()
     {
@@ -103,14 +104,13 @@ public class CreateNativeWordControllerTests(VocaBuddyApiFactory apiFactory) : I
         var createRequest = new CreateNativeWordDto
         {
             Text = "teszt",
-            Translations = [ new ForeignWordDto { Text = "test" } ]
+            Translations = [new ForeignWordDto { Text = "test" }]
         };
-        var createdResponse = await Client.PostAsJsonAsync("api/native-words", createRequest);
-        var createdWord = (await createdResponse.ReadAsAsync<Result<NativeWordDto>>()).Data;
-    
+        await Client.PostAsJsonAsync("api/native-words", createRequest);
+
         // Act
         var response = await Client.PostAsJsonAsync("api/native-words", createRequest);
-    
+
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var result = await response.ReadAsAsync<Result<NativeWordDto>>();

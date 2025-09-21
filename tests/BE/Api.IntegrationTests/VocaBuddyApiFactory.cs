@@ -1,19 +1,3 @@
-using System.Data.Common;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Respawn;
-using Testcontainers.MsSql;
-using VocaBuddy.Infrastructure.Persistence;
-
 namespace Api.IntegrationTests;
 
 public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
@@ -23,6 +7,7 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
         .WithPassword("Super_secret_password_123@")
         .WithName($"vocabuddy-db-{Guid.NewGuid()}")
         .WithPortBinding(1433, true)
+        .WithName("vocabuddy-test-db")
         .Build();
     
     private DbConnection _dbConnection = default!;
@@ -51,11 +36,8 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
             }
 
             services.AddDbContext<VocaBuddyContext>(options =>
-                options.UseSqlServer(_dbContainer.GetConnectionString()));
-            
-            using var scope = services.BuildServiceProvider().CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<VocaBuddyContext>();
-            dbContext.Database.Migrate();
+                options.UseSqlServer(_dbContainer.GetConnectionString())
+                       .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
             
             services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -78,11 +60,15 @@ public class VocaBuddyApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLife
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
-        _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
-        await InitializeRespawner();
+        var connectionString = _dbContainer.GetConnectionString();
+        _dbConnection = new SqlConnection(connectionString);
+        using var scope = Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<VocaBuddyContext>();
+        await dbContext.Database.MigrateAsync();
+        await InitializeRespawnerAsync();
     }
 
-    private async Task InitializeRespawner()
+    private async Task InitializeRespawnerAsync()
     {
         await _dbConnection.OpenAsync();
         _respawner = await Respawner.CreateAsync(

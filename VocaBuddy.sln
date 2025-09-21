@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -21,17 +21,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VocaBuddy.BE", "VocaBuddy.B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1E805322-489B-4A36-A819-CD6D96174BF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.UnitTests", "tests\UI.UnitTests\UI.UnitTests.csproj", "{972E70D7-4009-4E5F-8590-8E3CE490BF26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.UnitTests", "tests\UI.UnitTests\UI.UnitTests.csproj", "{972E70D7-4009-4E5F-8590-8E3CE490BF26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.UnitTests", "tests\Identity.UnitTests\Identity.UnitTests.csproj", "{41005AF9-1A8E-4D00-AF99-06E7A0DDF1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.UnitTests", "tests\Identity.UnitTests\Identity.UnitTests.csproj", "{41005AF9-1A8E-4D00-AF99-06E7A0DDF1E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{75FC73C3-ACD0-45CF-8943-F7B6CDADC076}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BE", "BE", "{1BCC13B4-C8E0-47EA-AEB9-CE536283EFEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.UnitTests", "tests\BE\Api.UnitTests\Api.UnitTests.csproj", "{0C48A527-C0F1-4BE6-B96B-A8FD855020DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.UnitTests", "tests\BE\Api.UnitTests\Api.UnitTests.csproj", "{0C48A527-C0F1-4BE6-B96B-A8FD855020DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.IntegrationTests", "tests\BE\Api.IntegrationTests\Api.IntegrationTests.csproj", "{39E4CC1A-89A8-41F0-B9AF-CBF5DD248A72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.IntegrationTests", "tests\BE\Api.IntegrationTests\Api.IntegrationTests.csproj", "{39E4CC1A-89A8-41F0-B9AF-CBF5DD248A72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
