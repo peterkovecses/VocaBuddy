@@ -28,7 +28,13 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<IdentityContext>()
         .AddDefaultTokenProviders();
 
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        });
+
+        services.AddValidatorsFromAssemblyContaining<UserRegistrationRequestValidator>();
+        services.AddFluentValidationAutoValidation();
 
         services.AddCors(options =>
         {

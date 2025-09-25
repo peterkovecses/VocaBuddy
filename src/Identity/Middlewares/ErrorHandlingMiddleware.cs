@@ -45,16 +45,16 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
     {
         return appException switch
         {
-            UserExistsException => (HttpStatusCode.Conflict),
-            InvalidUserRegistrationInputException => (HttpStatusCode.BadRequest),
-            InvalidCredentialsException => (HttpStatusCode.BadRequest),
-            UsedUpRefreshTokenException => (HttpStatusCode.Unauthorized),
-            RefreshTokenNotExistsException => (HttpStatusCode.Unauthorized),
-            NotExpiredTokenException => (HttpStatusCode.Unauthorized),
-            JwtIdNotMatchException => (HttpStatusCode.Unauthorized),
-            InvalidatedRefreshTokenException => (HttpStatusCode.Unauthorized),
-            ExpiredRefreshTokenException => (HttpStatusCode.Unauthorized),
-            InvalidJwtException => (HttpStatusCode.Unauthorized),
+            UserExistsException => HttpStatusCode.Conflict,
+            InvalidUserRegistrationInputException => HttpStatusCode.BadRequest,
+            InvalidCredentialsException => HttpStatusCode.BadRequest,
+            UsedUpRefreshTokenException => HttpStatusCode.Unauthorized,
+            RefreshTokenNotExistsException => HttpStatusCode.Unauthorized,
+            NotExpiredTokenException => HttpStatusCode.Unauthorized,
+            JwtIdNotMatchException => HttpStatusCode.Unauthorized,
+            InvalidatedRefreshTokenException => HttpStatusCode.Unauthorized,
+            ExpiredRefreshTokenException => HttpStatusCode.Unauthorized,
+            InvalidJwtException => HttpStatusCode.Unauthorized,
             _ => throw new UnmappedIdentityException(appException)
         };
     }

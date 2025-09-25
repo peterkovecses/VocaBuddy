@@ -28,7 +28,7 @@
                                     <p>Remaining words: @GamePlayService!.RemainingWordCount</p>
                                 </div>
                                 <div class="input-group">
-                                    <input id="translation" class="form-control @(IsSubmitted ? (IsCorrectAnswer ? "border-success" : "border-danger") : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" spellcheck="false" />
+                                    <input id="translation" class="form-control @(IsSubmitted ? IsCorrectAnswer ? "border-success" : "border-danger" : "")" @bind="UserInput" required style="width: 200px;" autocomplete="off" spellcheck="false" />
 
                                     @if (IsSubmitted)
                                     {
