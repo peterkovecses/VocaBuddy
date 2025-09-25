@@ -2,10 +2,19 @@
 
 public class UserRegistrationRequestWithPasswordCheck
 {
-    public string Email { get; set; } = default!;
-    public string Password { get; set; } = default!;
-    public string ConfirmPassword { get; set; } = default!;
+    public string FirstName { get; set; } = null!;
+    
+    public string LastName { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public string ConfirmPassword { get; set; } = null!;
 
     public UserRegistrationRequest ConvertToIdentityModel()
-        => new() { Email = this.Email, Password = this.Password };
+        => new()
+        {
+            FirstName = this.FirstName, 
+            LastName = this.LastName, 
+            Email = this.Email, 
+            Password = this.Password
+        };
 }

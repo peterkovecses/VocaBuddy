@@ -1,6 +1,6 @@
 ﻿namespace Identity.Services;
 
-public partial class IdentityService(UserManager<IdentityUser> userManager,
+public partial class IdentityService(UserManager<ApplicationUser> userManager,
         IdentityContext context,
         IOptions<CustomTokenValidationParameters> options)
     : IIdentityService
@@ -8,7 +8,7 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
     private readonly CustomTokenValidationParameters _tokenValidationParameters = options.Value;
     private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
-    private async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(IdentityUser user)
+    private async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(ApplicationUser user)
     {
         var key = Encoding.ASCII.GetBytes(_tokenValidationParameters.Secret);
         var tokenDescription = await CreateTokenDescriptionAsync();
@@ -28,7 +28,7 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
-        static CustomRefreshToken CreateRefreshToken(IdentityUser user, SecurityToken token)
+        static CustomRefreshToken CreateRefreshToken(ApplicationUser user, SecurityToken token)
             => new()
             {
                 JwtId = token.Id,
@@ -63,6 +63,6 @@ public partial class IdentityService(UserManager<IdentityUser> userManager,
         }
     }
 
-    private async Task<IdentityUser?> FindUserByEmailAsync(string email)
+    private async Task<ApplicationUser?> FindUserByEmailAsync(string email)
         => await userManager.FindByNameAsync(email);
 }

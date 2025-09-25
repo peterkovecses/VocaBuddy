@@ -7,7 +7,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
     {
-        await identityService.RegisterAsync(request.Email, request.Password);
+        await identityService.RegisterAsync(request);
 
         return Ok(Result.Success());
     }

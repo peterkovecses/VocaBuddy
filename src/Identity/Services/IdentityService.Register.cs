@@ -2,7 +2,7 @@
 
 public partial class IdentityService
 {
-    public async Task RegisterAsync(string email, string password)
+    public async Task RegisterAsync(UserRegistrationRequest request)
     {
         await ValidateUserAsync();
         var user = CreateUser();
@@ -12,23 +12,25 @@ public partial class IdentityService
 
         async Task ValidateUserAsync()
         {
-            if ((await FindUserByEmailAsync(email)) != null)
+            if (await FindUserByEmailAsync(request.Email) is not null)
             {
                 throw new UserExistsException();
             }
         }
 
-        IdentityUser CreateUser()
+        ApplicationUser CreateUser()
             => new()
             {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
                 Id = Guid.NewGuid().ToString(),
-                Email = email,
-                UserName = email
+                Email = request.Email,
+                UserName = request.Email,
             };
 
         async Task SaveUserAsync()
         {
-            var result = await userManager.CreateAsync(user, password);
+            var result = await userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
                 throw new InvalidUserRegistrationInputException(MergeIdentityErrors(result.Errors));

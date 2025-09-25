@@ -19,6 +19,18 @@
                 <FluentValidationValidator />
 
                 <div class="form-group">
+                    <label for="firstName" class="form-label">First Name:</label>
+                    <InputText id="firstName" class="form-control" @bind-Value="Model.FirstName" />
+                    <ValidationMessage For="@(() => Model.FirstName)" />
+                </div>
+
+                <div class="form-group mt-3">
+                    <label for="lastName" class="form-label">Last Name:</label>
+                    <InputText id="lastName" class="form-control" @bind-Value="Model.LastName" />
+                    <ValidationMessage For="@(() => Model.LastName)" />
+                </div>
+
+                <div class="form-group mt-3">
                     <label for="email" class="form-label">Email:</label>
                     <InputText id="email" class="form-control" @bind-Value="Model.Email" />
                     <ValidationMessage For="@(() => Model.Email)" />

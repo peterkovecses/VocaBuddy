@@ -94,7 +94,7 @@ public partial class IdentityService
                 jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase);
 
-        async Task<IdentityUser?> FindUserByIdAsync()
+        async Task<ApplicationUser?> FindUserByIdAsync()
             => await userManager.FindByIdAsync(claimPrincipal.Claims.Single(claim => claim.Type == "id").Value);
     }
 }

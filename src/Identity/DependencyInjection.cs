@@ -20,7 +20,7 @@ public static class DependencyInjection
         var identityOptions = new IdentityOptions();
         identityOptionsSection.Bind(identityOptions);
 
-        services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.Password = identityOptions.Password;
             options.User= identityOptions.User;

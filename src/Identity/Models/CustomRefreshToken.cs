@@ -13,6 +13,6 @@
         public string UserId { get; set; } = default!;
 
         [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; } = default!;
+        public ApplicationUser User { get; set; } = default!;
     }
 }
