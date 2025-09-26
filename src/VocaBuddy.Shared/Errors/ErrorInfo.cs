@@ -19,5 +19,8 @@ public class ErrorInfo
     }
 
     public static ErrorInfo ServerError()
-        => new("ServerError", new ApplicationError("An error occurred while processing your request."));
+        => new(CommonErrorCodes.ServerError, ApplicationError.ServerError());
+    
+    public static ErrorInfo ValidationError(KeyValuePair<string, object>[] errors) => 
+        new(CommonErrorCodes.ValidationError, ApplicationError.ValidationError(errors));
 }

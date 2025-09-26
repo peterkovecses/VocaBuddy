@@ -1,10 +1,6 @@
 ﻿namespace Identity.Exceptions;
 
-public abstract class IdentityExceptionBase : Exception
+public abstract class IdentityExceptionBase(string message) : Exception(message)
 {
-    public string ErrorCode { get; init; } = "BaseError";
-
-    protected IdentityExceptionBase(string message) : base(message)
-    {
-    }
+    public string ErrorCode { get; protected init; } = "BaseError";
 }

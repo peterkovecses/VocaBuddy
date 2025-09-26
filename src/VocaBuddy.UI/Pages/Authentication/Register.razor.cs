@@ -2,7 +2,7 @@
 
 public class RegisterBase : CustomComponentBase
 {
-    public const string RegistrationFailed = "Registration failed.";
+    private const string RegistrationFailed = "Registration failed.";
 
     [Inject]
     public IAuthenticationService? AuthService { get; set; }

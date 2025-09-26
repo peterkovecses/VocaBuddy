@@ -20,6 +20,9 @@ public class Result
 
     public static Result ServerError()
         => Failure(ErrorInfo.ServerError());
+    
+    public static Result ValidationError(KeyValuePair<string, object>[] errors)
+        => Failure(ErrorInfo.ValidationError(errors));
 }
 
 public class Result<TData> : Result

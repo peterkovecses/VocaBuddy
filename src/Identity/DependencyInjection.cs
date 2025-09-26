@@ -30,7 +30,12 @@ public static class DependencyInjection
 
         services.AddControllers(options =>
         {
+            options.Filters.Add<ValidationFilter>();
             options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        })
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
         });
 
         services.AddValidatorsFromAssemblyContaining<UserRegistrationRequestValidator>();

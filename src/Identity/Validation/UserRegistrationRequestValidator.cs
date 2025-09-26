@@ -37,12 +37,4 @@ public class UserRegistrationRequestValidator : AbstractValidator<UserRegistrati
             .Must(password => !passwordOptions.RequireNonAlphanumeric || password.Any(ch => !char.IsLetterOrDigit(ch)))
             .WithMessage("A password must contain at least one non-alphanumeric character.");
     }
-    
-    protected override void RaiseValidationException(
-        ValidationContext<UserRegistrationRequest> context,
-        FluentValidation.Results.ValidationResult result)
-    {
-        var message = string.Join(" ", result.Errors.Select(e => e.ErrorMessage));
-        throw new InvalidUserRegistrationInputException(message);
-    }
 }
