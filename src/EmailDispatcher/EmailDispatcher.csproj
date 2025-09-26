@@ -9,7 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="EasyNetQ" Version="8.0.0-beta99" />
+        <PackageReference Include="EasyNetQ.Serialization.SystemTextJson" Version="8.0.0-beta99" />
         <PackageReference Include="MailKit" Version="4.13.0" />
+        <PackageReference Include="MediatR" Version="13.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
     </ItemGroup>
 

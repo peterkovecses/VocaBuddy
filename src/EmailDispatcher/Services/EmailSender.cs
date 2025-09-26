@@ -4,7 +4,7 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
     private readonly SmtpSettings _settings = smtpSettings.Value;
-    private readonly SmtpClient _smtpClient = new();
+    private readonly MailKit.Net.Smtp.SmtpClient _smtpClient = new();
     private readonly TimeSpan _disconnectDelay = TimeSpan.FromSeconds(smtpSettings.Value.DisconnectDelaySeconds);
     private CancellationTokenSource? _disconnectCts;
 

@@ -9,6 +9,12 @@ public class MimeMessageBuilder
         _message = new MimeMessage();
     }
     
+    public MimeMessageBuilder WithMessageId(string messageId)
+    {
+        _message.MessageId = messageId;
+        return this;
+    }
+    
     public static MimeMessageBuilder StartBuilding() => new();
 
     public MimeMessageBuilder WithSender(string name, string email)

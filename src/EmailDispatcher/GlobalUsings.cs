@@ -1,10 +1,14 @@
 global using EmailDispatcher;
 global using EmailDispatcher.Helpers;
+global using EmailDispatcher.Features.SendConfirmationEmail;
 global using EmailDispatcher.Models;
 global using EmailDispatcher.Services;
 global using EmailDispatcher.Templates;
 global using VocaBuddy.Shared.Events.Identity;
+global using System.Text.Json;
 global using Microsoft.Extensions.Options;
+global using System.Reflection;
 global using MimeKit;
-global using MailKit.Net.Smtp;
 global using MailKit.Security;
+global using EasyNetQ;
+global using MediatR;
