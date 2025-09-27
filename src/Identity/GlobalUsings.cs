@@ -1,10 +1,10 @@
 ﻿global using VocaBuddy.Shared.Constants;
 global using VocaBuddy.Shared.Models;
 global using VocaBuddy.Shared.Errors;
-global using Identity.Application.Facade;
-global using Identity.Application.Refresh;
-global using Identity.Application.Login;
-global using Identity.Application.Registration;
+global using Identity.Application.IdentityFacade;
+global using Identity.Application.Features.Refresh;
+global using Identity.Application.Features.Login;
+global using Identity.Application.Features.Registration;
 global using Identity.Application.Services;
 global using Identity.Application.Exceptions;
 global using Identity;

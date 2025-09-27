@@ -1,4 +1,4 @@
-namespace Identity.Application.Login;
+namespace Identity.Application.Features.Login;
 
 public interface ILoginService
 {

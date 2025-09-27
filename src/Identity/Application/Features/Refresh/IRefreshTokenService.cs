@@ -1,4 +1,4 @@
-namespace Identity.Application.Refresh;
+namespace Identity.Application.Features.Refresh;
 
 public interface IRefreshTokenService
 {

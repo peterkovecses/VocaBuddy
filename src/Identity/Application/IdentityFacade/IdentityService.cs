@@ -1,4 +1,4 @@
-namespace Identity.Application.Facade;
+namespace Identity.Application.IdentityFacade;
 
 public class IdentityService(
     IRegistrationService registrationService,

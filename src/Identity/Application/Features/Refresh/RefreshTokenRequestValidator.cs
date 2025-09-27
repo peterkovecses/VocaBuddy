@@ -1,4 +1,4 @@
-namespace Identity.Application.Refresh;
+namespace Identity.Application.Features.Refresh;
 
 public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequest>
 {

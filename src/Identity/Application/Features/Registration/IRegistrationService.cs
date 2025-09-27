@@ -1,4 +1,4 @@
-namespace Identity.Application.Registration;
+namespace Identity.Application.Features.Registration;
 
 public interface  IRegistrationService
 {
