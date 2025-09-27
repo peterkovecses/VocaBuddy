@@ -21,4 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\VocaBuddy.Shared\VocaBuddy.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Web\" />
+  </ItemGroup>
 </Project>

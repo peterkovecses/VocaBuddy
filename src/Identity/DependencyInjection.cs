@@ -14,6 +14,10 @@ public static class DependencyInjection
         tokenValidationParametersConfigSection.Bind(tokenValidationParameters);
         services.Configure<CustomTokenValidationParameters>(tokenValidationParametersConfigSection);
 
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IRegistrationService, RegistrationService>();
+        services.AddScoped<ILoginService, LoginService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddScoped<IIdentityService, IdentityService>();
 
         var identityOptionsSection = configuration.GetSection("IdentityServer");
@@ -38,7 +42,7 @@ public static class DependencyInjection
             options.SuppressModelStateInvalidFilter = true;
         });
 
-        services.AddValidatorsFromAssemblyContaining<UserRegistrationRequestValidator>();
+        services.AddValidatorsFromAssemblyContaining<RegistrationRequestValidator>();
         services.AddFluentValidationAutoValidation();
 
         services.AddCors(options =>

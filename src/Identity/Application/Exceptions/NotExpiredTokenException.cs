@@ -1,0 +1,10 @@
+﻿namespace Identity.Application.Exceptions
+{
+    public class NotExpiredTokenException : IdentityExceptionBase
+    {
+        public NotExpiredTokenException() : base("This token has not expired yet.") 
+        {
+            ErrorCode = IdentityErrorCodes.NotExpiredToken;
+        }
+    }
+}
