@@ -2,7 +2,7 @@ namespace Identity.Application.Services;
 
 public class TokenService(
     IOptions<CustomTokenValidationParameters> options,
-    IdentityContext context,
+    IIdentityContext context,
     UserManager<ApplicationUser> userManager
     ) : ITokenService
 {
@@ -25,7 +25,7 @@ public class TokenService(
         }
     }
 
-    public async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(ApplicationUser user)
+    public async Task<TokenHolder> CreateSuccessfulAuthenticationResultAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         var key = Encoding.ASCII.GetBytes(_tokenValidationParameters.Secret);
         var tokenDescription = await CreateTokenDescriptionAsync();
@@ -63,8 +63,8 @@ public class TokenService(
 
         async Task SaveRefreshTokenAsync()
         {
-            await context.RefreshTokens.AddAsync(refreshToken);
-            await context.SaveChangesAsync();
+            await context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         async Task<List<Claim>> GetClaimsAsync()

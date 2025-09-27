@@ -1,4 +1,6 @@
-﻿namespace Identity;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+namespace Identity;
 
 public static class DependencyInjection
 {
@@ -14,6 +16,7 @@ public static class DependencyInjection
         tokenValidationParametersConfigSection.Bind(tokenValidationParameters);
         services.Configure<CustomTokenValidationParameters>(tokenValidationParametersConfigSection);
 
+        services.AddScoped<IIdentityContext, IdentityContext>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IRegistrationService, RegistrationService>();
         services.AddScoped<ILoginService, LoginService>();

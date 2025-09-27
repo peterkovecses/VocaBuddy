@@ -5,7 +5,7 @@ public class LoginService(
     ITokenService tokenService)
     : ILoginService
 {
-    public async Task<TokenHolder> LoginAsync(string email, string password)
+    public async Task<TokenHolder> LoginAsync(string email, string password, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByEmailAsync(email);
 
@@ -14,6 +14,6 @@ public class LoginService(
             throw new InvalidCredentialsException();
         }
 
-        return await tokenService.CreateSuccessfulAuthenticationResultAsync(user);
+        return await tokenService.CreateSuccessfulAuthenticationResultAsync(user, cancellationToken);
     }
 }

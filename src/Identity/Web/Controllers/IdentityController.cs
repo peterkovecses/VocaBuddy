@@ -13,17 +13,17 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
+    public async Task<IActionResult> Login([FromBody] UserLoginRequest request, CancellationToken cancellationToken)
     {
-        var tokens = await identityService.LoginAsync(request.Email, request.Password);
+        var tokens = await identityService.LoginAsync(request.Email, request.Password, cancellationToken);
         
         return Ok(Result.Success(tokens));
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
-        var tokens = await identityService.RefreshTokenAsync(request.AuthToken, request.RefreshToken);
+        var tokens = await identityService.RefreshTokenAsync(request.AuthToken, request.RefreshToken, cancellationToken);
 
         return Ok(Result.Success(tokens));
     }

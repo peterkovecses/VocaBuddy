@@ -2,6 +2,7 @@
 global using VocaBuddy.Shared.Models;
 global using VocaBuddy.Shared.Errors;
 global using Identity.Application.IdentityFacade;
+global using Identity.Application.Contracts;
 global using Identity.Application.Features.Refresh;
 global using Identity.Application.Features.Login;
 global using Identity.Application.Features.Registration;

@@ -1,12 +1,12 @@
 ﻿namespace Identity.Application.Features.Refresh;
 
 public class RefreshTokenService(
-    IdentityContext context,
+    IIdentityContext context,
     UserManager<ApplicationUser> userManager,
     ITokenService tokenService)
     : IRefreshTokenService
 {
-    public async Task<TokenHolder> RefreshTokenAsync(string token, string refreshToken)
+    public async Task<TokenHolder> RefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken)
     {
         var claimPrincipal = GetPrincipalFromToken();
         ValidatePrincipal(claimPrincipal);
@@ -15,7 +15,7 @@ public class RefreshTokenService(
         await MakeTokenUsedUpAsync();
         var user = await userManager.FindByIdAsync(claimPrincipal.Claims.Single(claim => claim.Type == "id").Value);
 
-        return await tokenService.CreateSuccessfulAuthenticationResultAsync(user!);
+        return await tokenService.CreateSuccessfulAuthenticationResultAsync(user!, cancellationToken);
 
         ClaimsPrincipal GetPrincipalFromToken() => tokenService.GetClaimsOrThrow(token);
 
@@ -34,7 +34,7 @@ public class RefreshTokenService(
         }
 
         async Task<CustomRefreshToken?> GetStoredRefreshTokenAsync()
-            => await context.RefreshTokens.SingleOrDefaultAsync(r => r.Token == refreshToken);
+            => await context.RefreshTokens.SingleOrDefaultAsync(r => r.Token == refreshToken, cancellationToken: cancellationToken);
 
         void ValidateRefreshToken()
         {
@@ -58,7 +58,7 @@ public class RefreshTokenService(
         async Task MakeTokenUsedUpAsync()
         {
             storedRefreshToken!.Used = true;
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }
