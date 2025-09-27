@@ -2,7 +2,8 @@ namespace EmailDispatcher.Features.SendConfirmationEmail;
 
 public record SendConfirmationEmailCommand : IRequest<Unit>
 {
-    public required string Id { get; set; }
+    public Guid EventId { get; init; }
+    public required string UserId { get; init; }
     public required string Email { get; init; }
     public required string FirstName { get; init; }
     public required string LastName { get; init; }

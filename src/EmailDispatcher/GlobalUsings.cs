@@ -3,7 +3,7 @@ global using EmailDispatcher.Helpers;
 global using EmailDispatcher.Features.SendConfirmationEmail;
 global using EmailDispatcher.Models;
 global using EmailDispatcher.Services;
-global using EmailDispatcher.Templates;
+global using EmailDispatcher.Workers;
 global using VocaBuddy.Shared.Events.Identity;
 global using System.Text.Json;
 global using Microsoft.Extensions.Options;

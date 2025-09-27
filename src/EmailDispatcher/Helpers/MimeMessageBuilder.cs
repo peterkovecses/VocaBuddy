@@ -9,9 +9,9 @@ public class MimeMessageBuilder
         _message = new MimeMessage();
     }
     
-    public MimeMessageBuilder WithMessageId(string messageId)
+    public MimeMessageBuilder WithEventId(Guid messageId)
     {
-        _message.MessageId = messageId;
+        _message.MessageId = messageId.ToString();
         return this;
     }
     

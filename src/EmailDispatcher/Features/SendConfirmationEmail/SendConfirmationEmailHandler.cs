@@ -4,10 +4,10 @@ public class SendConfirmationEmailHandler(IEmailSender emailSender) : IRequestHa
 {
     public async Task<Unit> Handle(SendConfirmationEmailCommand request, CancellationToken cancellationToken)
     {
-        var textBody = UserRegisteredTextTemplate.Create(request.FirstName, request.ConfirmationLink);
+        var textBody = SendConfirmationEmailTextTemplate.Create(request.FirstName, request.ConfirmationLink);
         var message = MimeMessageBuilder
             .StartBuilding()
-            .WithMessageId(request.Id)
+            .WithEventId(request.EventId)
             .WithSender("VocaBuddy Support", "support@vocabuddy.com")
             .WithRecipient(request.FullName, request.Email)
             .WithSubject("Welcome to VocaBuddy! Please Confirm Your Email")

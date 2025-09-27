@@ -1,6 +1,6 @@
-namespace EmailDispatcher.Templates;
+namespace EmailDispatcher.Features.SendConfirmationEmail;
 
-public static class UserRegisteredTextTemplate
+public static class SendConfirmationEmailTextTemplate
 {
     public static string Create(string firstName, string confirmationLink) 
         => $""" 

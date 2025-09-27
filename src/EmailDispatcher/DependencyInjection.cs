@@ -11,7 +11,7 @@ public static class DependencyInjection
         };
         services.AddEasyNetQ("host=localhost").UseSystemTextJson(serializerOptions);
         services.AddSingleton<IEmailSender, EmailSender>();
-        services.AddHostedService<SendConfirmationEmailWorker>();
+        services.AddHostedService<UserRegisteredWorker>();
         services.AddMediatR(config => config.RegisterServicesFromAssembly(AssemblyMarker.Assembly));
 
         return services;
