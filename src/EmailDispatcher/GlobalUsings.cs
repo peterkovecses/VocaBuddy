@@ -13,3 +13,5 @@ global using MimeKit;
 global using MailKit.Security;
 global using EasyNetQ;
 global using MediatR;
+global using Serilog;
+global using Serilog.Context;

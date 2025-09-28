@@ -4,7 +4,7 @@ public static class BusHandlerWrapper
 {
     public static Func<T, Task> Handle<T>(
         Func<T, Task> handler, 
-        ILogger logger) 
+        Serilog.ILogger logger) 
         where T : class, IEvent
     {
         return async message =>
@@ -12,16 +12,17 @@ public static class BusHandlerWrapper
             var messageType = typeof(T).Name;
             var eventId = message.EventId;
 
-            using (logger.BeginScope("MessageType: {MessageType}, EventId: {EventId}", messageType, eventId))
+            using (LogContext.PushProperty("MessageType", messageType))
+            using (LogContext.PushProperty("EventId", eventId))
             {
                 try
                 {
-                    logger.LogInformation("Start processing message");
+                    logger.Information("Start processing message.");
                     await handler(message);
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "An error occurred while processing message");
+                    logger.Error(ex, "An error occurred while processing message.");
                 }
             }
         };

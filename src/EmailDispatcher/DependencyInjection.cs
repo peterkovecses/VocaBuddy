@@ -9,6 +9,14 @@ public static class DependencyInjection
         {
             PropertyNameCaseInsensitive = true
         };
+        
+        services.AddSerilog(loggerConfiguration =>
+        {
+            loggerConfiguration
+                .ReadFrom.Configuration(configuration)
+                .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter());
+        });
+        
         services.AddEasyNetQ("host=localhost").UseSystemTextJson(serializerOptions);
         services.AddSingleton<IEmailSender, EmailSender>();
         services.AddHostedService<UserRegisteredWorker>();

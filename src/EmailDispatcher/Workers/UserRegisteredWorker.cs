@@ -1,6 +1,6 @@
 namespace EmailDispatcher.Workers;
 
-public class UserRegisteredWorker(ILogger<UserRegisteredWorker> logger, IBus bus, IMediator mediator)
+public class UserRegisteredWorker(Serilog.ILogger logger, IBus bus, IMediator mediator)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
