@@ -1,6 +1,6 @@
 namespace VocaBuddy.Shared.Events.Identity;
 
-public class UserRegistered
+public class UserRegistered : IEvent
 {
     public Guid EventId { get; } = Guid.NewGuid(); 
     public required string UserId { get; init; }
