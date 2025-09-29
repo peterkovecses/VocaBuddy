@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddSingleton<IEmailSender, EmailSender>();
         services.AddHostedService<UserRegisteredWorker>();
         services.AddMediatR(config => config.RegisterServicesFromAssembly(AssemblyMarker.Assembly));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         return services;
     }

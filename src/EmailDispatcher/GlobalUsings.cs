@@ -1,5 +1,6 @@
 global using EmailDispatcher;
 global using EmailDispatcher.Helpers;
+global using EmailDispatcher.Logging;
 global using EmailDispatcher.Features.SendConfirmationEmail;
 global using EmailDispatcher.Models;
 global using EmailDispatcher.Services;

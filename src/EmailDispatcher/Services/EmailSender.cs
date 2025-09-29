@@ -10,13 +10,15 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
 
     public async Task SendAsync(MimeMessage email, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Attempting to send email with Id {MessageId}...", email.MessageId);
+        logger.LogInformation("Attempting to send email.");
         await _semaphore.WaitAsync(cancellationToken);
         try
         {
             await ConnectAsync(cancellationToken);
             await _smtpClient.SendAsync(email, cancellationToken);
-            logger.LogInformation("Email sent with Id {MessageId}", email.MessageId);
+            logger.LogInformation("Successfully sent email.");
+               
+                
             ScheduleDisconnect();
         }
         finally

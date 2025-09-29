@@ -6,7 +6,6 @@ public static class SendConfirmationEmailMapper
         new()
         {
             EventId = eventData.EventId,
-            UserId = eventData.UserId,
             Email = eventData.Email,
             FirstName = eventData.FirstName,
             LastName = eventData.LastName,

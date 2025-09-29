@@ -15,7 +15,7 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
             "Starting request {RequestName}", 
             typeof(TRequest).Name);
 
-        var result = await next();
+        var result = await next(cancellationToken);
 
         if (result.IsFailure)
         {

@@ -1,12 +1,17 @@
 namespace EmailDispatcher.Workers;
 
-public class UserRegisteredWorker(Serilog.ILogger logger, IBus bus, IMediator mediator)
+public class UserRegisteredWorker(IBus bus, IServiceScopeFactory scopeFactory)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await bus.PubSub.SubscribeAsync<UserRegistered>("email-dispatcher-user-registered",
-            BusHandlerWrapper.Handle<UserRegistered>(async data => await mediator.Send(data.ToSendEmailCommand(), stoppingToken), logger),
+            async data =>
+            {
+                using var scope = scopeFactory.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                await mediator.Send(data.ToSendEmailCommand(), stoppingToken);
+            },
             cancellationToken: stoppingToken);
     }
 }
