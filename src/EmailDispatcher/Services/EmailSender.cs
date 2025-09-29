@@ -17,8 +17,6 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
             await ConnectAsync(cancellationToken);
             await _smtpClient.SendAsync(email, cancellationToken);
             logger.LogInformation("Successfully sent email.");
-               
-                
             ScheduleDisconnect();
         }
         finally
@@ -43,12 +41,10 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
 
     private void ScheduleDisconnect()
     {
-        logger.LogInformation("Scheduling disconnect in {Seconds} seconds.", _disconnectDelay.TotalSeconds);
-        
         // Cancel any previously scheduled disconnect
         _disconnectCts?.Cancel();
         _disconnectCts?.Dispose();
-
+        
         // Schedule a new disconnect
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         DelayedDisconnectAsync();
@@ -61,6 +57,7 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
         var cancellationToken = _disconnectCts.Token;
         try
         {
+            logger.LogInformation("Scheduling disconnect in {Seconds} seconds.", _disconnectDelay.TotalSeconds);
             await Task.Delay(_disconnectDelay, cancellationToken);
             await DisconnectAsync(cancellationToken);
         }

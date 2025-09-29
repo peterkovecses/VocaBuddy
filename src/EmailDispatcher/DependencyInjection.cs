@@ -14,7 +14,8 @@ public static class DependencyInjection
         {
             loggerConfiguration
                 .ReadFrom.Configuration(configuration)
-                .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter());
+                // .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter());
+                .WriteTo.Console();
         });
         
         services.AddEasyNetQ("host=localhost").UseSystemTextJson(serializerOptions);
