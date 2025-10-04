@@ -1,5 +1,3 @@
-using VocaBuddy.Shared.DomainEvents;
-
 namespace Identity.Domain.Contracts;
 
 public interface IEntity

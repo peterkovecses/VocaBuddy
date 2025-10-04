@@ -1,5 +1,3 @@
-using VocaBuddy.Shared.DomainEvents.Identity;
-
 namespace EmailDispatcher.Features.SendConfirmationEmail;
 
 public static class SendConfirmationEmailMapper

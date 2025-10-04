@@ -1,5 +1,3 @@
-using VocaBuddy.Shared.DomainEvents;
-
 namespace EmailDispatcher.Logging;
 
 public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)

@@ -1,5 +1,3 @@
-using VocaBuddy.Shared.DomainEvents.Identity;
-
 namespace EmailDispatcher.Workers;
 
 public class UserRegisteredWorker(IBus bus, IServiceScopeFactory scopeFactory)
