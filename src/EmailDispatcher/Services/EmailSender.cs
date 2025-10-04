@@ -32,17 +32,17 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
         var circuitBreakerPolicy = Policy
             .Handle<Exception>()
             .CircuitBreakerAsync(
-                exceptionsAllowedBeforeBreaking: 3,
-                durationOfBreak: TimeSpan.FromSeconds(30));
+                exceptionsAllowedBeforeBreaking: _settings.MaxCircuitBreakerFailures,
+                durationOfBreak: TimeSpan.FromSeconds(_settings.CircuitBreakerDurationSeconds));
         
         var retryPolicy = Policy
             .Handle<SocketException>()
             .Or<MailKit.Net.Smtp.SmtpCommandException>()
             .Or<MailKit.Net.Smtp.SmtpProtocolException>()
             .WaitAndRetryAsync(
-                retryCount: 5,
-                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
-                onRetry: (exception, timespan, retryCount, context) =>
+                retryCount: _settings.RetryAttempts,
+                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(_settings.RetryDelaySeconds, attempt)),
+                onRetry: (exception, timespan, retryCount, _) =>
                 {
                     logger.LogWarning(exception,
                         "Retry {RetryAttempt} after {Delay}s due to {Message}",
