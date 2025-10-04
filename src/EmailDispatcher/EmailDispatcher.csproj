@@ -14,6 +14,7 @@
         <PackageReference Include="MailKit" Version="4.13.0" />
         <PackageReference Include="MediatR" Version="13.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
+        <PackageReference Include="Polly" Version="8.6.4" />
         <PackageReference Include="Serilog" Version="4.3.1-dev-02387" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.1-dev-02307" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.1-dev-02317" />

@@ -11,18 +11,45 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
     public async Task SendAsync(MimeMessage email, CancellationToken cancellationToken)
     {
         logger.LogInformation("Attempting to send email.");
+        var policy = GetPolicy();
         await _semaphore.WaitAsync(cancellationToken);
         try
         {
-            await ConnectAsync(cancellationToken);
-            await _smtpClient.SendAsync(email, cancellationToken);
-            logger.LogInformation("Successfully sent email.");
-            ScheduleDisconnect();
+            await policy.ExecuteAsync(async ct =>
+            {
+                await ConnectAsync(ct);
+                await TrySendAsync(email, ct);
+            }, cancellationToken);
         }
         finally
         {
             _semaphore.Release();
         }
+    }
+
+    private AsyncPolicyWrap GetPolicy()
+    {
+        var circuitBreakerPolicy = Policy
+            .Handle<Exception>()
+            .CircuitBreakerAsync(
+                exceptionsAllowedBeforeBreaking: 3,
+                durationOfBreak: TimeSpan.FromSeconds(30));
+        
+        var retryPolicy = Policy
+            .Handle<SocketException>()
+            .Or<MailKit.Net.Smtp.SmtpCommandException>()
+            .Or<MailKit.Net.Smtp.SmtpProtocolException>()
+            .WaitAndRetryAsync(
+                retryCount: 5,
+                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                onRetry: (exception, timespan, retryCount, context) =>
+                {
+                    logger.LogWarning(exception,
+                        "Retry {RetryAttempt} after {Delay}s due to {Message}",
+                        retryCount, timespan.TotalSeconds, exception.Message);
+                });
+
+        return Policy.WrapAsync(circuitBreakerPolicy, retryPolicy);
     }
     
     private async Task ConnectAsync(CancellationToken cancellationToken)
@@ -37,6 +64,22 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
         }
         logger.LogInformation("Reusing existing SMTP connection.");
         await _smtpClient.NoOpAsync(cancellationToken);
+    }
+    
+    private async Task TrySendAsync(MimeMessage email, CancellationToken ct)
+    {
+        try
+        {
+            await _smtpClient.SendAsync(email, ct);
+            logger.LogInformation("Successfully sent email.");
+            ScheduleDisconnect();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Forced disconnect due to error while sending email.");
+            await SafeDisconnectAsync(ct);
+            throw;
+        }
     }
 
     private void ScheduleDisconnect()
@@ -71,6 +114,18 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
             logger.LogError(ex, "An error occurred in the disconnect scheduler task.");
         }
     }
+    
+    private async Task SafeDisconnectAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await ExecuteDisconnectionAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Error during forced disconnect.");
+        }
+    }
 
     private async Task DisconnectAsync(CancellationToken cancellationToken)
     {
@@ -80,15 +135,20 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
         
         try
         {
-            if (!_smtpClient.IsConnected) return;
-            logger.LogInformation("Attempting to disconnect from SMTP server...");
-            await _smtpClient.DisconnectAsync(true, cancellationToken);
-            logger.LogInformation("Successfully disconnected from SMTP server.");
+            await ExecuteDisconnectionAsync(cancellationToken);
         }
         finally
         {
             _semaphore.Release();
         }
+    }
+
+    private async Task ExecuteDisconnectionAsync(CancellationToken cancellationToken)
+    {
+        if (!_smtpClient.IsConnected) return;
+        logger.LogInformation("Attempting to disconnect from SMTP server...");
+        await _smtpClient.DisconnectAsync(true, cancellationToken);
+        logger.LogInformation("Successfully disconnected from SMTP server.");
     }
 
     public async ValueTask DisposeAsync()
