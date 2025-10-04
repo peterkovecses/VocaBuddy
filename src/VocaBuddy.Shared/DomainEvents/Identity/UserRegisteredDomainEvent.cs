@@ -1,6 +1,6 @@
-namespace VocaBuddy.Shared.Events.Identity;
+namespace VocaBuddy.Shared.DomainEvents.Identity;
 
-public class UserRegistered : IEvent
+public class UserRegisteredDomainEvent : IDomainEvent
 {
     public Guid EventId { get; } = Guid.NewGuid(); 
     public required string Email { get; init; }

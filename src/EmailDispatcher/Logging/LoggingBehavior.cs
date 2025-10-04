@@ -1,8 +1,10 @@
+using VocaBuddy.Shared.DomainEvents;
+
 namespace EmailDispatcher.Logging;
 
 public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>, IEvent
+    where TRequest : IRequest<TResponse>, IDomainEvent
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {

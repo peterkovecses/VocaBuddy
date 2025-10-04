@@ -1,6 +1,8 @@
+using VocaBuddy.Shared.DomainEvents;
+
 namespace EmailDispatcher.Features.SendConfirmationEmail;
 
-public record SendConfirmationEmailCommand : IRequest<Unit>, IEvent
+public record SendConfirmationEmailCommand : IRequest<Unit>, IDomainEvent
 {
     public Guid EventId { get; init; }
     public required string Email { get; init; }
