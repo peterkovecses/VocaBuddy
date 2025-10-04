@@ -11,7 +11,8 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
     public async Task SendAsync(MimeMessage email, CancellationToken cancellationToken)
     {
         logger.LogInformation("Attempting to send email.");
-        var policy = GetPolicy();
+        var policy = ResiliencePolicyFactory.CreatePolicy(_settings.Resilience, logger);
+        
         await _semaphore.WaitAsync(cancellationToken);
         try
         {
@@ -25,31 +26,6 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
         {
             _semaphore.Release();
         }
-    }
-
-    private AsyncPolicyWrap GetPolicy()
-    {
-        var circuitBreakerPolicy = Policy
-            .Handle<Exception>()
-            .CircuitBreakerAsync(
-                exceptionsAllowedBeforeBreaking: _settings.MaxCircuitBreakerFailures,
-                durationOfBreak: TimeSpan.FromSeconds(_settings.CircuitBreakerDurationSeconds));
-        
-        var retryPolicy = Policy
-            .Handle<SocketException>()
-            .Or<MailKit.Net.Smtp.SmtpCommandException>()
-            .Or<MailKit.Net.Smtp.SmtpProtocolException>()
-            .WaitAndRetryAsync(
-                retryCount: _settings.RetryAttempts,
-                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(_settings.RetryDelaySeconds, attempt)),
-                onRetry: (exception, timespan, retryCount, _) =>
-                {
-                    logger.LogWarning(exception,
-                        "Retry {RetryAttempt} after {Delay}s due to {Message}",
-                        retryCount, timespan.TotalSeconds, exception.Message);
-                });
-
-        return Policy.WrapAsync(circuitBreakerPolicy, retryPolicy);
     }
     
     private async Task ConnectAsync(CancellationToken cancellationToken)
