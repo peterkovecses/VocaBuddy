@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-namespace Identity;
+﻿namespace Identity;
 
 public static class DependencyInjection
 {
@@ -8,14 +6,18 @@ public static class DependencyInjection
     {
         services.AddDataProtection();
 
-        services.AddDbContext<IdentityContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("IdentityDatabase")));
+        services.AddDbContext<IdentityContext>((sp, options) =>
+            options
+                .UseSqlServer(configuration.GetConnectionString("IdentityDatabase"))
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+
 
         var tokenValidationParametersConfigSection = configuration.GetSection("TokenValidationParameters");
         var tokenValidationParameters = new CustomTokenValidationParameters();
         tokenValidationParametersConfigSection.Bind(tokenValidationParameters);
         services.Configure<CustomTokenValidationParameters>(tokenValidationParametersConfigSection);
 
+        services.AddSingleton<InsertOutboxMessagesInterceptor>();
         services.AddScoped<IIdentityContext, IdentityContext>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IRegistrationService, RegistrationService>();
@@ -28,22 +30,19 @@ public static class DependencyInjection
         identityOptionsSection.Bind(identityOptions);
 
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-        {
-            options.Password = identityOptions.Password;
-            options.User= identityOptions.User;
-        })
-        .AddEntityFrameworkStores<IdentityContext>()
-        .AddDefaultTokenProviders();
+            {
+                options.Password = identityOptions.Password;
+                options.User = identityOptions.User;
+            })
+            .AddEntityFrameworkStores<IdentityContext>()
+            .AddDefaultTokenProviders();
 
         services.AddControllers(options =>
-        {
-            options.Filters.Add<ValidationFilter>();
-            options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-        })
-        .ConfigureApiBehaviorOptions(options =>
-        {
-            options.SuppressModelStateInvalidFilter = true;
-        });
+            {
+                options.Filters.Add<ValidationFilter>();
+                options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+            })
+            .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; });
 
         services.AddValidatorsFromAssemblyContaining<RegistrationRequestValidator>();
         services.AddFluentValidationAutoValidation();
@@ -51,12 +50,12 @@ public static class DependencyInjection
         services.AddCors(options =>
         {
             options.AddPolicy(name: "_myAllowSpecificOrigins",
-                              policy =>
-                              {
-                                  policy.WithOrigins("https://localhost:7095")
-                                  .AllowAnyHeader()
-                                  .AllowAnyMethod();
-                              });
+                policy =>
+                {
+                    policy.WithOrigins("https://localhost:7095")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
         });
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

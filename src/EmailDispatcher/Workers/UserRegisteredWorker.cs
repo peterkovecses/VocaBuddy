@@ -1,3 +1,5 @@
+using VocaBuddy.Shared.DomainEvents.Identity;
+
 namespace EmailDispatcher.Workers;
 
 public class UserRegisteredWorker(IBus bus, IServiceScopeFactory scopeFactory)
@@ -5,7 +7,7 @@ public class UserRegisteredWorker(IBus bus, IServiceScopeFactory scopeFactory)
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await bus.PubSub.SubscribeAsync<UserRegistered>("email-dispatcher-user-registered",
+        await bus.PubSub.SubscribeAsync<UserRegisteredDomainEvent>("email-dispatcher-user-registered",
             async data =>
             {
                 using var scope = scopeFactory.CreateScope();

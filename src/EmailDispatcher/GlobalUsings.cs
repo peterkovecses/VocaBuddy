@@ -1,3 +1,5 @@
+global using VocaBuddy.Shared.DomainEvents;
+global using VocaBuddy.Shared.DomainEvents.Identity;
 global using EmailDispatcher;
 global using EmailDispatcher.Helpers;
 global using EmailDispatcher.Logging;
@@ -5,8 +7,6 @@ global using EmailDispatcher.Features.SendConfirmationEmail;
 global using EmailDispatcher.Models;
 global using EmailDispatcher.Services;
 global using EmailDispatcher.Workers;
-global using VocaBuddy.Shared.Events;
-global using VocaBuddy.Shared.Events.Identity;
 global using System.Net.Sockets;
 global using System.Text.Json;
 global using Microsoft.Extensions.Options;

@@ -10,11 +10,6 @@ public class IdentityContext(
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        builder.Entity<ApplicationUser>(b =>
-        {
-            b.Property(user => user.FirstName).HasMaxLength(50);
-            b.Property(user => user.LastName).HasMaxLength(50);
-        });
+        builder.ApplyConfigurationsFromAssembly(typeof(IdentityContext).Assembly);
     }
 }

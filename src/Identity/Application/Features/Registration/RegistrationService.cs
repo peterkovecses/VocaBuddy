@@ -19,6 +19,9 @@ public class RegistrationService(
             Email = request.Email,
             UserName = request.Email,
         };
+        
+        var confirmationLink = $"https://example.com/confirm?userId={user.Id}";
+        user.AddUserRegisteredEvent(confirmationLink);
 
         var result = await userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
