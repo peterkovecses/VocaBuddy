@@ -1,8 +1,8 @@
 namespace EmailDispatcher.Helpers;
 
-public static class ResiliencePolicyFactory
+public class ResiliencyPolicyFactory
 {
-    public static AsyncPolicyWrap CreatePolicy(ResilienceSettings settings, Microsoft.Extensions.Logging.ILogger logger)
+    public static AsyncPolicyWrap CreatePolicy(ResiliencySettings settings, ILogger<ResiliencyPolicyFactory> logger)
     {
         var circuitBreakerPolicy = Policy
             .Handle<Exception>()

@@ -1,6 +1,6 @@
 namespace EmailDispatcher.Models;
 
-public class ResilienceSettings
+public class ResiliencySettings
 {
     public int RetryAttempts { get; init; }
     public int RetryDelaySeconds { get; init; }

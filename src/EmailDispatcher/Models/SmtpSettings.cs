@@ -5,5 +5,5 @@ public class SmtpSettings
     public required string Host { get; init; }
     public int Port { get; init; }
     public int DisconnectDelaySeconds { get; init; }
-    public ResilienceSettings Resilience { get; init; } = new();
+    public ResiliencySettings Resiliency { get; init; } = new();
 }

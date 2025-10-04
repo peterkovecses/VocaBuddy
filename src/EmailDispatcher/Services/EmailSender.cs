@@ -1,6 +1,7 @@
 namespace EmailDispatcher.Services;
 
-public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smtpSettings) : IEmailSender, IAsyncDisposable
+public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smtpSettings, AsyncPolicyWrap policy)
+    : IEmailSender, IAsyncDisposable
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
     private readonly SmtpSettings _settings = smtpSettings.Value;
@@ -11,8 +12,6 @@ public class EmailSender(ILogger<EmailSender> logger, IOptions<SmtpSettings> smt
     public async Task SendAsync(MimeMessage email, CancellationToken cancellationToken)
     {
         logger.LogInformation("Attempting to send email.");
-        var policy = ResiliencePolicyFactory.CreatePolicy(_settings.Resilience, logger);
-        
         await _semaphore.WaitAsync(cancellationToken);
         try
         {
